@@ -121,12 +121,12 @@ const platformConfig = {
   X: {
     icon: FaXTwitter,
     color: "text-gray-900",
-    bgGradient: "from-gray-50 to-gray-100",
+    bgGradient: "from-gray-100 to-gray-200",
   },
   X_RETWEET: {
     icon: FaXTwitter,
     color: "text-gray-900",
-    bgGradient: "from-gray-50 to-gray-100",
+    bgGradient: "from-gray-100 to-gray-200",
   },
   YOUTUBE_SUBSCRIBERS: {
     icon: FaYoutube,
@@ -170,13 +170,13 @@ const PerformanceTable = <T extends TableRowData>({
   renderRow: (item: T, index: number) => React.ReactNode;
 }) => (
   <div className="overflow-x-auto mb-4">
-    <table className="min-w-full divide-y divide-gray-200">
+    <table className="min-w-full divide-y divide-gray-200 table-fixed">
       <thead>
         <tr>
           {headers.map((header, index) => (
             <th
               key={index}
-              className="px-4 py-2 text-left text-sm font-medium text-gray-500"
+              className="px-4 py-2 text-left text-sm font-medium text-gray-500 w-1/4"
             >
               {header}
             </th>
@@ -358,14 +358,16 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
           console.log("Platform:", platform);
           console.log("Raw data from database:", data);
           console.log("Data length:", data.length);
-          console.log("Filtering for X tasks");
-          
-          // Filter for X platform only
+          console.log("Filtering for X tasks (both X and X_RETWEET)");
+
+          // Filter for both X and X_RETWEET platforms
           filteredData = data.filter(
             (item) =>
               item.platform === "X" ||
+              item.platform === "X_RETWEET" ||
               String(item.platform).toUpperCase() === "TWITTER" ||
               String(item.type).toUpperCase() === "X" ||
+              String(item.type).toUpperCase() === "X_RETWEET" ||
               String(item.type).toUpperCase() === "TWITTER"
           );
           console.log("Found X tasks after filtering:", filteredData);
@@ -722,6 +724,127 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
     );
   };
 
+  const renderXTables = () => {
+    console.log("=== RENDER X TABLES DEBUG ===");
+    console.log("Platform:", platform);
+    console.log("All socialTasks:", socialTasks);
+    console.log("socialTasks length:", socialTasks.length);
+
+    // Get all X tasks (both X and X_RETWEET)
+    const allXTasks = socialTasks.filter(
+      (task) =>
+        String(task.platform) === "X" ||
+        String(task.type) === "X" ||
+        String(task.platform) === "TWITTER" ||
+        String(task.type) === "TWITTER" ||
+        String(task.platform) === "X_RETWEET" ||
+        String(task.type) === "X_RETWEET"
+    );
+
+    // Separate into X and X_RETWEET
+    const xTasks = allXTasks.filter(
+      (task) =>
+        String(task.platform) === "X" ||
+        String(task.type) === "X" ||
+        String(task.platform) === "TWITTER" ||
+        String(task.type) === "TWITTER"
+    );
+
+    const xRetweetTasks = allXTasks.filter(
+      (task) =>
+        String(task.platform) === "X_RETWEET" ||
+        String(task.type) === "X_RETWEET"
+    );
+
+    console.log("All X tasks:", allXTasks);
+    console.log("X tasks:", xTasks);
+    console.log("X_RETWEET tasks:", xRetweetTasks);
+
+    return (
+      <div className="space-y-6">
+        {/* X (Twitter) Table */}
+        <div>
+          <h3 className="text-lg font-medium mb-2">X (Twitter)</h3>
+          {xTasks.length > 0 ? (
+            <PerformanceTable
+              headers={["No.", "User", "Engagements", "Action"]}
+              data={xTasks}
+              renderRow={(item, index) => (
+                <tr
+                  key={item.id}
+                  className="hover:bg-white/30 transition-colors"
+                >
+                  <td className="px-4 py-2 text-sm text-gray-900 cursor-text select-text">
+                    {index + 1}
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-900 cursor-text select-text">
+                    <a
+                      href={item.link_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-900 truncate block max-w-[250px]"
+                    >
+                      {item.link_url || "N/A"}
+                    </a>
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-900 cursor-text select-text">
+                    {getCompletedUsersCount(item)}
+                  </td>
+                  <td className="px-4 py-2 text-sm cursor-text select-text">
+                    {renderToggleButton(item.id)}
+                  </td>
+                </tr>
+              )}
+            />
+          ) : (
+            <p className="text-sm text-gray-500">No X tasks available</p>
+          )}
+        </div>
+
+        {/* X Retweet Table */}
+        <div>
+          <h3 className="text-lg font-medium mb-2">X Retweet</h3>
+          {xRetweetTasks.length > 0 ? (
+            <PerformanceTable
+              headers={["No.", "User", "Engagements", "Action"]}
+              data={xRetweetTasks}
+              renderRow={(item, index) => (
+                <tr
+                  key={item.id}
+                  className="hover:bg-white/30 transition-colors"
+                >
+                  <td className="px-4 py-2 text-sm text-gray-900 cursor-text select-text">
+                    {index + 1}
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-900 cursor-text select-text">
+                    <a
+                      href={item.link_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-900 truncate block max-w-[250px]"
+                    >
+                      {item.link_url || "N/A"}
+                    </a>
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-900 cursor-text select-text">
+                    {getCompletedUsersCount(item)}
+                  </td>
+                  <td className="px-4 py-2 text-sm cursor-text select-text">
+                    {renderToggleButton(item.id)}
+                  </td>
+                </tr>
+              )}
+            />
+          ) : (
+            <p className="text-sm text-gray-500">
+              No X Retweet tasks available
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const renderYoutubeTables = () => {
     console.log("All socialTasks in renderYoutubeTables:", socialTasks);
 
@@ -957,10 +1080,8 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
       // For Telegram, we want to show both channels and groups regardless of which tab is selected
       console.log("Showing all Telegram tasks for platform:", platformStr);
       return renderTelegramTables();
-    } else if (platformStr === "X") {
-      return renderXTable();
-    } else if (platformStr === "X_RETWEET") {
-      return renderXRetweetTable();
+    } else if (platformStr === "X" || platformStr === "X_RETWEET") {
+      return renderXTables();
     } else if (platformStr.includes("YOUTUBE")) {
       return renderYoutubeTables();
     } else if (platformStr === "DISCORD") {
