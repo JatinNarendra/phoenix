@@ -354,7 +354,12 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
           );
           console.log("Found Telegram tasks:", filteredData);
         } else if (platform === "X" && data) {
+          console.log("=== X DATA FETCHING DEBUG ===");
+          console.log("Platform:", platform);
+          console.log("Raw data from database:", data);
+          console.log("Data length:", data.length);
           console.log("Filtering for X tasks");
+          
           // Filter for X platform only
           filteredData = data.filter(
             (item) =>
@@ -363,7 +368,8 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
               String(item.type).toUpperCase() === "X" ||
               String(item.type).toUpperCase() === "TWITTER"
           );
-          console.log("Found X tasks:", filteredData);
+          console.log("Found X tasks after filtering:", filteredData);
+          console.log("Filtered data length:", filteredData.length);
         } else if (platform === "X_RETWEET" && data) {
           console.log("Filtering for X_RETWEET tasks");
           // Filter for X_RETWEET platform only
@@ -617,13 +623,18 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
 
   const renderXTable = () => {
     // Log all tasks for debugging
+    console.log("=== RENDER X TABLE DEBUG ===");
+    console.log("Platform:", platform);
     console.log("All tasks for X filtering:", socialTasks);
+    console.log("socialTasks length:", socialTasks.length);
+    console.log("socialTasks type:", typeof socialTasks);
 
     // socialTasks already contains only X tasks from the database query
     // No need to filter again
     const xTasks = socialTasks;
 
     console.log("Found X tasks:", xTasks);
+    console.log("xTasks length:", xTasks.length);
 
     return (
       <div>
