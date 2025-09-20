@@ -200,6 +200,7 @@ const platformDisplayNames = {
   TELEGRAM_CHANNEL: "Telegram",
   TELEGRAM_GROUP: "Telegram",
   X: "X",
+  X_RETWEET: "X Retweet",
   YOUTUBE_SUBSCRIBERS: "Youtube",
   YOUTUBE_VIEWS: "Youtube",
   DISCORD: "Discord",

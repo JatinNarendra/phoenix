@@ -52,17 +52,21 @@ interface DatabaseResponse {
 const gradients: Record<PlatformType, string> = {
   TELEGRAM_CHANNEL: "from-[#0088cc]/20 to-[#0088cc]/5",
   X: "from-white/20 to-white/5",
+  X_RETWEET: "from-white/20 to-white/5",
   YOUTUBE_VIEWS: "from-[#FF0000]/20 to-[#FF0000]/5",
   TELEGRAM_GROUP: "from-[#0088cc]/20 to-[#0088cc]/5",
   YOUTUBE_SUBSCRIBERS: "from-[#FF0000]/20 to-[#FF0000]/5",
+  DISCORD: "from-[#5865F2]/20 to-[#5865F2]/5",
 };
 
 const glows: Record<PlatformType, string> = {
   TELEGRAM_CHANNEL: "hover:shadow-[#0088cc]/20",
   X: "hover:shadow-white/20",
+  X_RETWEET: "hover:shadow-white/20",
   YOUTUBE_VIEWS: "hover:shadow-[#FF0000]/20",
   TELEGRAM_GROUP: "hover:shadow-[#0088cc]/20",
   YOUTUBE_SUBSCRIBERS: "hover:shadow-[#FF0000]/20",
+  DISCORD: "hover:shadow-[#5865F2]/20",
 };
 
 const SocialTasksPage = () => {

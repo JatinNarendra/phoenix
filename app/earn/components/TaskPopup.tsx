@@ -4,6 +4,7 @@ import { PlatformType, SpecialTask, CampaignTask } from "@/app/types/Customer";
 import TaskTelegramIcon from "../../../public/assets/TaskTelegramIcon.png";
 import TaskXIcon from "../../../public/assets/TaskXIcon.png";
 import TaskYoutubeIcon from "../../../public/assets/TaskYoutubeIcon.png";
+import TaskDiscordIcon from "../../../public/assets/discordicon.png";
 import { useGame } from "@/app/context/GameContext";
 import { useUser } from "@/app/hooks/useUser";
 import { gameToast } from "@/app/utility/customToast";
@@ -16,6 +17,7 @@ import SpinIcon from "../../../public/assets/SpinIcon.png";
 import bi_telegram from "../../../public/assets/Earn/bi_telegram.png";
 import bi_twitter from "../../../public/assets/Earn/bi_twitter.png";
 import bi_youtube from "../../../public/assets/Earn/bi_youtube.png";
+import bi_discord from "../../../public/assets/discordicon.png";
 import WarningIcon from "../../../public/assets/Earn/WarningIcon.png";
 import PenaltyWarningPopup from "./penaltywarningpopup";
 import { supabase } from "@/lib/supabase";
@@ -54,8 +56,10 @@ const platformIcons = {
   TELEGRAM_CHANNEL: bi_telegram,
   TELEGRAM_GROUP: bi_telegram,
   X: bi_twitter,
+  X_RETWEET: bi_twitter,
   YOUTUBE_VIEWS: bi_youtube,
   YOUTUBE_SUBSCRIBERS: bi_youtube,
+  DISCORD: bi_discord,
 };
 
 const platformLabels = {
@@ -64,6 +68,8 @@ const platformLabels = {
   X: "Visit X (Twitter)",
   YOUTUBE_VIEWS: "Subscribe to Youtube",
   YOUTUBE_SUBSCRIBERS: "Subscribe to Youtube",
+  DISCORD: "Visit Discord",
+  X_RETWEET: "Visit X (Twitter)",
 };
 
 export const socialIcons: Record<PlatformType, React.ReactNode> = {
@@ -71,6 +77,7 @@ export const socialIcons: Record<PlatformType, React.ReactNode> = {
     <Image src={TaskTelegramIcon} alt="Telegram" width={90} height={90} />
   ),
   X: <Image src={TaskXIcon} alt="X" width={90} height={90} />,
+  X_RETWEET: <Image src={TaskXIcon} alt="X Retweet" width={90} height={90} />,
   YOUTUBE_VIEWS: (
     <Image src={TaskYoutubeIcon} alt="YouTube" width={90} height={90} />
   ),
@@ -80,6 +87,7 @@ export const socialIcons: Record<PlatformType, React.ReactNode> = {
   YOUTUBE_SUBSCRIBERS: (
     <Image src={TaskYoutubeIcon} alt="YouTube" width={90} height={90} />
   ),
+  DISCORD: <Image src={TaskDiscordIcon} alt="Discord" width={90} height={90} />,
 };
 
 const TaskPopup: React.FC<TaskPopupProps> = ({

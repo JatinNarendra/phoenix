@@ -9,6 +9,7 @@ import Close from "@/public/assets/Close.png";
 import TaskYoutubeIcon from "../../../public/assets/TaskYoutubeIcon.png";
 import TaskTelegramIcon from "../../../public/assets/TaskTelegramIcon.png";
 import TaskXIcon from "../../../public/assets/TaskXIcon.png";
+import TaskDiscordIcon from "../../../public/assets/discordicon.png";
 import TaskCompletedDiamond from "../../../public/assets/TaskCompletedDiamond.png";
 import { supabase } from "@/lib/supabase";
 
@@ -27,16 +28,20 @@ const platformIcons = {
   TELEGRAM_CHANNEL: TaskTelegramIcon,
   TELEGRAM_GROUP: TaskTelegramIcon,
   X: TaskXIcon,
+  X_RETWEET: TaskXIcon,
   YOUTUBE_VIEWS: TaskYoutubeIcon,
   YOUTUBE_SUBSCRIBERS: TaskYoutubeIcon,
+  DISCORD: TaskDiscordIcon,
 };
 
 const platformLabels = {
   TELEGRAM_CHANNEL: "Join Telegram Channel",
   TELEGRAM_GROUP: "Join Telegram Group",
   X: "Follow on X (Twitter)",
+  X_RETWEET: "Retweet on X (Twitter)",
   YOUTUBE_VIEWS: "Watch on YouTube",
   YOUTUBE_SUBSCRIBERS: "Subscribe on YouTube",
+  DISCORD: "Join Discord Server",
 };
 
 const TaskCompletedPopup: React.FC<TaskCompletedProps> = ({

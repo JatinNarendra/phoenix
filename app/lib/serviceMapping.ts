@@ -4,10 +4,12 @@ import { calculateServiceTypeMetrics } from "./metrics";
 // Map platforms to their service types
 export const platformToServiceType: Record<PlatformType, ServiceType> = {
   X: "X",
+  X_RETWEET: "X_RETWEET",
   TELEGRAM_CHANNEL: "TELEGRAM_CHANNEL",
   TELEGRAM_GROUP: "TELEGRAM_GROUP",
   YOUTUBE_SUBSCRIBERS: "YOUTUBE_SUBSCRIBERS",
   YOUTUBE_VIEWS: "YOUTUBE_VIEWS",
+  DISCORD: "DISCORD",
 };
 
 // Map service types to their display properties

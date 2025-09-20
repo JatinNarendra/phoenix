@@ -6,6 +6,7 @@ import Image from "next/image";
 import TaskTelegram from "@/public/assets/TaskTelegramIcon.png";
 import TaskYoutube from "@/public/assets/TaskYoutubeIcon.png";
 import TaskX from "@/public/assets/TaskXIcon.png";
+import TaskDiscord from "@/public/assets/discordicon.png";
 import SparkyIcon from "@/public/assets/SparkyIcon.png";
 import SpinIcon from "@/public/assets/SpinIcon.png";
 import TaskCompletedDiamond from "@/public/assets/TaskCompletedDiamond.png";
@@ -27,10 +28,12 @@ const platformIcons = {
   TELEGRAM_CHANNEL: TaskTelegram,
   TELEGRAM_GROUP: TaskTelegram,
   X: TaskX,
+  X_RETWEET: TaskX,
   YOUTUBE_VIEWS: TaskYoutube,
   YOUTUBE_SUBSCRIBERS: TaskYoutube,
   YOUTUBE: TaskYoutube,
   TELEGRAM: TaskTelegram,
+  DISCORD: TaskDiscord,
 };
 
 const getTaskTitle = (platform: string, customerName: string) => {
