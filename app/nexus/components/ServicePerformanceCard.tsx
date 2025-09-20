@@ -353,14 +353,16 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
               String(item.platform).toUpperCase().includes("TELEGRAM")
           );
           console.log("Found Telegram tasks:", filteredData);
-        } else if (platform === "X" && data) {
+        } else if ((platform === "X" || platform === "X_RETWEET") && data) {
           console.log("Filtering for X tasks");
           // Filter for both X and Twitter to be inclusive
           filteredData = data.filter(
             (item) =>
               item.platform === "X" ||
+              item.platform === "X_RETWEET" ||
               String(item.platform).toUpperCase() === "TWITTER" ||
               String(item.type).toUpperCase() === "X" ||
+              String(item.type).toUpperCase() === "X_RETWEET" ||
               String(item.type).toUpperCase() === "TWITTER"
           );
           console.log("Found X tasks:", filteredData);
