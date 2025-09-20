@@ -353,19 +353,26 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
               String(item.platform).toUpperCase().includes("TELEGRAM")
           );
           console.log("Found Telegram tasks:", filteredData);
-        } else if ((platform === "X" || platform === "X_RETWEET") && data) {
+        } else if (platform === "X" && data) {
           console.log("Filtering for X tasks");
-          // Filter for both X and Twitter to be inclusive
+          // Filter for X platform only
           filteredData = data.filter(
             (item) =>
               item.platform === "X" ||
-              item.platform === "X_RETWEET" ||
               String(item.platform).toUpperCase() === "TWITTER" ||
               String(item.type).toUpperCase() === "X" ||
-              String(item.type).toUpperCase() === "X_RETWEET" ||
               String(item.type).toUpperCase() === "TWITTER"
           );
           console.log("Found X tasks:", filteredData);
+        } else if (platform === "X_RETWEET" && data) {
+          console.log("Filtering for X_RETWEET tasks");
+          // Filter for X_RETWEET platform only
+          filteredData = data.filter(
+            (item) =>
+              item.platform === "X_RETWEET" ||
+              String(item.type).toUpperCase() === "X_RETWEET"
+          );
+          console.log("Found X_RETWEET tasks:", filteredData);
         } else if ((platform as string) === "YOUTUBE_SUBSCRIBERS" && data) {
           console.log("Filtering for YOUTUBE_SUBSCRIBERS tasks");
           // Use the utility function for consistent filtering
@@ -612,22 +619,20 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
     // Log all tasks for debugging
     console.log("All tasks for X filtering:", socialTasks);
 
-    // Use more extensive filter for X/Twitter (including X_RETWEET)
+    // Filter for X platform only (not X_RETWEET)
     const xTasks = socialTasks.filter(
       (task) =>
         String(task.platform) === "X" ||
         String(task.type) === "X" ||
         String(task.platform) === "TWITTER" ||
-        String(task.type) === "TWITTER" ||
-        String(task.platform) === "X_RETWEET" ||
-        String(task.type) === "X_RETWEET"
+        String(task.type) === "TWITTER"
     );
 
-    console.log("Found X/Twitter tasks:", xTasks);
+    console.log("Found X tasks:", xTasks);
 
     return (
       <div>
-        <h3 className="text-lg font-medium mb-2">X (Twitter & Retweets)</h3>
+        <h3 className="text-lg font-medium mb-2">X (Twitter)</h3>
         {xTasks.length > 0 ? (
           <PerformanceTable
             headers={["No.", "User", "Engagements", "Action"]}
@@ -658,6 +663,57 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
           />
         ) : (
           <p className="text-sm text-gray-500">No X tasks available</p>
+        )}
+      </div>
+    );
+  };
+
+  const renderXRetweetTable = () => {
+    // Log all tasks for debugging
+    console.log("All tasks for X_RETWEET filtering:", socialTasks);
+
+    // Filter for X_RETWEET platform only
+    const xRetweetTasks = socialTasks.filter(
+      (task) =>
+        String(task.platform) === "X_RETWEET" ||
+        String(task.type) === "X_RETWEET"
+    );
+
+    console.log("Found X_RETWEET tasks:", xRetweetTasks);
+
+    return (
+      <div>
+        <h3 className="text-lg font-medium mb-2">X Retweet</h3>
+        {xRetweetTasks.length > 0 ? (
+          <PerformanceTable
+            headers={["No.", "User", "Engagements", "Action"]}
+            data={xRetweetTasks}
+            renderRow={(item, index) => (
+              <tr key={item.id} className="hover:bg-white/30 transition-colors">
+                <td className="px-4 py-2 text-sm text-gray-900 cursor-text select-text">
+                  {index + 1}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-900 cursor-text select-text">
+                  <a
+                    href={item.link_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-900 truncate block max-w-[250px]"
+                  >
+                    {item.link_url || "N/A"}
+                  </a>
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-900 cursor-text select-text">
+                  {getCompletedUsersCount(item)}
+                </td>
+                <td className="px-4 py-2 text-sm cursor-text select-text">
+                  {renderToggleButton(item.id)}
+                </td>
+              </tr>
+            )}
+          />
+        ) : (
+          <p className="text-sm text-gray-500">No X Retweet tasks available</p>
         )}
       </div>
     );
@@ -898,8 +954,10 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
       // For Telegram, we want to show both channels and groups regardless of which tab is selected
       console.log("Showing all Telegram tasks for platform:", platformStr);
       return renderTelegramTables();
-    } else if (platformStr === "X" || platformStr === "X_RETWEET") {
+    } else if (platformStr === "X") {
       return renderXTable();
+    } else if (platformStr === "X_RETWEET") {
+      return renderXRetweetTable();
     } else if (platformStr.includes("YOUTUBE")) {
       return renderYoutubeTables();
     } else if (platformStr === "DISCORD") {
