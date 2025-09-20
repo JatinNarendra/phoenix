@@ -1,0 +1,371 @@
+"use client";
+import Image from "next/image";
+import InviteFriends from "../../public/assets/Referral/InviteFriends.png";
+import NoFriendsYet from "../../public/assets/Referral/NoFriendsYet.png";
+import ReferralHandShakeIcon from "../../public/assets/Referral/ReferralHandShakeIcon.png";
+import ReferralInviteButtonBG from "../../public/assets/Referral/ReferralInviteButtonBG.png";
+import InviteLinkCopy from "../../public/assets/Referral/InviteLinkCopy.png";
+import ReferralMainBG from "../../public/assets/Referral/ReferralMainBG.png";
+import ReferralFriendsIcon from "../../public/assets/Referral/ReferralFriendsIcon.png";
+import SparkIcon from "../../public/assets/spin/sparkicon.png";
+import Link from 'next/link';
+  getReferralStats, 
+  generateReferralLink, 
+  generateDirectMiniAppReferralLink,
+  loadReferralStats,
+  ReferralStats 
+
+// TEMPORARY DEBUG - Remove this after testing
+      console.log('Clearing localStorage key for testing:', key);
+      localStorage.removeItem(key);
+
+  const router = useRouter();
+  const user = useUser();
+  const [referralLink, setReferralLink] = useState("");
+    totalReferrals: 0, 
+    totalRewards: 0,
+    referees: []
+  const [isLoading, setIsLoading] = useState(true);
+  const [pendingReferrerRewards, setPendingReferrerRewards] = useState(0);
+  const [isClaimingRewards, setIsClaimingRewards] = useState(false);
+  
+  // Set body style for better scrolling in Telegram Mini App
+    // Set body style to allow scrolling
+      document.body.style.height = '100%';
+      document.body.style.overflow = 'auto';
+    
+        document.body.style.height = '';
+        document.body.style.overflow = '';
+
+  // Fetch pending referrer rewards
+    if (!user.id) return;
+    
+      // Get all referrals where this user is the referrer and rewards haven't been claimed
+        .from('user_referrals')
+        .select('reward_amount')
+        .eq('referrer_id', user.id.toString())
+        .eq('reward_claimed', false);
+        
+        console.error('Error fetching pending referrer rewards:', error);
+        return;
+      
+      // Calculate total pending rewards
+      const totalPending = data?.reduce((sum, referral) => sum + (referral.reward_amount || 50000), 0) || 0;
+      setPendingReferrerRewards(totalPending);
+      console.error('Error in fetchPendingReferrerRewards:', error);
+
+  // Define fetchReferralStats to load referral data
+    if (!user.id) return;
+    
+      setIsLoading(true);
+      
+      // Try to use the new loadReferralStats function
+      const referralData = await loadReferralStats(user.id.toString());
+        // Get the regular referral stats
+        const referralStats = await getReferralStats(user.id.toString());
+          setStats(referralStats);
+          
+          // Update the gameState to keep it in sync
+            ...prevState,
+              inviteLink: generateReferralLink(user.id.toString()),
+              referredFriends: referralStats.totalReferrals,
+              totalRewards: referralStats.totalRewards
+        // Fallback to game state if database query fails
+            totalReferrals: gameState.referral.referredFriends || 0,
+            totalRewards: gameState.referral.totalRewards || 0,
+            referees: []
+      
+      // Fetch pending referrer rewards
+      await fetchPendingReferrerRewards();
+      console.error('Error loading referral stats:', error);
+      setIsLoading(false);
+
+  // Handle claiming all pending referrer rewards
+    if (!user.id || pendingReferrerRewards <= 0 || isClaimingRewards) return;
+    
+      setIsClaimingRewards(true);
+      
+      // Get all unclaimed referrals
+        .from('user_referrals')
+        .select('id, reward_amount')
+        .eq('referrer_id', user.id.toString())
+        .eq('reward_claimed', false);
+      
+        gameToast.error('Failed to claim rewards. Please try again.');
+        console.error('Error fetching unclaimed referrals:', fetchError);
+        setIsClaimingRewards(false);
+        return;
+      
+        gameToast.info('No rewards to claim');
+        setIsClaimingRewards(false);
+        return;
+      
+      // Mark all as claimed in the database
+          .from('user_referrals')
+            reward_claimed: true,
+            reward_claimed_at: new Date().toISOString()
+          .eq('id', referral.id);
+          
+      
+      // Get the total amount to add to the user's coins
+      const totalReward = unclaimedReferrals.reduce((sum, referral) => sum + (referral.reward_amount || 50000), 0);
+      
+      // Update the user's game state
+        .from('telegram_users')
+        .select('game_state')
+        .eq('user_id', user.id.toString())
+        .single();
+        
+        gameToast.error('Failed to claim rewards. Please try again.');
+        console.error('Error fetching user data:', userError);
+        setIsClaimingRewards(false);
+        return;
+      
+      // Clone the game state to avoid reference issues
+      const gameState = JSON.parse(JSON.stringify(userData.game_state));
+      
+      // Update coins and referral stats
+      const currentCoins = Number(gameState.coins || 0);
+      const currentTotalCoins = Number(gameState.totalCoins || 0);
+      
+      // Ensure referral object exists
+          inviteLink: generateReferralLink(user.id.toString()),
+          referredFriends: 0,
+          totalRewards: 0
+      
+      // Calculate updated values
+      const currentTotalRewards = Number(gameState.referral.totalRewards || 0);
+      
+      // Update the game state
+      gameState.coins = currentCoins + totalReward;
+      gameState.totalCoins = currentTotalCoins + totalReward;
+      gameState.referral.totalRewards = currentTotalRewards + totalReward;
+      
+      // Save the updated game state
+        .from('telegram_users')
+          game_state: gameState,
+          last_updated: new Date().toISOString()
+        .eq('user_id', user.id.toString());
+        
+        gameToast.error('Failed to update rewards. Please try again.');
+        console.error('Error updating game state:', updateError);
+        setIsClaimingRewards(false);
+        return;
+      
+      // Update local state
+        ...prevState,
+        coins: (prevState.coins || 0) + totalReward,
+        totalCoins: (prevState.totalCoins || 0) + totalReward,
+          totalRewards: ((prevState.referral?.totalRewards || 0) + totalReward)
+      
+      // Reset pending rewards
+      setPendingReferrerRewards(0);
+      
+      // Show success message
+      
+      // Refresh stats after claiming
+          setIsLoading(true);
+          
+          // Reload stats directly without circular reference
+          const referralData = await loadReferralStats(user.id.toString());
+            const referralStats = await getReferralStats(user.id.toString());
+              setStats(referralStats);
+              
+              // Update gameState
+                ...prevState,
+                  inviteLink: generateReferralLink(user.id.toString()),
+                  referredFriends: referralStats.totalReferrals,
+                  totalRewards: referralStats.totalRewards
+          
+          // Fetch new pending rewards
+          await fetchPendingReferrerRewards();
+          console.error('Error refreshing stats after claim:', error);
+          setIsLoading(false);
+      console.error('Error claiming referrer rewards:', error);
+      gameToast.error('Failed to claim rewards. Please try again.');
+      setIsClaimingRewards(false);
+
+  // Load referral stats from database
+    fetchReferralStats();
+
+  // Generate or retrieve referral link
+      // Generate the links for sharing
+      const deepLink = generateReferralLink(user.id.toString());
+      const httpLink = generateDirectMiniAppReferralLink(user.id.toString());
+      
+      // Set the link for UI display to the HTTP link (more compatible)
+      setReferralLink(httpLink);
+      
+      // Save the links to game state if they don't exist
+          ...prevState,
+            inviteLink: httpLink,
+            deepLinkInvite: deepLink
+
+  // Handle copying to clipboard
+    // Always use the direct mini app link for better compatibility
+    const linkToCopy = generateDirectMiniAppReferralLink(user.id.toString());
+    
+        await navigator.clipboard.writeText(linkToCopy);
+        gameToast.success(`Link copied to clipboard`);
+        
+        // Optional haptic feedback if in Telegram
+          WebApp.HapticFeedback.impactOccurred("light");
+        console.error("Failed to copy link:", err);
+        gameToast.error("Failed to copy link");
+
+  // Handle opening share via Telegram
+    const linkToShare = linkType === 'direct' 
+      ? generateDirectMiniAppReferralLink(user.id.toString()) 
+      : referralLink;
+    const messageText = linkType === 'direct' 
+    
+        // Use Web Share API if available
+          title: "Join Phoenix Game",
+          text: messageText,
+          url: linkToShare
+        // Fallback to Telegram specific sharing if available
+        // Create a temp link element and click it (Telegram handles this)
+        const a = document.createElement('a');
+        a.setAttribute('target', '_blank');
+        a.click();
+      
+      // Optional haptic feedback
+        WebApp.HapticFeedback.impactOccurred("medium");
+
+      WebApp.BackButton.show();
+      WebApp.enableClosingConfirmation();
+      
+        router.push('/');
+
+      WebApp.BackButton.onClick(handleBack);
+      
+        WebApp.BackButton.offClick(handleBack);
+
+  return (
+      <div className="fixed top-[-80px] right-0 -z-10 pointer-events-none">
+        <Image
+          alt="Background"
+          priority
+        />
+
+      <div className="p-4 pb-36">
+        <div className="mt-8">
+          <h2 className="text-sm font-bold text-gray-400 mb-6">Your Friends</h2>
+          <div className="flex items-center gap-3">
+            <Image
+              alt="Invite Friends"
+            />
+            <span className="text-white text-3xl font-bold">
+            </span>
+
+            <div className="mt-2 text-sm text-[#E18700]">
+              from referrals!
+
+        <Link href="/referral/howitworks">
+          <h2 className="text-sm text-[#E18700] py-6 underline font-bold decoration-[#E18700] cursor-pointer">
+            How it Works!
+          </h2>
+        </Link>
+
+        <div className="relative rounded-xl overflow-hidden backdrop-blur-[14px] bg-[#291818]/70 border border-white/10 p-4">
+          <div className="relative z-10 flex items-start gap-4">
+            <div className="w-2/12">
+              <Image
+                alt="Handshake"
+              />
+              <div className="w-10/12 flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <Image
+                    alt="SPARK"
+                  />
+                  <span className="text-xl font-bold text-[#E18700]">
+                  </span>
+                <button
+                    isClaimingRewards ? "opacity-70" : "hover:brightness-110"
+                >
+                    <span className="flex items-center gap-2">
+                      Claiming...
+                    </span>
+                  ) : (
+                    "Claim"
+                </button>
+            ) : (
+              <div className="w-10/12 space-y-2 font-bold">
+                <h3 className="text-white">Refer More<br />Earn More</h3>
+                <p className="text-sm text-gray-300">
+                  <span className="text-[#909090]"> Get </span>
+                  <span className="text-[#909090]">
+                    per invited friends & bonus rewards for level up by friends!
+                  </span>
+                </p>
+
+        <div className="mt-24">
+            <div className="flex flex-col items-center">
+              <Image
+                alt="No friends yet"
+              />
+          ) : (
+            <>
+              <h3 className="text-lg font-bold text-[#E18700] p-4 ">Referrals</h3>
+              <div className="text-left w-full backdrop-blur-[14px] bg-[#291818]/70 border border-white/10 rounded-xl overflow-hidden">
+                <div className="flex flex-col">
+                      // Extract date info for display
+                      const referralDate = referee.joinedAt
+                        ? format(new Date(referee.joinedAt), "dd MMM, yyyy")
+                        : "Unknown date";
+                      // Default reward per friend
+                      const rewardAmount = 50000;
+                      return (
+                          <div className="p-4">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div className="relative">
+                                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#444] to-[#222] flex items-center justify-center overflow-hidden">
+                                    <div className="text-white text-lg font-bold">
+
+                                <div>
+                                  <h4 className="text-white font-bold">
+                                  </h4>
+                                  <span className="text-gray-400 text-xs">
+                                  </span>
+                                  <span
+                                    className="inline-block mx-1 align-middle text-gray-400 text-xs"
+                                      fontSize: "18px",
+                                      lineHeight: "0",
+                                  >
+                                    •
+                                  </span>
+                                  <span className="text-gray-400 text-xs">
+                                  </span>
+
+                              <div className="flex items-center gap-1">
+                                <div className="flex items-center gap-1">
+                                  <Image
+                                    alt="SPARK"
+                                  />
+                                  <span className="text-[#E18700] font-bold">
+                                  </span>
+                      );
+            </>
+
+      <div className="fixed bottom-0 left-0 right-0 z-10 max-w-md mx-auto">
+        <div className="relative rounded-t-xl overflow-hidden px-4 py-6">
+          <Image
+            alt="Invite Button"
+            fill
+            className="-z-10"
+          />
+
+          <div className="relative z-10 flex items-center gap-6">
+            <button
+              className="flex items-center"
+            >
+              <Image
+                alt="Invite Friends"
+              />
+            </button>
+              <Image
+                alt="Copy Link"
+              />
+            </button>
+  );

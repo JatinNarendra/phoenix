@@ -1,0 +1,78 @@
+/* Toast animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Game toast base styles */
+.game-toast {
+  animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 9999 !important;
+}
+
+.game-toast[data-state='entering'] {
+  animation: slideIn 0.3s ease-out;
+}
+
+.game-toast[data-state='leaving'] {
+  animation: slideOut 0.3s ease-in;
+}
+
+/* Variant-specific glow effects */
+.game-toast-success {
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+}
+
+.game-toast-error {
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+}
+
+.game-toast-info {
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+}
+
+.game-toast-reward {
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+}
+
+/* Hover effects */
+.game-toast:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+} 
