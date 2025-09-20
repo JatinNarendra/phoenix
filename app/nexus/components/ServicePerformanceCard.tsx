@@ -353,19 +353,26 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
               String(item.platform).toUpperCase().includes("TELEGRAM")
           );
           console.log("Found Telegram tasks:", filteredData);
-        } else if ((platform === "X" || platform === "X_RETWEET") && data) {
-          console.log("Filtering for X-related tasks (both X and X_RETWEET)");
-          // Get all X-related tasks, let individual table functions separate them
+        } else if (platform === "X" && data) {
+          console.log("Filtering for X tasks");
+          // Filter for X platform only
           filteredData = data.filter(
             (item) =>
               item.platform === "X" ||
-              item.platform === "X_RETWEET" ||
               String(item.platform).toUpperCase() === "TWITTER" ||
               String(item.type).toUpperCase() === "X" ||
-              String(item.type).toUpperCase() === "X_RETWEET" ||
               String(item.type).toUpperCase() === "TWITTER"
           );
-          console.log("Found X-related tasks:", filteredData);
+          console.log("Found X tasks:", filteredData);
+        } else if (platform === "X_RETWEET" && data) {
+          console.log("Filtering for X_RETWEET tasks");
+          // Filter for X_RETWEET platform only
+          filteredData = data.filter(
+            (item) =>
+              item.platform === "X_RETWEET" ||
+              String(item.type).toUpperCase() === "X_RETWEET"
+          );
+          console.log("Found X_RETWEET tasks:", filteredData);
         } else if ((platform as string) === "YOUTUBE_SUBSCRIBERS" && data) {
           console.log("Filtering for YOUTUBE_SUBSCRIBERS tasks");
           // Use the utility function for consistent filtering
@@ -612,14 +619,9 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
     // Log all tasks for debugging
     console.log("All tasks for X filtering:", socialTasks);
 
-    // Filter for X platform only (not X_RETWEET)
-    const xTasks = socialTasks.filter(
-      (task) =>
-        String(task.platform) === "X" ||
-        String(task.type) === "X" ||
-        String(task.platform) === "TWITTER" ||
-        String(task.type) === "TWITTER"
-    );
+    // socialTasks already contains only X tasks from the database query
+    // No need to filter again
+    const xTasks = socialTasks;
 
     console.log("Found X tasks:", xTasks);
 
@@ -665,12 +667,9 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
     // Log all tasks for debugging
     console.log("All tasks for X_RETWEET filtering:", socialTasks);
 
-    // Filter for X_RETWEET platform only
-    const xRetweetTasks = socialTasks.filter(
-      (task) =>
-        String(task.platform) === "X_RETWEET" ||
-        String(task.type) === "X_RETWEET"
-    );
+    // socialTasks already contains only X_RETWEET tasks from the database query
+    // No need to filter again
+    const xRetweetTasks = socialTasks;
 
     console.log("Found X_RETWEET tasks:", xRetweetTasks);
 
