@@ -692,7 +692,7 @@ export default function CustomerDashboard({ params }: CustomerDashboardProps) {
                 <div className="flex gap-2">
                   <Button
                     onClick={handleAddTaskClick}
-                    className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700"
+                    className="w-full sm:w-auto bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white"
                   >
                     <FaPlus className="mr-2 h-4 w-4" />
                     Add Task
