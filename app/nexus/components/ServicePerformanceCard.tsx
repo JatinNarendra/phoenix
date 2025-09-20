@@ -123,6 +123,11 @@ const platformConfig = {
     color: "text-gray-900",
     bgGradient: "from-gray-50 to-gray-100",
   },
+  X_RETWEET: {
+    icon: FaXTwitter,
+    color: "text-gray-900",
+    bgGradient: "from-gray-50 to-gray-100",
+  },
   YOUTUBE_SUBSCRIBERS: {
     icon: FaYoutube,
     color: "text-red-600",
@@ -891,7 +896,7 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
       // For Telegram, we want to show both channels and groups regardless of which tab is selected
       console.log("Showing all Telegram tasks for platform:", platformStr);
       return renderTelegramTables();
-    } else if (platformStr === "X") {
+    } else if (platformStr === "X" || platformStr === "X_RETWEET") {
       return renderXTable();
     } else if (platformStr.includes("YOUTUBE")) {
       return renderYoutubeTables();
@@ -918,7 +923,7 @@ const ServicePerformanceCard: React.FC<ServicePerformanceCardProps> = ({
                   : platform === "YOUTUBE_SUBSCRIBERS" ||
                     platform === "YOUTUBE_VIEWS"
                   ? "#dc2626"
-                  : platform === "X"
+                  : platform === "X" || platform === "X_RETWEET"
                   ? "#111827"
                   : platform === "DISCORD"
                   ? "#7c3aed"
