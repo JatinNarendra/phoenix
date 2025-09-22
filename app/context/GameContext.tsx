@@ -782,7 +782,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
           if (storedStateStr) {
             storedState = JSON.parse(storedStateStr);
             // Additional validation: ensure stored state belongs to current user
-            if (storedState.user_id !== user_id.toString()) {
+            if (storedState && storedState.user_id !== user_id.toString()) {
               console.log(
                 "GameContext: Stored state belongs to different user, ignoring:",
                 {

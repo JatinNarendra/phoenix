@@ -67,7 +67,7 @@ export const initializeUserOnce = (
 
   // Set flag to prevent re-initialization for this user
   hasInitialized = true;
-  lastInitializedUserId = currentUserId;
+  lastInitializedUserId = currentUserId || null;
 
   // Store the promise so we can return it if called again
   initializationPromise = fetch("/api/telegram/user", {
