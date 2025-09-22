@@ -1,9 +1,9 @@
 const https = require("https");
 
 // Bot configuration
-const BOT_TOKEN = "8153450520:AAE31uukI1RPDFFwDZAnhEQXMTOPjJ2E9eE";
+const BOT_TOKEN = "7979842022:AAEOa6Y_9XCw0MmOhAWK8NIT6lehlL4lOVM";
 const WEBHOOK_URL = "https://sparky-kappa.vercel.app/api/payments/webhook";
-const WEBHOOK_SECRET = "dbde5a346ebf238833436c7ffde34383";
+const WEBHOOK_SECRET = "sparkyzone34638833436c7ffde34383";
 
 async function setWebhook() {
   const webhookData = {

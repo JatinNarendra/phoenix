@@ -10,7 +10,7 @@ const BOT_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
 
 // Get bot URL from env with fallback
 export const getBotUrl = () => {
-  return process.env.BOT_URL || "https://t.me/phoenixearnbot";
+  return process.env.BOT_URL || "https://t.me/PhoenixZoneBot";
 };
 
 // Get bot username from URL
