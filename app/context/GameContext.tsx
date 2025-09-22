@@ -691,6 +691,43 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
+      // Clear localStorage data from previous users to prevent data mixing
+      // when users switch between different Telegram accounts
+      try {
+        const storedStateStr = localStorage.getItem(STORAGE_KEYS.USER);
+        if (storedStateStr) {
+          const storedState = JSON.parse(storedStateStr);
+          // If stored state belongs to a different user, clear it
+          if (
+            storedState.user_id &&
+            storedState.user_id !== user_id.toString()
+          ) {
+            console.log(
+              "GameContext: Clearing localStorage data from different user:",
+              {
+                storedUserId: storedState.user_id,
+                currentUserId: user_id.toString(),
+              }
+            );
+            localStorage.removeItem(STORAGE_KEYS.USER);
+            // Also clear other user-specific data
+            localStorage.removeItem("playerScore");
+            localStorage.removeItem("boosterUsage");
+            localStorage.removeItem("spinProgression");
+          }
+        }
+      } catch (error) {
+        console.error(
+          "GameContext: Error checking localStorage for user data:",
+          error
+        );
+        // Clear localStorage if there's any error parsing it
+        localStorage.removeItem(STORAGE_KEYS.USER);
+        localStorage.removeItem("playerScore");
+        localStorage.removeItem("boosterUsage");
+        localStorage.removeItem("spinProgression");
+      }
+
       // Initialize timer service early to ensure timers are loaded from localStorage
       timerService.initializeTimerService();
 
@@ -744,6 +781,19 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
           const storedStateStr = localStorage.getItem(STORAGE_KEYS.USER);
           if (storedStateStr) {
             storedState = JSON.parse(storedStateStr);
+            // Additional validation: ensure stored state belongs to current user
+            if (storedState.user_id !== user_id.toString()) {
+              console.log(
+                "GameContext: Stored state belongs to different user, ignoring:",
+                {
+                  storedUserId: storedState.user_id,
+                  currentUserId: user_id.toString(),
+                }
+              );
+              storedState = null;
+              // Clear the invalid data
+              localStorage.removeItem(STORAGE_KEYS.USER);
+            }
           }
         } catch {
           localStorage.removeItem(STORAGE_KEYS.USER);

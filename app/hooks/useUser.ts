@@ -39,6 +39,43 @@ export const useUser = () => {
     initializationAttempted.current = true;
     console.log("useUser: Starting user initialization");
 
+    // Clear localStorage data from previous users when user changes
+    if (typeof window !== "undefined") {
+      try {
+        const storedStateStr = localStorage.getItem("user");
+        if (storedStateStr) {
+          const storedState = JSON.parse(storedStateStr);
+          // If stored state belongs to a different user, clear it
+          if (
+            storedState.user_id &&
+            storedState.user_id !== WebApp?.initDataUnsafe?.user?.id?.toString()
+          ) {
+            console.log(
+              "useUser: Clearing localStorage data from different user:",
+              {
+                storedUserId: storedState.user_id,
+                currentUserId: WebApp?.initDataUnsafe?.user?.id,
+              }
+            );
+            localStorage.removeItem("user");
+            localStorage.removeItem("playerScore");
+            localStorage.removeItem("boosterUsage");
+            localStorage.removeItem("spinProgression");
+          }
+        }
+      } catch (error) {
+        console.error(
+          "useUser: Error checking localStorage for user data:",
+          error
+        );
+        // Clear localStorage if there's any error parsing it
+        localStorage.removeItem("user");
+        localStorage.removeItem("playerScore");
+        localStorage.removeItem("boosterUsage");
+        localStorage.removeItem("spinProgression");
+      }
+    }
+
     const initializeUser = async () => {
       // Check if we're on a Nexus route - if so, bypass Telegram checks
       const isNexusRoute =

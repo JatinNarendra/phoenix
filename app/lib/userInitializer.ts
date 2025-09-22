@@ -12,6 +12,7 @@ export interface InitializeResult {
 // Global state to track initialization
 let hasInitialized = false;
 let initializationPromise: Promise<InitializeResult> | null = null;
+let lastInitializedUserId: string | null = null;
 
 // Utility function to reset user progression data
 export const resetUserProgressionData = () => {
@@ -24,13 +25,25 @@ export const resetUserProgressionData = () => {
 export const initializeUserOnce = (
   WebApp: TelegramWebApp
 ): Promise<InitializeResult> => {
-  // If we've already started initialization, return the existing promise
-  if (initializationPromise) {
+  const currentUserId = WebApp.initDataUnsafe.user?.id?.toString();
+
+  // If user has changed, reset initialization state
+  if (lastInitializedUserId && lastInitializedUserId !== currentUserId) {
+    console.log("User changed, resetting initialization state:", {
+      lastUserId: lastInitializedUserId,
+      currentUserId: currentUserId,
+    });
+    hasInitialized = false;
+    initializationPromise = null;
+  }
+
+  // If we've already started initialization for this user, return the existing promise
+  if (initializationPromise && lastInitializedUserId === currentUserId) {
     return initializationPromise;
   }
 
-  // If we've already completed initialization, return a resolved promise
-  if (hasInitialized) {
+  // If we've already completed initialization for this user, return a resolved promise
+  if (hasInitialized && lastInitializedUserId === currentUserId) {
     return Promise.resolve({ success: true });
   }
 
@@ -52,8 +65,9 @@ export const initializeUserOnce = (
     return Promise.resolve({ success: true });
   }
 
-  // Set flag to prevent re-initialization
+  // Set flag to prevent re-initialization for this user
   hasInitialized = true;
+  lastInitializedUserId = currentUserId;
 
   // Store the promise so we can return it if called again
   initializationPromise = fetch("/api/telegram/user", {

@@ -991,4 +991,123 @@ energyCapacity: 1500,        // ✅ Correct
 
 ---
 
-_Last Updated: 2024-12-19_
+### Bug #009 - Telegram User Data Mixing When Switching Accounts
+
+- **Date Reported**: 2025-01-22
+- **Severity**: High
+- **Component**: GameContext, useUser, userInitializer, localStorage
+- **Status**: Resolved
+- **Reporter**: User Report
+
+#### Description
+
+When users have 2 different accounts in the same Telegram app and switch between different accounts, the application returns the same data for different Telegram users in different rows. This causes data corruption and incorrect user state management where user data from one account appears in another user's record.
+
+#### Steps to Reproduce
+
+1. User has 2 different Telegram accounts in the same app
+2. User switches between different accounts
+3. User opens the game application
+4. User sees data from the previous account instead of their current account
+
+#### Expected Behavior
+
+Each user should see only their own data when switching between different Telegram accounts. User data should be properly isolated and not mixed between different accounts.
+
+#### Actual Behavior
+
+Users see mixed data where:
+
+- User data from one account appears in another user's record
+- Game state data is being shared between different user IDs
+- Referral links and other user-specific data gets mixed between accounts
+
+#### Environment
+
+- Platform: Telegram WebApp
+- Users Affected: Multiple users with multiple accounts
+- Component: GameContext, useUser, userInitializer, localStorage
+
+#### Root Cause Analysis
+
+The issue was caused by improper handling of localStorage data when users switch between different Telegram accounts in the same app. The problem occurred in three key areas:
+
+1. **GameContext.tsx**: The game state initialization logic was using localStorage as a fallback when database data wasn't available, but it wasn't properly validating that the stored data belonged to the current user.
+
+2. **useUser.ts**: The user hook wasn't clearing localStorage data from previous users when a new user was detected.
+
+3. **userInitializer.ts**: The initialization state was global and not user-specific, causing initialization to be skipped for new users if a previous user had already been initialized.
+
+**Technical Details:**
+
+1. **localStorage Persistence**: localStorage data persisted across user switches, causing data mixing
+2. **Insufficient Validation**: The code checked `storedState.user_id === user_id.toString()` but this wasn't sufficient
+3. **Global Initialization State**: Initialization state wasn't reset when users changed
+4. **Fallback Logic**: The app used localStorage data from previous users as fallback
+
+#### Resolution
+
+- **Date Resolved**: 2025-01-22
+- **Resolution Method**: Implemented comprehensive localStorage cleanup and user validation across all user management components
+- **Files Modified**:
+  - `app/context/GameContext.tsx` (lines 694-720, 775-784)
+  - `app/hooks/useUser.ts` (lines 42-68)
+  - `app/lib/userInitializer.ts` (lines 15, 28-48, 69-70)
+- **Key Changes**:
+  1. **Added localStorage cleanup**: Clear localStorage data from previous users when switching accounts
+  2. **Added user validation**: Ensure stored state belongs to current user before using it
+  3. **Made initialization user-specific**: Track last initialized user ID to prevent cross-user initialization
+  4. **Added comprehensive error handling**: Handle localStorage parsing errors gracefully
+
+#### Code Changes Made
+
+```typescript
+// GameContext.tsx - Clear localStorage from different users
+if (storedState.user_id && storedState.user_id !== user_id.toString()) {
+  console.log("GameContext: Clearing localStorage data from different user:", {
+    storedUserId: storedState.user_id,
+    currentUserId: user_id.toString(),
+  });
+  localStorage.removeItem(STORAGE_KEYS.USER);
+  localStorage.removeItem("playerScore");
+  localStorage.removeItem("boosterUsage");
+  localStorage.removeItem("spinProgression");
+}
+
+// userInitializer.ts - User-specific initialization tracking
+if (lastInitializedUserId && lastInitializedUserId !== currentUserId) {
+  console.log("User changed, resetting initialization state:", {
+    lastUserId: lastInitializedUserId,
+    currentUserId: currentUserId,
+  });
+  hasInitialized = false;
+  initializationPromise = null;
+}
+```
+
+#### Prevention Measures
+
+- **Always validate user data**: Check that stored data belongs to the current user before using it
+- **Clear user-specific data**: Remove localStorage data when users change
+- **Use user-specific state**: Avoid global state that persists across user switches
+- **Add comprehensive logging**: Log user changes and data clearing for debugging
+- **Test account switching**: Always test with multiple accounts when implementing user management
+
+#### Testing
+
+- [x] Verified localStorage is cleared when users switch accounts
+- [x] Confirmed user validation prevents data mixing
+- [x] Checked that initialization state is reset for new users
+- [x] Verified no linting errors were introduced
+- [x] Tested with multiple user accounts
+
+#### Impact
+
+- **Severity**: High (Data integrity issue affecting user experience)
+- **Scope**: All users with multiple Telegram accounts
+- **User Experience**: Users now see only their own data when switching accounts
+- **Data Integrity**: Prevents user data mixing and corruption
+
+---
+
+_Last Updated: 2025-01-22_
