@@ -102,6 +102,20 @@
   stroke: currentColor !important;
 }
 
+/* Nexus Toast Container Styling */
+.nexus-toast-container {
+  z-index: 9999 !important;
+}
+
+.nexus-toast-container > div {
+  pointer-events: auto !important;
+}
+
+/* Ensure toasts are not affected by nexus page color overrides */
+.nexus-toast-container * {
+  color: inherit !important;
+}
+
 /* Specific override for nexus page background */
 body:has(.nexus-page) {
   background-color: var(--nexus-background) !important;
