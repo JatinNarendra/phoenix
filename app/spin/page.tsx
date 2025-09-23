@@ -2205,9 +2205,6 @@ ${
     ? `Last Completed: Type ${state.lastCompletedType}`
     : ""
 }
-Type Completion Reward: ${
-            getTypeCompletionReward(currentGlobalType)?.value || 0
-          } spins
 Token Required: ${state.requiredTokens} tokens
 Reward: ${
             typeof state.reward.value === "number"
