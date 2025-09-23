@@ -27,6 +27,7 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isTelegramApp, setIsTelegramApp] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
   const [showSplash, setShowSplash] = useState<boolean>(false); // Don't show by default
+  const [showLoader, setShowLoader] = useState<boolean>(true); // Track if we should show loader
   const hasInitialized = useRef(false);
   const hasCalledReady = useRef(false);
   const lastKnownUserId = useRef<string | null>(null);
@@ -64,6 +65,18 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
       };
     }
   }, []);
+
+  // Add timeout to automatically hide loader after short delay
+  useEffect(() => {
+    if (showLoader) {
+      const loaderTimeout = setTimeout(() => {
+        console.log("WebAppContext: Loader timeout, hiding loader");
+        setShowLoader(false);
+      }, 1000); // Hide loader after 1 second max
+
+      return () => clearTimeout(loaderTimeout);
+    }
+  }, [showLoader]);
 
   useEffect(() => {
     if (hasInitialized.current) return;
@@ -164,6 +177,7 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsTelegramApp(true);
         setIsLoading(false);
         setIsReady(true);
+        setShowLoader(false);
         return;
       }
 
@@ -189,6 +203,7 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
             setIsTelegramApp(true);
             setIsLoading(false);
             setIsReady(true);
+            setShowLoader(false);
             return true;
           }
         }
@@ -264,6 +279,7 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
           setIsTelegramApp(true);
           setIsLoading(false);
           setIsReady(true);
+          setShowLoader(false);
           console.log("Dummy WebApp set successfully:", {
             hasInitData: !!dummyWebApp.initData,
             hasInitDataUnsafe: !!dummyWebApp.initDataUnsafe,
@@ -311,6 +327,7 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
             setIsLoading(false);
             // Don't show splash screen for fallback (non-Telegram) WebApp
             setIsReady(true);
+            setShowLoader(false);
           } else {
             // If document not ready, try again in 100ms but with a max retry count
             const maxRetries = 10; // Set a max retry count to prevent infinite attempts
@@ -361,6 +378,7 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
               setIsLoading(false);
               // Don't show splash screen for fallback (non-Telegram) WebApp
               setIsReady(true);
+              setShowLoader(false);
             }
           }
         }
@@ -521,7 +539,7 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
           setShowSplash(false);
         }}
       />
-      {!isReady && <Loader isLoading={true} />}
+      {!isReady && showLoader && <Loader isLoading={true} />}
       {children}
     </WebAppContext.Provider>
   );
