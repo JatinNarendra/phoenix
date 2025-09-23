@@ -4,6 +4,17 @@ import { supabase } from "../lib/supabase";
 import { AUTO_TAP_DURATION } from "../constants/gameConstants";
 import { levelConfig } from "../utility/stageConfig";
 
+// Get bot URL from env with fallback
+export const getBotUrl = () => {
+  return process.env.BOT_URL || "https://t.me/PhoenixZoneBot";
+};
+
+// Get bot username from URL
+export const getBotUsername = () => {
+  const botUrl = getBotUrl();
+  return botUrl.replace("https://t.me/", "");
+};
+
 // Get bot token from env
 const TELEGRAM_BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
 const BOT_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
