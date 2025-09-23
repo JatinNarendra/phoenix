@@ -1,23 +1,12 @@
 "use client";
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "../lib/supabase";
 import { AUTO_TAP_DURATION } from "../constants/gameConstants";
 import { levelConfig } from "../utility/stageConfig";
 
 // Get bot token from env
 const TELEGRAM_BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
 const BOT_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
-
-// Get bot URL from env with fallback
-export const getBotUrl = () => {
-  return process.env.BOT_URL || "https://t.me/PhoenixZoneBot";
-};
-
-// Get bot username from URL
-export const getBotUsername = () => {
-  const botUrl = getBotUrl();
-  return botUrl.replace("https://t.me/", "");
-};
 
 // Create HMAC key from bot token
 const createHMACKey = async (botToken: string) => {
@@ -312,60 +301,67 @@ export const updateTelegramUserProgress = async (
     const preservedBoosts = {
       ...appGameState.boosts,
       rewardedTurbo:
-        currentUser?.game_state?.boosts?.rewardedTurbo ??
+        (currentUser as any)?.game_state?.boosts?.rewardedTurbo ??
         appGameState.boosts.rewardedTurbo,
       rewardedRecharge:
-        currentUser?.game_state?.boosts?.rewardedRecharge ??
+        (currentUser as any)?.game_state?.boosts?.rewardedRecharge ??
         appGameState.boosts.rewardedRecharge,
       inGameTurbo:
-        currentUser?.game_state?.boosts?.inGameTurbo ??
+        (currentUser as any)?.game_state?.boosts?.inGameTurbo ??
         appGameState.boosts.inGameTurbo,
       inGameRecharge:
-        currentUser?.game_state?.boosts?.inGameRecharge ??
+        (currentUser as any)?.game_state?.boosts?.inGameRecharge ??
         appGameState.boosts.inGameRecharge,
       turboEndTime:
-        currentUser?.game_state?.boosts?.turboEndTime ??
+        (currentUser as any)?.game_state?.boosts?.turboEndTime ??
         appGameState.boosts.turboEndTime,
       rechargeEndTime:
-        currentUser?.game_state?.boosts?.rechargeEndTime ??
+        (currentUser as any)?.game_state?.boosts?.rechargeEndTime ??
         appGameState.boosts.rechargeEndTime,
     };
 
     // Preserve autotap state if it exists in current state
     const preservedAutoTapState = {
       autoTapActive:
-        appGameState.autoTapActive ?? currentUser?.game_state?.autoTapActive,
+        appGameState.autoTapActive ??
+        (currentUser as any)?.game_state?.autoTapActive,
       autoTapEndTime:
-        appGameState.autoTapEndTime ?? currentUser?.game_state?.autoTapEndTime,
+        appGameState.autoTapEndTime ??
+        (currentUser as any)?.game_state?.autoTapEndTime,
       autoTapStartTime:
         appGameState.autoTapStartTime ??
-        currentUser?.game_state?.autoTapStartTime,
+        (currentUser as any)?.game_state?.autoTapStartTime,
       autoTapProgress:
         appGameState.autoTapProgress ??
-        currentUser?.game_state?.autoTapProgress,
+        (currentUser as any)?.game_state?.autoTapProgress,
       autoTapTimeLeft:
         appGameState.autoTapTimeLeft ??
-        currentUser?.game_state?.autoTapTimeLeft,
+        (currentUser as any)?.game_state?.autoTapTimeLeft,
       autoTapSpark:
-        appGameState.autoTapSpark ?? currentUser?.game_state?.autoTapSpark,
+        appGameState.autoTapSpark ??
+        (currentUser as any)?.game_state?.autoTapSpark,
       autoTapCoins:
-        appGameState.autoTapCoins ?? currentUser?.game_state?.autoTapCoins,
+        appGameState.autoTapCoins ??
+        (currentUser as any)?.game_state?.autoTapCoins,
       autoTapClaimed:
-        appGameState.autoTapClaimed ?? currentUser?.game_state?.autoTapClaimed,
+        appGameState.autoTapClaimed ??
+        (currentUser as any)?.game_state?.autoTapClaimed,
       autoTapTotalCoins:
         appGameState.autoTapTotalCoins ??
-        currentUser?.game_state?.autoTapTotalCoins,
+        (currentUser as any)?.game_state?.autoTapTotalCoins,
       autoTapDaily:
-        appGameState.autoTapDaily ?? currentUser?.game_state?.autoTapDaily,
+        appGameState.autoTapDaily ??
+        (currentUser as any)?.game_state?.autoTapDaily,
     };
 
     // Preserve application state within game_state
     const preservedApplicationState = {
-      ...(currentUser?.game_state?.application_state || {}),
+      ...((currentUser as any)?.game_state?.application_state || {}),
       ...(appGameState.application_state || {}),
       isAutotapPurchased:
         appGameState.application_state?.isAutotapPurchased ??
-        currentUser?.game_state?.application_state?.isAutotapPurchased ??
+        (currentUser as any)?.game_state?.application_state
+          ?.isAutotapPurchased ??
         false,
       isAutotapActive: preservedAutoTapState.autoTapActive ?? false,
     };
@@ -415,7 +411,7 @@ export const initializeOrUpdateUser = async (
       return {
         success: false,
         isNewUser: false,
-        error: "Database connection not available",
+        error: "Supabase client not available",
       };
     }
 
@@ -437,9 +433,9 @@ export const initializeOrUpdateUser = async (
     const isNewUser = !existingUser;
 
     // If user exists and has autotap state, recalculate it
-    if (existingUser?.game_state) {
+    if ((existingUser as any)?.game_state) {
       const currentTime = Date.now();
-      const gameState = existingUser.game_state;
+      const gameState = (existingUser as any).game_state;
 
       // Handle autotap state
       if (gameState.autoTapActive && gameState.autoTapEndTime) {
@@ -542,7 +538,7 @@ export const initializeOrUpdateUser = async (
           turboRefillTime: 0,
           rechargeRefillTime: 0,
         },
-        energyCapacity: 1500,
+        energyCapacity: 2500,
         autoTapCoins: 0,
         autoTapTotalCoins: 0,
         autoTapClaimed: false,
@@ -583,7 +579,9 @@ export const initializeOrUpdateUser = async (
           isAutotapPurchased: false,
         },
       },
-      last_login: isStartCommand ? now : existingUser?.last_login ?? now,
+      last_login: isStartCommand
+        ? now
+        : (existingUser as any)?.last_login ?? now,
       last_active: now,
       updated_at: now,
     };
@@ -775,9 +773,11 @@ export const handleStartCommand = async (
         );
 
         if (!userError) {
-          if (userData.referred_by) {
+          if ((userData as any).referred_by) {
             console.log(
-              `⚠️ User ${userId} was already referred by ${userData.referred_by}`
+              `⚠️ User ${userId} was already referred by ${
+                (userData as any).referred_by
+              }`
             );
           } else {
             console.log("✅ New referral - updating user record");

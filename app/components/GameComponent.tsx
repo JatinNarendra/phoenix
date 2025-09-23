@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { saveGameProgress } from "../lib/telegram-api";
-import type { TelegramGameState } from "../lib/telegram-server";
+import { saveGameProgress } from "../lib/telegram";
+import type { TelegramGameState } from "../lib/telegram";
 import { useGame } from "../context/GameContext";
 import { useUser } from "../hooks/useUser";
 

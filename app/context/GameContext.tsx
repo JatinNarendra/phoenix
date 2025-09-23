@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import { levelConfig } from "../utility/stageConfig";
 import { toast } from "react-hot-toast";
-import { updateTelegramUserProgress } from "../lib/telegram-api";
+import { updateTelegramUserProgress } from "../lib/telegram";
 import { useUser } from "../hooks/useUser";
 import { supabase } from "../lib/supabase";
 import { TimerType } from "../types/gameTypes";
