@@ -31,6 +31,8 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
   const hasCalledReady = useRef(false);
   const lastKnownUserId = useRef<string | null>(null);
   const initDataCheckInterval = useRef<NodeJS.Timeout | null>(null);
+  const refreshCooldownRef = useRef<number>(0);
+  const refreshCountRef = useRef<number>(0);
 
   useEffect(() => {
     if (hasInitialized.current) return;
@@ -334,9 +336,27 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
         console.log("WebAppContext: Initial user ID set:", currentUserId);
       }
 
-      // Monitor for user ID changes every 2 seconds
+      // Monitor for user ID changes every 5 seconds (less aggressive)
       initDataCheckInterval.current = setInterval(() => {
         const currentUserId = WebApp.initDataUnsafe?.user?.id?.toString();
+        const now = Date.now();
+
+        // Prevent refresh loops with cooldown and max refresh count
+        if (now - refreshCooldownRef.current < 10000) {
+          // 10 second cooldown
+          return;
+        }
+
+        if (refreshCountRef.current >= 3) {
+          // Max 3 refreshes per session
+          console.log(
+            "WebAppContext: Max refresh count reached, stopping monitoring"
+          );
+          if (initDataCheckInterval.current) {
+            clearInterval(initDataCheckInterval.current);
+          }
+          return;
+        }
 
         if (
           currentUserId &&
@@ -346,9 +366,14 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
           console.log("WebAppContext: User ID change detected!", {
             previousUserId: lastKnownUserId.current,
             currentUserId: currentUserId,
+            refreshCount: refreshCountRef.current,
             initData: WebApp.initData,
             initDataUnsafe: WebApp.initDataUnsafe,
           });
+
+          // Update refresh tracking
+          refreshCountRef.current += 1;
+          refreshCooldownRef.current = now;
 
           // Force refresh the page to get fresh initData
           console.log(
@@ -362,7 +387,7 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
         if (currentUserId) {
           lastKnownUserId.current = currentUserId;
         }
-      }, 2000);
+      }, 5000); // Increased interval to 5 seconds
     };
 
     startInitDataMonitoring();
@@ -374,6 +399,18 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
   }, [isTelegramApp, WebApp]);
+
+  // Add timeout to hide splash screen if it stays too long
+  useEffect(() => {
+    if (showSplash) {
+      const splashTimeout = setTimeout(() => {
+        console.log("WebAppContext: Splash screen timeout, forcing hide");
+        setShowSplash(false);
+      }, 10000); // Hide splash after 10 seconds max
+
+      return () => clearTimeout(splashTimeout);
+    }
+  }, [showSplash]);
 
   const showBackButton = () => {
     if (WebApp?.BackButton) {
