@@ -182,11 +182,11 @@ export const TIMER_CONFIG: Record<
     resetInterval: 24 * 60 * 60 * 1000, // 24 hours
   },
   [TimerType.SPIN]: {
-    // Original code (commented out for testing)
-    // maxDuration: 1 * 60 * 60 * 1000, // 1 hour
+    // Production code - 2 hours timer
+    maxDuration: 2 * 60 * 60 * 1000, // 2 hours
 
-    // Testing code - 1 minute timer
-    maxDuration: 1 * 60 * 1000, // 1 minute
+    // Testing code (commented out)
+    // maxDuration: 1 * 60 * 1000, // 1 minute
     maxUses: 50,
     resetInterval: 24 * 60 * 60 * 1000, // 24 hours
   },

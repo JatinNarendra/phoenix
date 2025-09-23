@@ -1,14 +1,26 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { useGame } from './GameContext';
-import { useUser } from '../hooks/useUser';
-import timerService from '../services/timerService';
-import { toast } from 'react-hot-toast';
-import { TimerType, TimerData, TimerState, TimerMetadata } from "../types/gameTypes";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
+import { useGame } from "./GameContext";
+import { useUser } from "../hooks/useUser";
+import timerService from "../services/timerService";
+import { toast } from "react-hot-toast";
+import {
+  TimerType,
+  TimerData,
+  TimerState,
+  TimerMetadata,
+} from "../types/gameTypes";
 import { AUTO_TAP_DURATION } from "../constants/gameConstants";
-import { AutoTapReward } from '../services/timerService';
-import { checkRewardAvailability as checkReward } from '../lib/dailyRewards';
+import { AutoTapReward } from "../services/timerService";
+import { checkRewardAvailability as checkReward } from "../lib/dailyRewards";
 
 // Types
 interface SpinResult {
@@ -55,13 +67,21 @@ interface DailyRewardsFeatures {
     seconds: string;
     raw: number;
   };
-  checkRewardAvailability: () => { canCollect: boolean; missedDay: boolean; timeUntilNext: number };
+  checkRewardAvailability: () => {
+    canCollect: boolean;
+    missedDay: boolean;
+    timeUntilNext: number;
+  };
 }
 
 interface TimerFeatures {
   timers: TimerState;
   isLoading: boolean;
-  startTimer: (timerType: TimerType, duration: number, metadata?: TimerMetadata) => Promise<TimerData | null>;
+  startTimer: (
+    timerType: TimerType,
+    duration: number,
+    metadata?: TimerMetadata
+  ) => Promise<TimerData | null>;
   completeTimer: (timerType: TimerType) => Promise<void>;
   getTimerInfo: (timerType: TimerType) => TimerData | null;
   formatTime: (seconds: number) => string;
@@ -74,14 +94,18 @@ interface GameFeaturesContextType {
   timers: TimerFeatures;
 }
 
-const GameFeaturesContext = createContext<GameFeaturesContextType | undefined>(undefined);
+const GameFeaturesContext = createContext<GameFeaturesContextType | undefined>(
+  undefined
+);
 
 // Add an interface for the window with our custom property
 interface CustomWindow extends Window {
   __stopAutoTapInProgress?: boolean;
 }
 
-export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   // Spin state
   const [isSpinning, setIsSpinning] = useState(false);
   const [isAutoSpinning, setIsAutoSpinning] = useState(false);
@@ -96,7 +120,9 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [autoTapPower, setAutoTapPower] = useState(1);
   const [autoTapCoinsEarned, setAutoTapCoinsEarned] = useState(0);
   const [dailyUsesRemaining, setDailyUsesRemaining] = useState(3);
-  const [uncollectedRewards, setUncollectedRewards] = useState<AutoTapReward[]>([]);
+  const [uncollectedRewards, setUncollectedRewards] = useState<AutoTapReward[]>(
+    []
+  );
 
   // Daily rewards state
   const [isRewardAvailable, setIsRewardAvailable] = useState(false);
@@ -104,10 +130,16 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
     hours: "00",
     minutes: "00",
     seconds: "00",
-    raw: 0
+    raw: 0,
   });
 
-  const { increaseCoins, gameState, calculateTotalCoinsWithTurbo, decreaseSpins, persistState } = useGame();
+  const {
+    increaseCoins,
+    gameState,
+    calculateTotalCoinsWithTurbo,
+    decreaseSpins,
+    persistState,
+  } = useGame();
   const { id: userId } = useUser();
 
   // Timer state
@@ -121,16 +153,16 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const handleSpinTimerComplete = useCallback(() => {
     if (gameState.spins < 50) {
       // Add 2 spins for the completed timer
-      persistState(prev => ({
+      persistState((prev) => ({
         ...prev,
         spins: Math.min(50, (prev.spins || 0) + 2),
-        lastActiveTime: Date.now() // Update last active time
+        lastActiveTime: Date.now(), // Update last active time
       }));
 
       // Restart timer if still under 50 spins after adding
       const newSpinCount = Math.min(50, gameState.spins + 2);
       if (newSpinCount < 50) {
-        timerService.startTimer(TimerType.SPIN, 60 * 1000);
+        timerService.startTimer(TimerType.SPIN, 2 * 60 * 60 * 1000); // 2 hours
       }
     }
   }, [gameState.spins, persistState]);
@@ -142,9 +174,9 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
     // Initialize spin timer if needed
     if (gameState.spins < 50) {
       const spinTimer = timerService.getTimerInfo(TimerType.SPIN);
-      if (!spinTimer || spinTimer.status !== 'active') {
-        // Start a new spin timer for 60 seconds
-        timerService.startTimer(TimerType.SPIN, 60 * 1000);
+      if (!spinTimer || spinTimer.status !== "active") {
+        // Start a new spin timer for 2 hours
+        timerService.startTimer(TimerType.SPIN, 2 * 60 * 60 * 1000);
       }
     }
 
@@ -164,17 +196,20 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const loadTimers = async () => {
       setIsTimerLoading(true);
       const activeTimers = timerService.getAllActiveTimers();
-      
+
       // Initialize spin timer if needed
-      if (gameState.spins < 50 && (!activeTimers.spin || activeTimers.spin.status !== 'active')) {
-        timerService.startTimer(TimerType.SPIN, 60 * 1000);
+      if (
+        gameState.spins < 50 &&
+        (!activeTimers.spin || activeTimers.spin.status !== "active")
+      ) {
+        timerService.startTimer(TimerType.SPIN, 2 * 60 * 60 * 1000); // 2 hours
         // Get updated timers after starting spin timer
         const updatedTimers = timerService.getAllActiveTimers();
         setTimersState(updatedTimers);
       } else {
         setTimersState(activeTimers);
       }
-      
+
       setIsTimerLoading(false);
     };
 
@@ -188,24 +223,31 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
       // Only update state if component is still mounted
       if (isMounted.current) {
         const timers = timerService.getAllActiveTimers();
-        
+
         // Check if spin timer needs to be restarted
         if (gameState.spins < 50) {
           const spinTimer = timers.spin;
-          
+
           // If timer is completed or doesn't exist, handle completion and start new timer
-          if (!spinTimer || spinTimer.status === 'completed') {
+          if (!spinTimer || spinTimer.status === "completed") {
             handleSpinTimerComplete();
             const updatedTimers = timerService.getAllActiveTimers();
-            if (JSON.stringify(updatedTimers) !== JSON.stringify(prevTimersRef.current)) {
+            if (
+              JSON.stringify(updatedTimers) !==
+              JSON.stringify(prevTimersRef.current)
+            ) {
               prevTimersRef.current = updatedTimers;
               setTimersState(updatedTimers);
             }
-          } else if (JSON.stringify(timers) !== JSON.stringify(prevTimersRef.current)) {
+          } else if (
+            JSON.stringify(timers) !== JSON.stringify(prevTimersRef.current)
+          ) {
             prevTimersRef.current = timers;
             setTimersState(timers);
           }
-        } else if (JSON.stringify(timers) !== JSON.stringify(prevTimersRef.current)) {
+        } else if (
+          JSON.stringify(timers) !== JSON.stringify(prevTimersRef.current)
+        ) {
           prevTimersRef.current = timers;
           setTimersState(timers);
         }
@@ -229,7 +271,9 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
         setAutoTapCoinsEarned(state.coinsEarned);
       }
 
-      const rewards = await timerService.getUncollectedRewards(userId.toString());
+      const rewards = await timerService.getUncollectedRewards(
+        userId.toString()
+      );
       setUncollectedRewards(rewards);
     };
 
@@ -240,20 +284,23 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }, [userId]);
 
   // Timer functions
-  const startTimer = useCallback(async (
-    timerType: TimerType,
-    duration: number,
-    metadata?: TimerMetadata
-  ) => {
-    try {
-      const timer = timerService.startTimer(timerType, duration, metadata);
-      setTimersState(timerService.getAllActiveTimers());
-      return Promise.resolve(timer);
-    } catch (error) {
-      console.error("Error starting timer:", error);
-      return Promise.resolve(null);
-    }
-  }, []);
+  const startTimer = useCallback(
+    async (
+      timerType: TimerType,
+      duration: number,
+      metadata?: TimerMetadata
+    ) => {
+      try {
+        const timer = timerService.startTimer(timerType, duration, metadata);
+        setTimersState(timerService.getAllActiveTimers());
+        return Promise.resolve(timer);
+      } catch (error) {
+        console.error("Error starting timer:", error);
+        return Promise.resolve(null);
+      }
+    },
+    []
+  );
 
   const completeTimer = useCallback(async (timerType: TimerType) => {
     try {
@@ -278,11 +325,11 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const rand = Math.random() * 100;
     let multiplier = 1;
 
-    if (rand < 40) multiplier = 1;     // 40% chance
+    if (rand < 40) multiplier = 1; // 40% chance
     else if (rand < 70) multiplier = 2; // 30% chance
     else if (rand < 85) multiplier = 3; // 15% chance
     else if (rand < 95) multiplier = 5; // 10% chance
-    else multiplier = 10;               // 5% chance
+    else multiplier = 10; // 5% chance
 
     multiplier *= gameState.upgrades.spinLevel || 1;
 
@@ -299,7 +346,10 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const canSpin = useCallback(() => {
     const spinTimer = timerService.getTimerInfo(TimerType.SPIN);
-    if (!spinTimer || (spinTimer.status !== 'active' && spinTimer.remainingSec === 0)) {
+    if (
+      !spinTimer ||
+      (spinTimer.status !== "active" && spinTimer.remainingSec === 0)
+    ) {
       return gameState.spins > 0;
     }
     return false;
@@ -310,17 +360,19 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     setIsSpinning(true);
     const result = generateSpinResult();
-    
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
+
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     decreaseSpins(1);
     increaseCoins(result.coins);
-    setSpinResults(prev => [...prev, result]);
-    setSpinHistory(prev => [...prev.slice(-9), result]);
+    setSpinResults((prev) => [...prev, result]);
+    setSpinHistory((prev) => [...prev.slice(-9), result]);
     setLastSpinTime(Date.now());
-    setSpinCount(prev => prev + 1);
-    
-    toast.success(`Won ${result.coins.toLocaleString()} coins! (${result.multiplier}x)`);
+    setSpinCount((prev) => prev + 1);
+
+    toast.success(
+      `Won ${result.coins.toLocaleString()} coins! (${result.multiplier}x)`
+    );
     setIsSpinning(false);
   }, [canSpin, isSpinning, generateSpinResult, decreaseSpins, increaseCoins]);
 
@@ -330,11 +382,11 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const startAutoSpin = useCallback(async () => {
     if (isAutoSpinning || !canSpin()) return;
-    
+
     setIsAutoSpinning(true);
     while (canSpin() && isAutoSpinning) {
       await startSpin();
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
     setIsAutoSpinning(false);
   }, [isAutoSpinning, canSpin, startSpin]);
@@ -353,40 +405,42 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     try {
       // Get current auto tap state from database
-      const autoTapState = await timerService.getAutoTapState(userId.toString());
-      
+      const autoTapState = await timerService.getAutoTapState(
+        userId.toString()
+      );
+
       // Check if user has remaining uses
       if (!autoTapState || autoTapState.dailyUsesRemaining <= 0) {
         toast.error("No auto tap uses remaining today. Try again tomorrow!");
         return;
       }
-      
+
       const now = Date.now();
       const timerId = `autoTap-${now}`;
       const duration = AUTO_TAP_DURATION * 1000;
-      
+
       // Create timer metadata with user info
       const metadata: TimerMetadata = {
         autoTapSpark: 0,
         coinsEarned: 0,
         userId: userId.toString(),
-        timerId: timerId
+        timerId: timerId,
       };
-      
+
       // Start the auto-tap timer using our new API
       const timer = await startTimer(TimerType.AUTO_TAP, duration, metadata);
-      
+
       if (!timer) {
         toast.error("Failed to start auto-tap timer");
         return;
       }
-      
+
       // Decrease uses remaining in the database
       await timerService.updateAutoTapUses(
-        userId.toString(), 
+        userId.toString(),
         autoTapState.dailyUsesRemaining - 1
       );
-      
+
       // Update local state
       setAutoTapCoinsEarned(0);
       setDailyUsesRemaining(autoTapState.dailyUsesRemaining - 1);
@@ -400,7 +454,7 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
         autoTapProgress: 0,
         autoTapTimeLeft: AUTO_TAP_DURATION,
         autoTapSpark: 0,
-        lastAutoTapUpdate: now
+        lastAutoTapUpdate: now,
       }));
 
       // Start the auto-tap interval for coins
@@ -413,64 +467,77 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
       // Set up a timeout to automatically stop auto-tap when timer completes
       setTimeout(() => {
         clearInterval(intervalId);
-        
+
         // Check for uncollected rewards
-        const rewards = [{
-          id: timerId,
-          userId: userId.toString(),
-          timerId: timerId,
-          coinsEarned: autoTapCoinsEarned,
-          collected: false,
-          createdAt: new Date().toISOString(),
-          collectedAt: null
-        }];
-        
+        const rewards = [
+          {
+            id: timerId,
+            userId: userId.toString(),
+            timerId: timerId,
+            coinsEarned: autoTapCoinsEarned,
+            collected: false,
+            createdAt: new Date().toISOString(),
+            collectedAt: null,
+          },
+        ];
+
         setUncollectedRewards(rewards);
-        
+
         // Update game state to inactive
         persistState((prev) => ({
           ...prev,
           autoTapActive: false,
           autoTapEndTime: now + duration,
           autoTapProgress: 100,
-          autoTapTimeLeft: 0
+          autoTapTimeLeft: 0,
         }));
       }, duration);
-
     } catch (error) {
-      console.error('Error starting auto-tap:', error);
-      toast.error('Failed to start auto-tap');
+      console.error("Error starting auto-tap:", error);
+      toast.error("Failed to start auto-tap");
     }
-  }, [userId, gameState.autoTapActive, autoTapPower, autoTapSpeed, autoTapCoinsEarned, calculateTotalCoinsWithTurbo, startTimer, persistState]);
+  }, [
+    userId,
+    gameState.autoTapActive,
+    autoTapPower,
+    autoTapSpeed,
+    autoTapCoinsEarned,
+    calculateTotalCoinsWithTurbo,
+    startTimer,
+    persistState,
+  ]);
 
   const stopAutoTap = useCallback(async () => {
     if (!userId || !gameState.autoTapActive) return;
-    
+
     // Create and use a stable ID to avoid multiple calls
     const stableTimerId = `autotap-stable-${userId}`;
-    
+
     // Get the current state of the auto-tap timer
     const autoTapTimer = timerService.getTimerInfo(TimerType.AUTO_TAP);
-    
+
     if (autoTapTimer) {
       // Set a flag to prevent concurrent calls
       const customWindow = window as CustomWindow;
-      
+
       if (customWindow.__stopAutoTapInProgress) {
-        console.log("Stop auto tap already in progress, skipping duplicate call");
+        console.log(
+          "Stop auto tap already in progress, skipping duplicate call"
+        );
         return;
       }
-      
+
       // Set the flag
       customWindow.__stopAutoTapInProgress = true;
-      
+
       try {
         // Complete the timer
         await completeTimer(TimerType.AUTO_TAP);
-        
+
         // Calculate final reward based on what was earned
-        const finalReward = autoTapCoinsEarned || (autoTapPower * AUTO_TAP_DURATION);
-        
+        const finalReward =
+          autoTapCoinsEarned || autoTapPower * AUTO_TAP_DURATION;
+
         // Update game state
         persistState((prev) => ({
           ...prev,
@@ -481,9 +548,9 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
           // Ensure we have clean state for the next session
           autoTapProgress: 100,
           autoTapTimeLeft: 0,
-          autoTapSpark: finalReward
+          autoTapSpark: finalReward,
         }));
-        
+
         // Create an uncollected reward
         const reward: AutoTapReward = {
           id: stableTimerId,
@@ -492,9 +559,9 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
           coinsEarned: finalReward,
           collected: false,
           createdAt: new Date().toISOString(),
-          collectedAt: null
+          collectedAt: null,
         };
-        
+
         setUncollectedRewards([reward]);
       } finally {
         // Clear the flag after a short delay to prevent race conditions
@@ -503,90 +570,106 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
         }, 500);
       }
     }
-  }, [userId, gameState.autoTapActive, autoTapPower, autoTapCoinsEarned, persistState, completeTimer]);
+  }, [
+    userId,
+    gameState.autoTapActive,
+    autoTapPower,
+    autoTapCoinsEarned,
+    persistState,
+    completeTimer,
+  ]);
 
-  const collectReward = useCallback(async (timerId: string, sparkAmount: number) => {
-    if (!userId) return;
+  const collectReward = useCallback(
+    async (timerId: string, sparkAmount: number) => {
+      if (!userId) return;
 
-    try {
-      // Update both coins and autotap state in a single update
-      // Use immediate state update to ensure UI reflects changes immediately
-      const newCoins = gameState.coins + sparkAmount;
-      
-      persistState((prev) => ({
-        ...prev,
-        coins: newCoins,
-        autoTapClaimed: true,
-        autoTapCoins: 0
-      }));
-      
-      // Dispatch a custom event to notify components about the coin update
-      window.dispatchEvent(new CustomEvent('coinUpdate', { 
-        detail: { 
-          newAmount: newCoins,
-          source: 'autotap'
-        } 
-      }));
-      
-      // Remove the reward from uncollected rewards
-      setUncollectedRewards(prev => prev.filter(r => r.timerId !== timerId));
-      
-      // Don't show toast here as the component will handle it with gameToast
-    } catch (error) {
-      console.error('Error collecting auto-tap reward:', error);
-      toast.error('Failed to collect auto-tap reward');
-    }
-  }, [userId, persistState, gameState.coins]);
+      try {
+        // Update both coins and autotap state in a single update
+        // Use immediate state update to ensure UI reflects changes immediately
+        const newCoins = gameState.coins + sparkAmount;
+
+        persistState((prev) => ({
+          ...prev,
+          coins: newCoins,
+          autoTapClaimed: true,
+          autoTapCoins: 0,
+        }));
+
+        // Dispatch a custom event to notify components about the coin update
+        window.dispatchEvent(
+          new CustomEvent("coinUpdate", {
+            detail: {
+              newAmount: newCoins,
+              source: "autotap",
+            },
+          })
+        );
+
+        // Remove the reward from uncollected rewards
+        setUncollectedRewards((prev) =>
+          prev.filter((r) => r.timerId !== timerId)
+        );
+
+        // Don't show toast here as the component will handle it with gameToast
+      } catch (error) {
+        console.error("Error collecting auto-tap reward:", error);
+        toast.error("Failed to collect auto-tap reward");
+      }
+    },
+    [userId, persistState, gameState.coins]
+  );
 
   const resetAutoTapCoinsEarned = useCallback(() => {
     setAutoTapCoinsEarned(0);
   }, []);
 
   // Daily rewards functions - completely rewritten to avoid infinite loops
-  
+
   // This function doesn't update state directly, it just calculates values
   const calculateRewardAvailability = useCallback(() => {
     // If we're still initializing (no dailyRewards object yet), assume no reward is available
     if (!gameState.dailyRewards) {
-      return { 
-        canCollect: false, 
-        missedDay: false, 
+      return {
+        canCollect: false,
+        missedDay: false,
         timeUntilNext: 0,
         formattedTime: {
           hours: "00",
           minutes: "00",
           seconds: "00",
-          raw: 0
-        }
+          raw: 0,
+        },
       };
     }
 
     const result = checkReward(gameState.dailyRewards.lastCollected);
-    
+
     let formattedTime = {
       hours: "00",
       minutes: "00",
       seconds: "00",
-      raw: 0
+      raw: 0,
     };
-    
+
     if (!result.canCollect) {
       const timeUntilNext = result.timeUntilNext;
       const hours = Math.floor(timeUntilNext / (1000 * 60 * 60));
-      const minutes = Math.floor((timeUntilNext % (1000 * 60 * 60)) / (1000 * 60));
+      const minutes = Math.floor(
+        (timeUntilNext % (1000 * 60 * 60)) / (1000 * 60)
+      );
       const seconds = Math.floor((timeUntilNext % (1000 * 60)) / 1000);
 
       formattedTime = {
-        hours: hours.toString().padStart(2, '0'),
-        minutes: minutes.toString().padStart(2, '0'),
-        seconds: seconds.toString().padStart(2, '0'),
-        raw: timeUntilNext
+        hours: hours.toString().padStart(2, "0"),
+        minutes: minutes.toString().padStart(2, "0"),
+        seconds: seconds.toString().padStart(2, "0"),
+        raw: timeUntilNext,
       };
     }
 
     return {
       ...result,
-      formattedTime
+      formattedTime,
     };
   }, [gameState.dailyRewards]);
 
@@ -602,29 +685,30 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
   useEffect(() => {
     // Create a ref to track if component is mounted
     const isMounted = { current: true };
-    
+
     // Function to update timer display without causing infinite loops
     const updateTimer = () => {
       if (!isMounted.current) return;
-      
+
       const result = calculateRewardAvailability();
-      
+
       // Only update state if component is still mounted and values have changed
-      if (isMounted.current && (
-        result.canCollect !== isRewardAvailable || 
-        result.formattedTime.raw !== timeUntilNext.raw
-      )) {
+      if (
+        isMounted.current &&
+        (result.canCollect !== isRewardAvailable ||
+          result.formattedTime.raw !== timeUntilNext.raw)
+      ) {
         setIsRewardAvailable(result.canCollect);
         setTimeUntilNext(result.formattedTime);
       }
     };
-    
+
     // Run immediately
     updateTimer();
-    
+
     // Set up interval
     const timer = setInterval(updateTimer, 1000);
-    
+
     // Clean up
     return () => {
       isMounted.current = false;
@@ -643,21 +727,24 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     if (gameState.autoTapActive) {
       const autoTapTimer = timerService.getTimerInfo(TimerType.AUTO_TAP);
-      
-      if (autoTapTimer && autoTapTimer.status === 'active') {
+
+      if (autoTapTimer && autoTapTimer.status === "active") {
         intervalId = setInterval(() => {
           const now = Date.now();
           const timeDiff = now - lastUpdateTime;
-          
+
           if (timeDiff >= 1000) {
-            const coinsPerTap = calculateTotalCoinsWithTurbo(autoTapPower, false);
+            const coinsPerTap = calculateTotalCoinsWithTurbo(
+              autoTapPower,
+              false
+            );
             // Only accumulate coins, don't increase them directly
-            setAutoTapCoinsEarned(prev => prev + coinsPerTap);
+            setAutoTapCoinsEarned((prev) => prev + coinsPerTap);
             // Update the game state to show progress
-            persistState(prev => ({
+            persistState((prev) => ({
               ...prev,
               autoTapCoins: (prev.autoTapCoins || 0) + coinsPerTap,
-              autoTapSpark: (prev.autoTapSpark || 0) + coinsPerTap
+              autoTapSpark: (prev.autoTapSpark || 0) + coinsPerTap,
             }));
             lastUpdateTime = now;
           }
@@ -670,11 +757,16 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
         clearInterval(intervalId);
       }
     };
-  }, [gameState.autoTapActive, autoTapPower, persistState, calculateTotalCoinsWithTurbo]);
+  }, [
+    gameState.autoTapActive,
+    autoTapPower,
+    persistState,
+    calculateTotalCoinsWithTurbo,
+  ]);
 
   useEffect(() => {
     const autoTapTimer = timerService.getTimerInfo(TimerType.AUTO_TAP);
-    if (!autoTapTimer || autoTapTimer.status !== 'active') {
+    if (!autoTapTimer || autoTapTimer.status !== "active") {
       if (gameState.autoTapActive) {
         stopAutoTap();
       }
@@ -696,7 +788,9 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     // Check if auto tap uses should be reset at midnight UTC
     const checkAutoTapReset = async () => {
-      const autoTapState = await timerService.getAutoTapState(userId.toString());
+      const autoTapState = await timerService.getAutoTapState(
+        userId.toString()
+      );
       if (autoTapState) {
         setDailyUsesRemaining(autoTapState.dailyUsesRemaining);
       }
@@ -704,10 +798,10 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     // Run immediately and then set up interval
     checkAutoTapReset();
-    
+
     // Set up interval to check every minute
     const intervalId = setInterval(checkAutoTapReset, 60000);
-    
+
     return () => clearInterval(intervalId);
   }, [userId]);
 
@@ -754,8 +848,8 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
       startTimer,
       completeTimer,
       getTimerInfo,
-      formatTime
-    }
+      formatTime,
+    },
   };
 
   return (
@@ -767,11 +861,17 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
 export const useGameFeatures = () => {
   const context = useContext(GameFeaturesContext);
-  
+
   // Check if we're on a Nexus route and handle gracefully
   if (context === undefined) {
-    if (typeof window !== 'undefined' && (window.location.pathname.startsWith('/nexus') || window.location.pathname === '/nexuslogin')) {
-      console.warn("useGameFeatures called on Nexus route without GameFeaturesProvider, returning null context");
+    if (
+      typeof window !== "undefined" &&
+      (window.location.pathname.startsWith("/nexus") ||
+        window.location.pathname === "/nexuslogin")
+    ) {
+      console.warn(
+        "useGameFeatures called on Nexus route without GameFeaturesProvider, returning null context"
+      );
       // Return a safe default context for Nexus routes
       return {
         spin: {
@@ -794,7 +894,10 @@ export const useGameFeatures = () => {
           isRewardAvailable: false,
           timeUntilNext: 0,
           checkRewardAvailability: () => false,
-          collectReward: async () => ({ success: false, error: "Not available in nexus" }),
+          collectReward: async () => ({
+            success: false,
+            error: "Not available in nexus",
+          }),
           getRewardInfo: () => ({ coins: 0, spins: 0, day: 0 }),
         },
         autoTap: {
@@ -829,7 +932,9 @@ export const useGameFeatures = () => {
         },
       };
     }
-    throw new Error('useGameFeatures must be used within a GameFeaturesProvider');
+    throw new Error(
+      "useGameFeatures must be used within a GameFeaturesProvider"
+    );
   }
   return context;
-}; 
+};
