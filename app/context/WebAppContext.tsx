@@ -336,58 +336,57 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
         console.log("WebAppContext: Initial user ID set:", currentUserId);
       }
 
-      // Monitor for user ID changes every 5 seconds (less aggressive)
+      // Monitor for user ID changes every 3 seconds
       initDataCheckInterval.current = setInterval(() => {
         const currentUserId = WebApp.initDataUnsafe?.user?.id?.toString();
         const now = Date.now();
 
-        // Prevent refresh loops with cooldown and max refresh count
-        if (now - refreshCooldownRef.current < 10000) {
-          // 10 second cooldown
+        // Only check for user changes if we have a valid current user ID
+        if (!currentUserId) {
           return;
         }
 
-        if (refreshCountRef.current >= 3) {
-          // Max 3 refreshes per session
-          console.log(
-            "WebAppContext: Max refresh count reached, stopping monitoring"
-          );
-          if (initDataCheckInterval.current) {
-            clearInterval(initDataCheckInterval.current);
-          }
+        // If this is the first time we're setting a user ID, just store it
+        if (!lastKnownUserId.current) {
+          lastKnownUserId.current = currentUserId;
+          console.log("WebAppContext: Initial user ID set:", currentUserId);
           return;
         }
 
-        if (
-          currentUserId &&
-          lastKnownUserId.current &&
-          currentUserId !== lastKnownUserId.current
-        ) {
+        // Check if user ID has changed
+        if (currentUserId !== lastKnownUserId.current) {
           console.log("WebAppContext: User ID change detected!", {
             previousUserId: lastKnownUserId.current,
             currentUserId: currentUserId,
             refreshCount: refreshCountRef.current,
-            initData: WebApp.initData,
-            initDataUnsafe: WebApp.initDataUnsafe,
+            timeSinceLastRefresh: now - refreshCooldownRef.current,
           });
 
-          // Update refresh tracking
-          refreshCountRef.current += 1;
-          refreshCooldownRef.current = now;
+          // Only refresh if we haven't refreshed recently and haven't exceeded max count
+          if (
+            now - refreshCooldownRef.current > 15000 &&
+            refreshCountRef.current < 2
+          ) {
+            // Update refresh tracking
+            refreshCountRef.current += 1;
+            refreshCooldownRef.current = now;
+            lastKnownUserId.current = currentUserId;
 
-          // Force refresh the page to get fresh initData
-          console.log(
-            "WebAppContext: Forcing page refresh due to account switch"
-          );
-          window.location.reload();
-          return;
+            // Force refresh the page to get fresh initData
+            console.log(
+              "WebAppContext: Forcing page refresh due to account switch"
+            );
+            window.location.reload();
+            return;
+          } else {
+            console.log(
+              "WebAppContext: Skipping refresh due to cooldown or max count"
+            );
+            // Still update the last known user ID to prevent repeated checks
+            lastKnownUserId.current = currentUserId;
+          }
         }
-
-        // Update the last known user ID
-        if (currentUserId) {
-          lastKnownUserId.current = currentUserId;
-        }
-      }, 5000); // Increased interval to 5 seconds
+      }, 3000); // Check every 3 seconds
     };
 
     startInitDataMonitoring();

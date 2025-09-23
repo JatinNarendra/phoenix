@@ -717,6 +717,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
               localStorage.removeItem("playerScore");
               localStorage.removeItem("boosterUsage");
               localStorage.removeItem("spinProgression");
+              // Set a flag to indicate we cleared data due to user switch
+              localStorage.setItem("userSwitchCleared", "true");
             } else {
               console.log(
                 "GameContext: Different user detected but no previous user, preserving data:",
@@ -829,13 +831,22 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         });
 
         // Decision logic for which state to use:
+        const userSwitchCleared =
+          localStorage.getItem("userSwitchCleared") === "true";
+
         if (dbState) {
           // Database state exists - check if it has meaningful data
           // If database has 0 coins but localStorage has coins, prefer localStorage
+          // UNLESS we cleared localStorage due to user switching
           const hasLocalCoins = storedState && storedState.coins > 0;
           const hasDbCoins = dbState.coins > 0;
 
-          if (hasLocalCoins && !hasDbCoins && storedState) {
+          if (
+            hasLocalCoins &&
+            !hasDbCoins &&
+            storedState &&
+            !userSwitchCleared
+          ) {
             // Database has 0 coins but localStorage has coins - use localStorage and sync to database
             console.log(
               "[GAME CONTEXT DEBUG] Using localStorage coins over database (0 coins)"
@@ -893,16 +904,13 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
               }
             }, 1000);
           } else {
-            // Use database state (either it has coins or localStorage doesn't have coins)
-            // Check if this appears to be a newly created user (coins and other key values are at initial state)
-            if (
-              dbState.coins === 0 &&
-              dbState.level === 1 &&
-              dbState.stage === 1
-            ) {
-              // This is likely a newly created user, clear any old progression data
-              resetUserProgressionData();
-            }
+            // Use database state (either it has coins or localStorage doesn't have coins or user switch cleared)
+            console.log("[GAME CONTEXT DEBUG] Using database state:", {
+              hasDbCoins: hasDbCoins,
+              hasLocalCoins: hasLocalCoins,
+              userSwitchCleared: userSwitchCleared,
+              currentUserId: user_id.toString(),
+            });
 
             newState = {
               ...dbState,
@@ -931,6 +939,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
                 lastCompletedType: null,
               },
             };
+
+            // Clear the user switch flag after successful database state load
+            if (userSwitchCleared) {
+              localStorage.removeItem("userSwitchCleared");
+              console.log(
+                "GameContext: Successfully loaded database state after user switch"
+              );
+            }
           }
         } else if (
           dbError &&
