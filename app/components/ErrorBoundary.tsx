@@ -38,11 +38,11 @@ class ErrorBoundary extends React.Component<
     this.setState({ errorInfo });
   }
 
-  copyErrorToClipboard = () => {
-    const { error, errorInfo } = this.state;
-    const errorMessage = `Error: ${error?.message}\nStack: ${error?.stack}\nComponent Stack: ${errorInfo?.componentStack}`;
-    navigator.clipboard.writeText(errorMessage).then(() => {
-      alert("Error message copied to clipboard!");
+  resetError = () => {
+    this.setState({
+      hasError: false,
+      error: undefined,
+      errorInfo: undefined,
     });
   };
 
@@ -83,10 +83,10 @@ class ErrorBoundary extends React.Component<
             </button>
 
             <button
-              onClick={() => window.location.reload()}
+              onClick={this.resetError}
               className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors"
             >
-              Refresh Page
+              Try Again
             </button>
           </div>
         </div>

@@ -150,16 +150,16 @@ export const useUser = () => {
             initDataUnsafe: WebApp.initDataUnsafe,
           });
 
-          // Only refresh if we haven't refreshed recently
+          // Log the mismatch but don't force a reload
           const lastRefresh = localStorage.getItem("lastInitDataRefresh");
           const now = Date.now();
           if (!lastRefresh || now - parseInt(lastRefresh) > 5000) {
             // 5 second cooldown
             localStorage.setItem("lastInitDataRefresh", now.toString());
             console.log(
-              "useUser: Forcing page refresh due to initData mismatch"
+              "useUser: initData mismatch detected, but continuing without reload"
             );
-            window.location.reload();
+            // Instead of reloading, just log the issue and continue
             return;
           } else {
             console.log("useUser: Skipping refresh due to cooldown");
