@@ -73,9 +73,7 @@ const HowItWorksPage = () => {
 
       if (remaining.total <= 0) {
         clearInterval(timer);
-        // Instead of reloading, just update the state to reflect the change
-        // The component will re-render with updated data
-        console.log("Timer ended, updating state without reload");
+        window.location.reload();
       }
     }, 1000);
 

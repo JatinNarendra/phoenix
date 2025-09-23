@@ -459,10 +459,10 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
             lastKnownUserId.current = currentUserId;
 
             console.log(
-              "WebAppContext: User account switched, updating state without reload"
+              "WebAppContext: Forcing page refresh due to account switch"
             );
-            // Instead of reloading, just update the state
-            // The component will re-render with the new user data
+            window.location.reload();
+            return;
           } else {
             console.log(
               "WebAppContext: Skipping refresh due to recent refresh"

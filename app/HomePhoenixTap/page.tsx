@@ -18,6 +18,7 @@ import { getRechargeSpeedConfig } from "../utility/rechargeSpeedConfig";
 import { getEnergyConfig } from "../utility/energyConfig";
 import { useRouter } from "next/navigation";
 import { useWebApp } from "../hooks/useWebApp";
+import { safeWebAppBackButton, safeWebApp } from "../lib/platformUtils";
 import DailyRewardCalender from "@/public/assets/DailyRewardCalender.png";
 import { useGameFeatures } from "../context/GameFeaturesContext";
 import AutoTapPopup from "../components/AutoTapPopup";
@@ -790,15 +791,11 @@ const PhoenixTapArea: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (WebApp) {
-      WebApp.BackButton.hide();
-      WebApp.enableClosingConfirmation();
-    }
+    safeWebAppBackButton.hide(WebApp);
+    safeWebApp.enableClosingConfirmation(WebApp);
 
     return () => {
-      if (WebApp) {
-        WebApp.enableClosingConfirmation();
-      }
+      safeWebApp.enableClosingConfirmation(WebApp);
     };
   }, [WebApp]);
 
