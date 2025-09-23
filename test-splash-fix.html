@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Splash Screen Fix Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+      .test-section {
+        background: white;
+        padding: 20px;
+        margin: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .status {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+      }
+      .info {
+        background: #d1ecf1;
+        color: #0c5460;
+      }
+      .warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Splash Screen Fix Test</h1>
+
+    <div class="test-section">
+      <h2>Current localStorage Status</h2>
+      <div id="status" class="status info">Checking...</div>
+      <button onclick="checkStatus()">Check Status</button>
+      <button onclick="clearFlag()">Clear Flag</button>
+      <button onclick="setFlag()">Set Flag</button>
+    </div>
+
+    <div class="test-section">
+      <h2>Test Navigation</h2>
+      <p>This simulates the behavior when navigating between pages:</p>
+      <button onclick="simulateFirstVisit()">Simulate First Visit</button>
+      <button onclick="simulateSubsequentVisit()">
+        Simulate Subsequent Visit
+      </button>
+    </div>
+
+    <div class="test-section">
+      <h2>Test App Lifecycle</h2>
+      <p>This simulates app close/reopen behavior:</p>
+      <button onclick="simulateAppClose()">Simulate App Close</button>
+      <button onclick="simulateAppReopen()">Simulate App Reopen</button>
+    </div>
+
+    <script>
+      const splashShownKey = "phoenix_splash_shown";
+
+      function checkStatus() {
+        const hasShownSplash = localStorage.getItem(splashShownKey) === "true";
+        const statusDiv = document.getElementById("status");
+
+        if (hasShownSplash) {
+          statusDiv.className = "status warning";
+          statusDiv.textContent =
+            "Splash screen flag is SET - splash will NOT show";
+        } else {
+          statusDiv.className = "status success";
+          statusDiv.textContent =
+            "Splash screen flag is NOT SET - splash WILL show";
+        }
+      }
+
+      function clearFlag() {
+        localStorage.removeItem(splashShownKey);
+        checkStatus();
+      }
+
+      function setFlag() {
+        localStorage.setItem(splashShownKey, "true");
+        checkStatus();
+      }
+
+      function simulateFirstVisit() {
+        clearFlag();
+        const hasShownSplash = localStorage.getItem(splashShownKey) === "true";
+        alert(
+          `First visit simulation:\nSplash flag: ${hasShownSplash}\nResult: ${
+            hasShownSplash ? "Splash will NOT show" : "Splash WILL show"
+          }`
+        );
+      }
+
+      function simulateSubsequentVisit() {
+        setFlag();
+        const hasShownSplash = localStorage.getItem(splashShownKey) === "true";
+        alert(
+          `Subsequent visit simulation:\nSplash flag: ${hasShownSplash}\nResult: ${
+            hasShownSplash ? "Splash will NOT show" : "Splash WILL show"
+          }`
+        );
+      }
+
+      function simulateAppClose() {
+        // Simulate the beforeunload event
+        localStorage.removeItem(splashShownKey);
+        alert("App close simulated - splash flag cleared");
+        checkStatus();
+      }
+
+      function simulateAppReopen() {
+        // Simulate app reopening (flag should be cleared)
+        const hasShownSplash = localStorage.getItem(splashShownKey) === "true";
+        alert(
+          `App reopen simulation:\nSplash flag: ${hasShownSplash}\nResult: ${
+            hasShownSplash ? "Splash will NOT show" : "Splash WILL show"
+          }`
+        );
+      }
+
+      // Check status on page load
+      checkStatus();
+    </script>
+  </body>
+</html>

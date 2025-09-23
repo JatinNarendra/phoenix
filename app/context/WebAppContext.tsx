@@ -26,12 +26,44 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
   const [error, setError] = useState<Error | null>(null);
   const [isTelegramApp, setIsTelegramApp] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [showSplash, setShowSplash] = useState<boolean>(true); // Show by default
+  const [showSplash, setShowSplash] = useState<boolean>(false); // Don't show by default
   const hasInitialized = useRef(false);
   const hasCalledReady = useRef(false);
   const lastKnownUserId = useRef<string | null>(null);
   const initDataCheckInterval = useRef<NodeJS.Timeout | null>(null);
   const refreshCooldownRef = useRef<number>(0);
+  const splashShownKey = "phoenix_splash_shown";
+
+  // Clear splash screen flag when app is refreshed or closed
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(splashShownKey);
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        // App is being hidden/closed, clear the flag
+        if (typeof window !== "undefined") {
+          localStorage.removeItem(splashShownKey);
+        }
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange
+        );
+      };
+    }
+  }, []);
 
   useEffect(() => {
     if (hasInitialized.current) return;
@@ -52,10 +84,25 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
       isTelegramEnvironment,
     });
 
-    // Show splash screen immediately if we're in Telegram environment
-    if (isTelegramEnvironment) {
-      console.log("WebAppContext: Setting splash screen to true");
+    // Check if splash screen has been shown before in this session
+    const hasShownSplash =
+      typeof window !== "undefined" &&
+      localStorage.getItem(splashShownKey) === "true";
+
+    // Show splash screen only if we're in Telegram environment AND haven't shown it before
+    if (isTelegramEnvironment && !hasShownSplash) {
+      console.log(
+        "WebAppContext: First time in Telegram environment, showing splash screen"
+      );
       setShowSplash(true);
+      // Mark that we've shown the splash screen
+      if (typeof window !== "undefined") {
+        localStorage.setItem(splashShownKey, "true");
+      }
+    } else if (isTelegramEnvironment && hasShownSplash) {
+      console.log(
+        "WebAppContext: Splash screen already shown in this session, skipping"
+      );
     }
 
     const initializeWebApp = () => {
@@ -164,8 +211,13 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
         if (isLocalhost) {
           console.log("Running in localhost mode with dummy data");
           console.log("Creating dummy WebApp with user ID: 123456789");
-          // Show splash screen for localhost development
-          setShowSplash(true);
+          // Show splash screen for localhost development only if not shown before
+          if (!hasShownSplash) {
+            setShowSplash(true);
+            if (typeof window !== "undefined") {
+              localStorage.setItem(splashShownKey, "true");
+            }
+          }
           // Create dummy WebApp instance for local development
           const dummyWebApp: TelegramWebApp = {
             platform: "web",
