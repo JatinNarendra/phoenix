@@ -1564,7 +1564,7 @@ const SpinPage = () => {
                             totalRecharge;
 
                           // Calculate timer end time once if needed
-                          const timerDuration = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+                          const timerDuration = 2.5 * 60 * 60 * 1000; // 2.5 hours in milliseconds
                           const currentTime = Date.now();
 
                           // Clear timer if spins reach or exceed 50, otherwise set/keep timer
@@ -1922,7 +1922,7 @@ const SpinPage = () => {
                           }
 
                           // Calculate timer end time once if needed
-                          const timerDuration = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+                          const timerDuration = 2.5 * 60 * 60 * 1000; // 2.5 hours in milliseconds
                           const currentTime = Date.now();
 
                           // Clear timer if spins reach or exceed 50, otherwise set/keep timer

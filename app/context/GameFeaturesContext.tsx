@@ -152,17 +152,17 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
   // Add function to handle spin timer completion
   const handleSpinTimerComplete = useCallback(() => {
     if (gameState.spins < 50) {
-      // Add 2 spins for the completed timer
+      // Add 5 spins for the completed timer
       persistState((prev) => ({
         ...prev,
-        spins: Math.min(50, (prev.spins || 0) + 2),
+        spins: Math.min(50, (prev.spins || 0) + 5),
         lastActiveTime: Date.now(), // Update last active time
       }));
 
       // Restart timer if still under 50 spins after adding
-      const newSpinCount = Math.min(50, gameState.spins + 2);
+      const newSpinCount = Math.min(50, gameState.spins + 5);
       if (newSpinCount < 50) {
-        timerService.startTimer(TimerType.SPIN, 2 * 60 * 60 * 1000); // 2 hours
+        timerService.startTimer(TimerType.SPIN, 2.5 * 60 * 60 * 1000); // 2.5 hours
       }
     }
   }, [gameState.spins, persistState]);
@@ -175,8 +175,8 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
     if (gameState.spins < 50) {
       const spinTimer = timerService.getTimerInfo(TimerType.SPIN);
       if (!spinTimer || spinTimer.status !== "active") {
-        // Start a new spin timer for 2 hours
-        timerService.startTimer(TimerType.SPIN, 2 * 60 * 60 * 1000);
+        // Start a new spin timer for 2.5 hours
+        timerService.startTimer(TimerType.SPIN, 2.5 * 60 * 60 * 1000);
       }
     }
 
@@ -202,7 +202,7 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
         gameState.spins < 50 &&
         (!activeTimers.spin || activeTimers.spin.status !== "active")
       ) {
-        timerService.startTimer(TimerType.SPIN, 2 * 60 * 60 * 1000); // 2 hours
+        timerService.startTimer(TimerType.SPIN, 2.5 * 60 * 60 * 1000); // 2.5 hours
         // Get updated timers after starting spin timer
         const updatedTimers = timerService.getAllActiveTimers();
         setTimersState(updatedTimers);

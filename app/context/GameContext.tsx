@@ -823,11 +823,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         console.log("[GAME CONTEXT DEBUG] Decision logic inputs:", {
           dbState: dbState ? "exists" : "null",
           dbStateCoins: dbState?.coins,
+          dbStateLevel: dbState?.level,
           dbError,
           storedState: storedState ? "exists" : "null",
           storedStateCoins: storedState?.coins,
           storedStateUserId: storedState?.user_id,
           currentUserId: user_id.toString(),
+          userSwitchCleared:
+            localStorage.getItem("userSwitchCleared") === "true",
         });
 
         // Decision logic for which state to use:

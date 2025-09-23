@@ -32,7 +32,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
   const lastKnownUserId = useRef<string | null>(null);
   const initDataCheckInterval = useRef<NodeJS.Timeout | null>(null);
   const refreshCooldownRef = useRef<number>(0);
-  const refreshCountRef = useRef<number>(0);
 
   useEffect(() => {
     if (hasInitialized.current) return;
@@ -358,17 +357,14 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
           console.log("WebAppContext: User ID change detected!", {
             previousUserId: lastKnownUserId.current,
             currentUserId: currentUserId,
-            refreshCount: refreshCountRef.current,
             timeSinceLastRefresh: now - refreshCooldownRef.current,
           });
 
-          // Only refresh if we haven't refreshed recently and haven't exceeded max count
-          if (
-            now - refreshCooldownRef.current > 15000 &&
-            refreshCountRef.current < 2
-          ) {
+          // Only refresh if we haven't refreshed very recently (prevent rapid loops)
+          if (now - refreshCooldownRef.current > 3000) {
+            // 3 second minimum cooldown
+            // Always refresh on user change - this is critical for data integrity
             // Update refresh tracking
-            refreshCountRef.current += 1;
             refreshCooldownRef.current = now;
             lastKnownUserId.current = currentUserId;
 
@@ -380,13 +376,13 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
             return;
           } else {
             console.log(
-              "WebAppContext: Skipping refresh due to cooldown or max count"
+              "WebAppContext: Skipping refresh due to recent refresh"
             );
             // Still update the last known user ID to prevent repeated checks
             lastKnownUserId.current = currentUserId;
           }
         }
-      }, 3000); // Check every 3 seconds
+      }, 2000); // Check every 2 seconds
     };
 
     startInitDataMonitoring();
