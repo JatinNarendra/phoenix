@@ -29,6 +29,7 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showSplash, setShowSplash] = useState<boolean>(false); // Don't show by default
   const [showLoader, setShowLoader] = useState<boolean>(true); // Track if we should show loader
   const hasInitialized = useRef(false);
+  const webAppReadyKey = "phoenix_webapp_ready";
   const hasCalledReady = useRef(false);
   const lastKnownUserId = useRef<string | null>(null);
   const initDataCheckInterval = useRef<NodeJS.Timeout | null>(null);
@@ -40,14 +41,16 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
     const handleBeforeUnload = () => {
       if (typeof window !== "undefined") {
         localStorage.removeItem(splashShownKey);
+        localStorage.removeItem(webAppReadyKey);
       }
     };
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden") {
-        // App is being hidden/closed, clear the flag
+        // App is being hidden/closed, clear the flags
         if (typeof window !== "undefined") {
           localStorage.removeItem(splashShownKey);
+          localStorage.removeItem(webAppReadyKey);
         }
       }
     };
@@ -63,6 +66,23 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
           handleVisibilityChange
         );
       };
+    }
+  }, []);
+
+  // Check if WebApp was already initialized in this session
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isWebAppReady = localStorage.getItem(webAppReadyKey) === "true";
+      if (isWebAppReady) {
+        console.log(
+          "WebAppContext: WebApp already initialized in this session, skipping loader"
+        );
+        setIsReady(true);
+        setShowLoader(false);
+        setIsLoading(false);
+        // Set hasInitialized to prevent reinitialization
+        hasInitialized.current = true;
+      }
     }
   }, []);
 
@@ -178,6 +198,9 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(false);
         setIsReady(true);
         setShowLoader(false);
+        if (typeof window !== "undefined") {
+          localStorage.setItem(webAppReadyKey, "true");
+        }
         return;
       }
 
@@ -204,6 +227,9 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
             setIsLoading(false);
             setIsReady(true);
             setShowLoader(false);
+            if (typeof window !== "undefined") {
+              localStorage.setItem(webAppReadyKey, "true");
+            }
             return true;
           }
         }
@@ -280,6 +306,9 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
           setIsLoading(false);
           setIsReady(true);
           setShowLoader(false);
+          if (typeof window !== "undefined") {
+            localStorage.setItem(webAppReadyKey, "true");
+          }
           console.log("Dummy WebApp set successfully:", {
             hasInitData: !!dummyWebApp.initData,
             hasInitDataUnsafe: !!dummyWebApp.initDataUnsafe,
@@ -328,6 +357,9 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
             // Don't show splash screen for fallback (non-Telegram) WebApp
             setIsReady(true);
             setShowLoader(false);
+            if (typeof window !== "undefined") {
+              localStorage.setItem(webAppReadyKey, "true");
+            }
           } else {
             // If document not ready, try again in 100ms but with a max retry count
             const maxRetries = 10; // Set a max retry count to prevent infinite attempts
@@ -379,6 +411,9 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
               // Don't show splash screen for fallback (non-Telegram) WebApp
               setIsReady(true);
               setShowLoader(false);
+              if (typeof window !== "undefined") {
+                localStorage.setItem(webAppReadyKey, "true");
+              }
             }
           }
         }
