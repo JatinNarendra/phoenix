@@ -136,12 +136,31 @@ export const useUser = () => {
         return;
       }
 
+      // Validate initData integrity to detect cached/stale data
+      const telegramUser = WebApp.initDataUnsafe.user;
+      const initData = WebApp.initData;
+
+      // Check if initData contains the correct user ID
+      if (initData && telegramUser?.id) {
+        const userIdInInitData = initData.includes(`"id":${telegramUser.id}`);
+        if (!userIdInInitData) {
+          console.error("useUser: initData mismatch detected!", {
+            telegramUserId: telegramUser.id,
+            initData: initData,
+            initDataUnsafe: WebApp.initDataUnsafe,
+          });
+
+          // Force page refresh to get fresh initData
+          console.log("useUser: Forcing page refresh due to initData mismatch");
+          window.location.reload();
+          return;
+        }
+      }
+
       if (!hasLogged.current) {
         console.log("Telegram initData found:", WebApp.initData);
         hasLogged.current = true;
       }
-
-      const telegramUser = WebApp.initDataUnsafe.user;
       const username =
         telegramUser.username ||
         `${telegramUser.first_name}${

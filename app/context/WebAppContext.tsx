@@ -29,6 +29,8 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showSplash, setShowSplash] = useState<boolean>(true); // Show by default
   const hasInitialized = useRef(false);
   const hasCalledReady = useRef(false);
+  const lastKnownUserId = useRef<string | null>(null);
+  const initDataCheckInterval = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (hasInitialized.current) return;
@@ -314,6 +316,64 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
 
     initializeWebApp();
   }, []);
+
+  // Add initData monitoring to detect account switches
+  useEffect(() => {
+    if (!isTelegramApp || !WebApp) return;
+
+    const startInitDataMonitoring = () => {
+      // Clear any existing interval
+      if (initDataCheckInterval.current) {
+        clearInterval(initDataCheckInterval.current);
+      }
+
+      // Set initial user ID
+      const currentUserId = WebApp.initDataUnsafe?.user?.id?.toString();
+      if (currentUserId) {
+        lastKnownUserId.current = currentUserId;
+        console.log("WebAppContext: Initial user ID set:", currentUserId);
+      }
+
+      // Monitor for user ID changes every 2 seconds
+      initDataCheckInterval.current = setInterval(() => {
+        const currentUserId = WebApp.initDataUnsafe?.user?.id?.toString();
+
+        if (
+          currentUserId &&
+          lastKnownUserId.current &&
+          currentUserId !== lastKnownUserId.current
+        ) {
+          console.log("WebAppContext: User ID change detected!", {
+            previousUserId: lastKnownUserId.current,
+            currentUserId: currentUserId,
+            initData: WebApp.initData,
+            initDataUnsafe: WebApp.initDataUnsafe,
+          });
+
+          // Force refresh the page to get fresh initData
+          console.log(
+            "WebAppContext: Forcing page refresh due to account switch"
+          );
+          window.location.reload();
+          return;
+        }
+
+        // Update the last known user ID
+        if (currentUserId) {
+          lastKnownUserId.current = currentUserId;
+        }
+      }, 2000);
+    };
+
+    startInitDataMonitoring();
+
+    // Cleanup on unmount
+    return () => {
+      if (initDataCheckInterval.current) {
+        clearInterval(initDataCheckInterval.current);
+      }
+    };
+  }, [isTelegramApp, WebApp]);
 
   const showBackButton = () => {
     if (WebApp?.BackButton) {

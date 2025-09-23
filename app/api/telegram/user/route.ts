@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { initializeOrUpdateUser, updateTelegramUserProgress, saveGameProgress, validateTelegramWebAppData } from "../../../../lib/telegram-server";
+import {
+  initializeOrUpdateUser,
+  updateTelegramUserProgress,
+  saveGameProgress,
+  validateTelegramWebAppData,
+} from "../../../../lib/telegram-server";
 import type { TelegramGameState } from "../../../../lib/telegram-server";
 
 interface TelegramUserData {
@@ -21,18 +26,58 @@ export async function POST(request: Request) {
     if (initData) {
       const isValid = await validateTelegramWebAppData(initData);
       if (!isValid) {
-        console.warn("Telegram WebApp data validation failed:", { initData: initData?.substring(0, 100) + "..." });
-        
+        console.warn("Telegram WebApp data validation failed:", {
+          initData: initData?.substring(0, 100) + "...",
+        });
+
         // In development mode, allow the request to proceed with a warning
         if (process.env.NODE_ENV === "development") {
-          console.warn("Development mode: Proceeding despite validation failure");
+          console.warn(
+            "Development mode: Proceeding despite validation failure"
+          );
         } else {
           // In production, still validate but be more lenient for user creation
           if (action === "initialize" && userData) {
-            console.warn("Production mode: Allowing user initialization despite validation failure");
+            console.warn(
+              "Production mode: Allowing user initialization despite validation failure"
+            );
           } else {
-            return NextResponse.json({ error: "Invalid Telegram WebApp data" }, { status: 401 });
+            return NextResponse.json(
+              { error: "Invalid Telegram WebApp data" },
+              { status: 401 }
+            );
           }
+        }
+      }
+
+      // Additional validation: Check if initData user ID matches the provided userData
+      if (userData && initData) {
+        try {
+          // Extract user ID from initData
+          const userMatch = initData.match(/user=%7B%22id%22%3A(\d+)/);
+          if (userMatch) {
+            const initDataUserId = parseInt(userMatch[1]);
+            if (initDataUserId !== userData.id) {
+              console.error("initData user ID mismatch detected!", {
+                initDataUserId: initDataUserId,
+                userDataId: userData.id,
+                initData: initData.substring(0, 200) + "...",
+              });
+
+              return NextResponse.json(
+                {
+                  error:
+                    "User ID mismatch between initData and user data. Please refresh the app.",
+                },
+                { status: 400 }
+              );
+            }
+          }
+        } catch (error) {
+          console.error(
+            "Error parsing initData for user ID validation:",
+            error
+          );
         }
       }
     }
@@ -40,26 +85,48 @@ export async function POST(request: Request) {
     switch (action) {
       case "initialize":
         if (!userData) {
-          return NextResponse.json({ error: "User data is required for initialization" }, { status: 400 });
+          return NextResponse.json(
+            { error: "User data is required for initialization" },
+            { status: 400 }
+          );
         }
-        
-        const result = await initializeOrUpdateUser(userData as TelegramUserData, false);
+
+        const result = await initializeOrUpdateUser(
+          userData as TelegramUserData,
+          false
+        );
         return NextResponse.json({ success: true, data: result });
 
       case "updateProgress":
         if (!userId || !gameState) {
-          return NextResponse.json({ error: "User ID and game state are required for progress update" }, { status: 400 });
+          return NextResponse.json(
+            {
+              error: "User ID and game state are required for progress update",
+            },
+            { status: 400 }
+          );
         }
-        
-        const updateResult = await updateTelegramUserProgress(userId, gameState as TelegramGameState);
+
+        const updateResult = await updateTelegramUserProgress(
+          userId,
+          gameState as TelegramGameState
+        );
         return NextResponse.json({ success: updateResult });
 
       case "saveProgress":
         if (!userId || !gameState) {
-          return NextResponse.json({ error: "User ID and game state are required for saving progress" }, { status: 400 });
+          return NextResponse.json(
+            {
+              error: "User ID and game state are required for saving progress",
+            },
+            { status: 400 }
+          );
         }
-        
-        const saveResult = await saveGameProgress(userId, gameState as TelegramGameState);
+
+        const saveResult = await saveGameProgress(
+          userId,
+          gameState as TelegramGameState
+        );
         return NextResponse.json({ success: saveResult });
 
       default:
@@ -67,10 +134,13 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error("Error in telegram user API:", error);
-    return NextResponse.json({ 
-      error: "Internal server error", 
-      details: error instanceof Error ? error.message : "Unknown error" 
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -81,14 +151,20 @@ export async function GET(request: Request) {
     const initData = searchParams.get("initData");
 
     if (!userId) {
-      return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "User ID is required" },
+        { status: 400 }
+      );
     }
 
     // Validate Telegram WebApp data if provided
     if (initData) {
       const isValid = await validateTelegramWebAppData(initData);
       if (!isValid) {
-        return NextResponse.json({ error: "Invalid Telegram WebApp data" }, { status: 401 });
+        return NextResponse.json(
+          { error: "Invalid Telegram WebApp data" },
+          { status: 401 }
+        );
       }
     }
 
@@ -100,8 +176,8 @@ export async function GET(request: Request) {
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
       auth: {
         autoRefreshToken: false,
-        persistSession: false
-      }
+        persistSession: false,
+      },
     });
 
     const { data, error } = await supabaseAdmin
@@ -118,9 +194,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error("Error in telegram user GET API:", error);
-    return NextResponse.json({ 
-      error: "Internal server error", 
-      details: error instanceof Error ? error.message : "Unknown error" 
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }
