@@ -9,15 +9,15 @@ import { useProgression } from "../../context/ProgressionContext";
 import charactertokenpheonix from "../../../public/assets/spin/charactertokenpheonix.png";
 import BrownQuestionMarkDiamond from "../../../public/assets/spin/brownquestionmarkdiamond.png";
 import SpinHowItWorksImage from "../../../public/assets/spin/spinhowitworks.png";
-import SpinIcon from '@/public/assets/SpinIcon.png';
-import HourglassIcon from '@/public/assets/spin/hourglass.png';
+import SpinIcon from "@/public/assets/SpinIcon.png";
+import HourglassIcon from "@/public/assets/spin/hourglass.png";
 import { BsCheckCircleFill } from "react-icons/bs";
 
 import { useWebApp } from "@/app/hooks/useWebApp";
 
 // Format number with k, m suffix
 const formatNumber = (num: number | undefined): string => {
-  if (!num) return '';
+  if (!num) return "";
   if (num >= 1000000) {
     return `${(num / 1000000).toFixed(1)}m`;
   } else if (num >= 1000) {
@@ -27,35 +27,32 @@ const formatNumber = (num: number | undefined): string => {
 };
 
 const HowItWorksPage = () => {
-  const { 
-    state: progressionState, 
-    getTypeCompletionReward, 
-    isTypeCompletionAllowed, 
+  const {
+    state: progressionState,
+    isTypeCompletionAllowed,
     getCurrentlyActiveType,
-    getTimeUntilTypeEnd
+    getTimeUntilTypeEnd,
   } = useProgression();
   const { instance: WebApp } = useWebApp(true);
   const router = useRouter();
-  const [timeRemaining, setTimeRemaining] = React.useState({ hours: 71, minutes: 54, seconds: 17 });
-
-  // Get the ultimate prize from the current type's completion reward
-  const currentType = progressionState.currentType + 1;
-  const ultimatePrize = getTypeCompletionReward(currentType);
-  const formattedPrizeValue = formatNumber(ultimatePrize?.value);
-
+  const [timeRemaining, setTimeRemaining] = React.useState({
+    hours: 71,
+    minutes: 54,
+    seconds: 17,
+  });
 
   // Handle back navigation with Telegram WebApp
   useEffect(() => {
     if (WebApp) {
       WebApp.BackButton.show();
       WebApp.enableClosingConfirmation();
-      
+
       const handleBack = () => {
-        router.push('/spin');
+        router.push("/spin");
       };
 
       WebApp.BackButton.onClick(handleBack);
-      
+
       return () => {
         WebApp.BackButton.offClick(handleBack);
       };
@@ -66,22 +63,22 @@ const HowItWorksPage = () => {
   useEffect(() => {
     // Get the currently active type
     const currentlyActiveType = getCurrentlyActiveType();
-    
+
     // Get time remaining until the currently active type ends
     const timeUntilEnd = getTimeUntilTypeEnd(currentlyActiveType);
-    
+
     const timer = setInterval(() => {
       const remaining = getTimeUntilTypeEnd(currentlyActiveType);
       setTimeRemaining(remaining);
-      
+
       if (remaining.total <= 0) {
         clearInterval(timer);
         window.location.reload();
       }
     }, 1000);
-    
+
     setTimeRemaining(timeUntilEnd);
-    
+
     return () => clearInterval(timer);
   }, [getCurrentlyActiveType, getTimeUntilTypeEnd]);
 
@@ -90,19 +87,23 @@ const HowItWorksPage = () => {
     // Set viewport height for mobile devices and Telegram WebApp
     const setViewportHeight = () => {
       const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
     };
 
     setViewportHeight();
-    window.addEventListener('resize', setViewportHeight);
-    
-    return () => window.removeEventListener('resize', setViewportHeight);
+    window.addEventListener("resize", setViewportHeight);
+
+    return () => window.removeEventListener("resize", setViewportHeight);
   }, []);
 
   return (
-    <div className="bg-[#150404] rounded-lg w-full h-[calc(100vh-60px)] overflow-y-auto" style={{ height: 'calc(var(--vh, 1vh) * 100)', WebkitOverflowScrolling: 'touch' }}>
-     
-
+    <div
+      className="bg-[#150404] rounded-lg w-full h-[calc(100vh-60px)] overflow-y-auto"
+      style={{
+        height: "calc(var(--vh, 1vh) * 100)",
+        WebkitOverflowScrolling: "touch",
+      }}
+    >
       <div className="mb-6 mt-2 flex justify-center">
         <Image
           src={SpinHowItWorksImage}
@@ -117,7 +118,7 @@ const HowItWorksPage = () => {
           <div className="flex w-[180px] h-[40px] bg-black justify-center items-center border-[1px] border-[#E18700] rounded-[12px] p-2">
             <Image src={SpinIcon} alt="Token" width={20} height={20} />
             <span className="text-[#E18700] font-bold text-sm ml-2">
-              {formattedPrizeValue ? `${formattedPrizeValue} Ultimate Prize` : 'Ultimate Prize'}
+              Ultimate Prize
             </span>
           </div>
           <h3 className="text-lg font-bold text-white mt-[10px]">
@@ -139,32 +140,43 @@ const HowItWorksPage = () => {
                 />
               </div>
               <div className="flex flex-col items-center">
-                <div className="text-xl font-bold">{String(timeRemaining.hours).padStart(2, "0")}</div>
+                <div className="text-xl font-bold">
+                  {String(timeRemaining.hours).padStart(2, "0")}
+                </div>
                 <div className="text-xs text-gray-400">Hours</div>
               </div>
               <div className="text-gray-400 text-xl">:</div>
               <div className="flex flex-col items-center">
-                <div className="text-xl font-bold">{String(timeRemaining.minutes).padStart(2, "0")}</div>
+                <div className="text-xl font-bold">
+                  {String(timeRemaining.minutes).padStart(2, "0")}
+                </div>
                 <div className="text-xs text-gray-400">Minutes</div>
               </div>
               <div className="text-gray-400 text-xl">:</div>
               <div className="flex flex-col items-center">
-                <div className="text-xl font-bold">{String(timeRemaining.seconds).padStart(2, "0")}</div>
+                <div className="text-xl font-bold">
+                  {String(timeRemaining.seconds).padStart(2, "0")}
+                </div>
                 <div className="text-xs text-gray-400">Seconds</div>
               </div>
             </div>
           </div>
         </div>
 
-                {/* Type Completion Restriction Message */}
+        {/* Type Completion Restriction Message */}
         {!isTypeCompletionAllowed() && progressionState.lastCompletedType && (
           <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 z-50 w-full px-4">
-            <div className="bg-[#195e4f] rounded-2xl px-4 py-3">              
+            <div className="bg-[#195e4f] rounded-2xl px-4 py-3">
               <div className="flex flex-row items-start gap-2">
-                <BsCheckCircleFill className="text-green-400 mt-[2px]" size={24} />
+                <BsCheckCircleFill
+                  className="text-green-400 mt-[2px]"
+                  size={24}
+                />
                 <div className="flex flex-col">
                   <span className="text-green-200 text-[11px] font-bold mb-1">
-                    Congrats on getting the grand prize!  You will be able to collect spin progression rewards when the next round is live.
+                    Congrats on getting the grand prize! You will be able to
+                    collect spin progression rewards when the next round is
+                    live.
                   </span>
                 </div>
               </div>
@@ -288,7 +300,7 @@ const HowItWorksPage = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="mt-8">
             <div className="h-[1px] bg-gray-800"></div>
             <div className="mt-4 mb-2 flex items-center justify-center text-xs text-gray-400">

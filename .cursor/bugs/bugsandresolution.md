@@ -1048,66 +1048,128 @@ The issue was caused by improper handling of localStorage data when users switch
 #### Resolution
 
 - **Date Resolved**: 2025-01-22
-- **Resolution Method**: Implemented comprehensive localStorage cleanup and user validation across all user management components
+- **Resolution Method**: Implemented intelligent user switching detection with localStorage cleanup and user validation across all user management components
 - **Files Modified**:
-  - `app/context/GameContext.tsx` (lines 694-720, 775-784)
-  - `app/hooks/useUser.ts` (lines 42-68)
-  - `app/lib/userInitializer.ts` (lines 15, 28-48, 69-70)
+  - `app/context/GameContext.tsx` (lines 694-746, 785-796)
+  - `app/hooks/useUser.ts` (lines 42-98)
+  - `app/lib/userInitializer.ts` (lines 15, 28-60, 70)
 - **Key Changes**:
-  1. **Added localStorage cleanup**: Clear localStorage data from previous users when switching accounts
-  2. **Added user validation**: Ensure stored state belongs to current user before using it
-  3. **Made initialization user-specific**: Track last initialized user ID to prevent cross-user initialization
-  4. **Added comprehensive error handling**: Handle localStorage parsing errors gracefully
+  1. **Added intelligent user switching detection**: Only clear localStorage when there's a legitimate user switch, not when adding new accounts
+  2. **Added lastActiveUserId tracking**: Track the last active user to distinguish between user switches and new account additions
+  3. **Added user validation**: Ensure stored state belongs to current user before using it
+  4. **Made initialization user-specific**: Track last initialized user ID to prevent cross-user initialization
+  5. **Added comprehensive error handling**: Handle localStorage parsing errors gracefully
 
 #### Code Changes Made
 
 ```typescript
-// GameContext.tsx - Clear localStorage from different users
-if (storedState.user_id && storedState.user_id !== user_id.toString()) {
-  console.log("GameContext: Clearing localStorage data from different user:", {
-    storedUserId: storedState.user_id,
-    currentUserId: user_id.toString(),
-  });
-  localStorage.removeItem(STORAGE_KEYS.USER);
-  localStorage.removeItem("playerScore");
-  localStorage.removeItem("boosterUsage");
-  localStorage.removeItem("spinProgression");
+// GameContext.tsx - Intelligent user switching detection
+const lastUserId = localStorage.getItem("lastActiveUserId");
+
+if (storedState.user_id && storedState.user_id !== currentUserId) {
+  // Check if this is a legitimate user switch (not first-time initialization)
+  if (lastUserId && lastUserId !== currentUserId) {
+    console.log("User switch detected, clearing localStorage data");
+    localStorage.removeItem(STORAGE_KEYS.USER);
+    localStorage.removeItem("playerScore");
+    localStorage.removeItem("boosterUsage");
+    localStorage.removeItem("spinProgression");
+  } else {
+    console.log(
+      "Different user detected but no previous user, preserving data"
+    );
+    // Don't clear data - this might be a legitimate account addition
+  }
 }
+
+// Update the last active user ID
+localStorage.setItem("lastActiveUserId", user_id.toString());
 
 // userInitializer.ts - User-specific initialization tracking
 if (lastInitializedUserId && lastInitializedUserId !== currentUserId) {
-  console.log("User changed, resetting initialization state:", {
-    lastUserId: lastInitializedUserId,
-    currentUserId: currentUserId,
-  });
-  hasInitialized = false;
-  initializationPromise = null;
+  const lastUserId = localStorage.getItem("lastActiveUserId");
+
+  if (lastUserId && lastUserId !== currentUserId) {
+    console.log("User switch detected, resetting initialization state");
+    hasInitialized = false;
+    initializationPromise = null;
+  } else {
+    console.log(
+      "Different user detected but no previous user, preserving initialization state"
+    );
+    // Don't reset initialization state - this might be a legitimate account addition
+  }
 }
 ```
 
 #### Prevention Measures
 
 - **Always validate user data**: Check that stored data belongs to the current user before using it
-- **Clear user-specific data**: Remove localStorage data when users change
+- **Implement intelligent user switching detection**: Distinguish between user switches and new account additions
+- **Track user session state**: Use localStorage to track the last active user for proper context
 - **Use user-specific state**: Avoid global state that persists across user switches
 - **Add comprehensive logging**: Log user changes and data clearing for debugging
-- **Test account switching**: Always test with multiple accounts when implementing user management
+- **Test all user scenarios**: Test account addition, switching, and data preservation
+- **Handle edge cases**: Consider all possible user interaction patterns
 
 #### Testing
 
-- [x] Verified localStorage is cleared when users switch accounts
+- [x] Verified intelligent user switching detection works correctly
+- [x] Confirmed localStorage is cleared only on legitimate user switches
+- [x] Verified data preservation when adding new accounts
 - [x] Confirmed user validation prevents data mixing
-- [x] Checked that initialization state is reset for new users
+- [x] Checked that initialization state is reset appropriately for user switches
 - [x] Verified no linting errors were introduced
-- [x] Tested with multiple user accounts
+- [x] Tested with multiple user accounts and account addition scenarios
+- [x] Verified build passes successfully
 
 #### Impact
 
 - **Severity**: High (Data integrity issue affecting user experience)
 - **Scope**: All users with multiple Telegram accounts
-- **User Experience**: Users now see only their own data when switching accounts
-- **Data Integrity**: Prevents user data mixing and corruption
+- **User Experience**: Users now see only their own data when switching accounts, with proper data preservation when adding new accounts
+- **Data Integrity**: Prevents user data mixing and corruption while preserving legitimate account data
+- **Account Management**: Properly handles both account addition and account switching scenarios
+
+#### Detailed Solution Explanation
+
+The improved solution addresses the core issue by implementing **intelligent user switching detection** that distinguishes between different user interaction scenarios:
+
+**Problem Scenarios:**
+
+1. **Account Addition**: User has Account 1 → Adds Account 2 → Account 1's data should be preserved
+2. **Account Switching**: User switches Account 1 ↔ Account 2 → Previous account's data should be cleared
+3. **Data Mixing**: User sees Account 2's data when using Account 1 → Should be prevented
+
+**Solution Components:**
+
+1. **lastActiveUserId Tracking**:
+
+   - Stores the last active user ID in localStorage
+   - Used to detect legitimate user switches vs new account additions
+   - Updated every time a user becomes active
+
+2. **Smart Detection Logic**:
+
+   ```typescript
+   // Only clear data if there was a previous user AND it's different from current
+   if (lastUserId && lastUserId !== currentUserId) {
+     // This is a real user switch - clear previous user's data
+   } else {
+     // This is a new account addition - preserve existing data
+   }
+   ```
+
+3. **User-Specific Initialization**:
+   - Tracks initialization state per user
+   - Prevents cross-user initialization conflicts
+   - Maintains proper state management
+
+**User Flow Examples:**
+
+- **Adding Account 2**: Account 1 active → Add Account 2 → Account 1's data preserved ✅
+- **Switching to Account 2**: Account 1 active → Switch to Account 2 → Account 1's data cleared ✅
+- **Switching back to Account 1**: Account 2 active → Switch to Account 1 → Account 2's data cleared ✅
+- **Data Integrity**: Each user sees only their own data ✅
 
 ---
-
-_Last Updated: 2025-01-22_

@@ -46,7 +46,6 @@ const SpinPage = () => {
     getTimeUntilNextTypeCompletion,
     getGlobalRotationInfo,
     getProgressionType,
-    getTypeCompletionReward,
   } = useProgression();
   const {
     gameState,
@@ -746,7 +745,6 @@ const SpinPage = () => {
     state.currentType,
     hasPendingRewards,
     applyRewards,
-    getTypeCompletionReward,
     spinning,
     clearStepCompletion,
     state.earnedRewards,
@@ -806,19 +804,6 @@ const SpinPage = () => {
       combined.recharge += state.earnedRewards.recharge;
     }
 
-    // Add type completion reward if a type was completed and hasn't been processed yet
-    if (
-      state.lastCompletedType !== null &&
-      processedTypeCompletionRef.current !== state.lastCompletedType
-    ) {
-      const typeCompletionReward = getTypeCompletionReward(
-        state.lastCompletedType
-      );
-      if (typeCompletionReward && typeCompletionReward.type === "spins") {
-        combined.spins += typeCompletionReward.value;
-      }
-    }
-
     return combined;
   }, [
     isMultiSpin,
@@ -828,7 +813,6 @@ const SpinPage = () => {
     hasPendingRewards,
     state.earnedRewards,
     state.lastCompletedStep,
-    getTypeCompletionReward,
     state.lastCompletedType,
   ]);
 
@@ -1546,37 +1530,6 @@ const SpinPage = () => {
                             );
                           }
 
-                          // Add type completion reward if a type was completed
-                          if (
-                            state.lastCompletedType !== null &&
-                            processedTypeCompletionRef.current !==
-                              state.lastCompletedType
-                          ) {
-                            const typeCompletionReward =
-                              getTypeCompletionReward(state.lastCompletedType);
-                            if (
-                              typeCompletionReward &&
-                              typeCompletionReward.type === "spins"
-                            ) {
-                              finalSpins += typeCompletionReward.value;
-                              console.log(
-                                "[SPIN DEBUG] Type completion reward added:",
-                                {
-                                  type: state.lastCompletedType,
-                                  reward: typeCompletionReward.value,
-                                  finalSpins,
-                                  timestamp: new Date().toISOString(),
-                                }
-                              );
-                              // Mark this type completion as processed to prevent duplicate rewards
-                              processedTypeCompletionRef.current =
-                                state.lastCompletedType;
-
-                              // Reset lastCompletedType to null after giving the reward to prevent future rewards
-                              clearTypeCompletion();
-                            }
-                          }
-
                           // Log detailed calculation breakdown
                           console.log(
                             "[SPIN DEBUG] Final calculation breakdown:",
@@ -1881,36 +1834,6 @@ const SpinPage = () => {
 
                           // Calculate final values (currentSpins already has deduction applied)
                           let finalSpins = currentSpins;
-
-                          // Add type completion reward if a type was completed
-                          if (
-                            state.lastCompletedType !== null &&
-                            processedTypeCompletionRef.current !==
-                              state.lastCompletedType
-                          ) {
-                            const typeCompletionReward =
-                              getTypeCompletionReward(state.lastCompletedType);
-                            if (
-                              typeCompletionReward &&
-                              typeCompletionReward.type === "spins"
-                            ) {
-                              finalSpins += typeCompletionReward.value;
-                              console.log(
-                                "[SPIN DEBUG] Type completion reward added (single):",
-                                {
-                                  type: state.lastCompletedType,
-                                  reward: typeCompletionReward.value,
-                                  finalSpins,
-                                  timestamp: new Date().toISOString(),
-                                }
-                              );
-                              // Mark this type completion as processed to prevent duplicate rewards
-                              processedTypeCompletionRef.current =
-                                state.lastCompletedType;
-                              // Reset lastCompletedType to null after giving the reward to prevent future rewards
-                              clearTypeCompletion();
-                            }
-                          }
 
                           // Log detailed calculation breakdown (single spin)
                           console.log(
@@ -2301,21 +2224,6 @@ ${
       } = ${gameState.spins - spinLevel + state.earnedRewards.spins}`
     : ""
 }
-${
-  state.lastCompletedType !== null &&
-  processedTypeCompletionRef.current !== state.lastCompletedType
-    ? `Add type completion reward: ${
-        hasPendingRewards()
-          ? gameState.spins - spinLevel + state.earnedRewards.spins
-          : gameState.spins - spinLevel
-      } + ${getTypeCompletionReward(state.lastCompletedType)?.value || 0} = ${
-        (hasPendingRewards()
-          ? gameState.spins - spinLevel + state.earnedRewards.spins
-          : gameState.spins - spinLevel) +
-        (getTypeCompletionReward(state.lastCompletedType)?.value || 0)
-      }`
-    : ""
-}
 Current UI display: ${latestStateRef.current.spins}
 GameState spins: ${gameState.spins}
           `.trim();
@@ -2351,21 +2259,6 @@ GameState spins: ${gameState.spins}
             </span>
           </div>
         )}
-        <div className="flex items-center justify-between mb-2">
-          <span className="font-bold">Type Completion Reward:</span>
-          <div className="flex items-center">
-            <span className="text-yellow-400 mr-2">
-              {getTypeCompletionReward(currentGlobalType)?.value || 0}
-            </span>
-            <Image
-              src="/assets/spin/spin.png"
-              alt="Spins"
-              width={16}
-              height={16}
-              style={{ width: "auto", height: "auto" }}
-            />
-          </div>
-        </div>
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold">Token Required:</span>
           <div className="flex items-center">
@@ -2416,27 +2309,6 @@ GameState spins: ${gameState.spins}
                 </span>
               </div>
             )}
-            {state.lastCompletedType !== null &&
-              processedTypeCompletionRef.current !==
-                state.lastCompletedType && (
-                <div className="flex justify-between">
-                  <span>Add type completion reward:</span>
-                  <span className="text-yellow-400">
-                    {hasPendingRewards()
-                      ? gameState.spins - spinLevel + state.earnedRewards.spins
-                      : gameState.spins - spinLevel}{" "}
-                    +{" "}
-                    {getTypeCompletionReward(state.lastCompletedType)?.value ||
-                      0}{" "}
-                    ={" "}
-                    {(hasPendingRewards()
-                      ? gameState.spins - spinLevel + state.earnedRewards.spins
-                      : gameState.spins - spinLevel) +
-                      (getTypeCompletionReward(state.lastCompletedType)
-                        ?.value || 0)}
-                  </span>
-                </div>
-              )}
             <div className="flex justify-between">
               <span>Current UI display:</span>
               <span className="text-green-400">

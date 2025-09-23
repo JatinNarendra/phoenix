@@ -691,31 +691,47 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-      // Clear localStorage data from previous users to prevent data mixing
-      // when users switch between different Telegram accounts
+      // Check for user switching and handle localStorage appropriately
       try {
         const storedStateStr = localStorage.getItem(STORAGE_KEYS.USER);
+        const lastUserId = localStorage.getItem("lastActiveUserId");
+
         if (storedStateStr) {
           const storedState = JSON.parse(storedStateStr);
-          // If stored state belongs to a different user, clear it
-          if (
-            storedState.user_id &&
-            storedState.user_id !== user_id.toString()
-          ) {
-            console.log(
-              "GameContext: Clearing localStorage data from different user:",
-              {
-                storedUserId: storedState.user_id,
-                currentUserId: user_id.toString(),
-              }
-            );
-            localStorage.removeItem(STORAGE_KEYS.USER);
-            // Also clear other user-specific data
-            localStorage.removeItem("playerScore");
-            localStorage.removeItem("boosterUsage");
-            localStorage.removeItem("spinProgression");
+          const currentUserId = user_id.toString();
+
+          // If stored state belongs to a different user
+          if (storedState.user_id && storedState.user_id !== currentUserId) {
+            // Check if this is a legitimate user switch (not first-time initialization)
+            if (lastUserId && lastUserId !== currentUserId) {
+              console.log(
+                "GameContext: User switch detected, clearing localStorage data:",
+                {
+                  lastUserId: lastUserId,
+                  storedUserId: storedState.user_id,
+                  currentUserId: currentUserId,
+                }
+              );
+              // Clear localStorage data from previous user
+              localStorage.removeItem(STORAGE_KEYS.USER);
+              localStorage.removeItem("playerScore");
+              localStorage.removeItem("boosterUsage");
+              localStorage.removeItem("spinProgression");
+            } else {
+              console.log(
+                "GameContext: Different user detected but no previous user, preserving data:",
+                {
+                  storedUserId: storedState.user_id,
+                  currentUserId: currentUserId,
+                }
+              );
+              // Don't clear data - this might be a legitimate account addition
+            }
           }
         }
+
+        // Update the last active user ID
+        localStorage.setItem("lastActiveUserId", user_id.toString());
       } catch (error) {
         console.error(
           "GameContext: Error checking localStorage for user data:",
@@ -726,6 +742,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         localStorage.removeItem("playerScore");
         localStorage.removeItem("boosterUsage");
         localStorage.removeItem("spinProgression");
+        localStorage.removeItem("lastActiveUserId");
       }
 
       // Initialize timer service early to ensure timers are loaded from localStorage

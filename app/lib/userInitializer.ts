@@ -27,14 +27,32 @@ export const initializeUserOnce = (
 ): Promise<InitializeResult> => {
   const currentUserId = WebApp.initDataUnsafe.user?.id?.toString();
 
-  // If user has changed, reset initialization state
+  // Check if this is a legitimate user switch vs first-time initialization
   if (lastInitializedUserId && lastInitializedUserId !== currentUserId) {
-    console.log("User changed, resetting initialization state:", {
-      lastUserId: lastInitializedUserId,
-      currentUserId: currentUserId,
-    });
-    hasInitialized = false;
-    initializationPromise = null;
+    // Check localStorage to see if this is a real user switch
+    const lastUserId =
+      typeof window !== "undefined"
+        ? localStorage.getItem("lastActiveUserId")
+        : null;
+
+    if (lastUserId && lastUserId !== currentUserId) {
+      console.log("User switch detected, resetting initialization state:", {
+        lastUserId: lastUserId,
+        lastInitializedUserId: lastInitializedUserId,
+        currentUserId: currentUserId,
+      });
+      hasInitialized = false;
+      initializationPromise = null;
+    } else {
+      console.log(
+        "Different user detected but no previous user, preserving initialization state:",
+        {
+          lastInitializedUserId: lastInitializedUserId,
+          currentUserId: currentUserId,
+        }
+      );
+      // Don't reset initialization state - this might be a legitimate account addition
+    }
   }
 
   // If we've already started initialization for this user, return the existing promise

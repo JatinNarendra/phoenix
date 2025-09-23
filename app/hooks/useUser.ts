@@ -39,29 +39,49 @@ export const useUser = () => {
     initializationAttempted.current = true;
     console.log("useUser: Starting user initialization");
 
-    // Clear localStorage data from previous users when user changes
+    // Check for user switching and handle localStorage appropriately
     if (typeof window !== "undefined") {
       try {
         const storedStateStr = localStorage.getItem("user");
-        if (storedStateStr) {
+        const lastUserId = localStorage.getItem("lastActiveUserId");
+        const currentUserId = WebApp?.initDataUnsafe?.user?.id?.toString();
+
+        if (storedStateStr && currentUserId) {
           const storedState = JSON.parse(storedStateStr);
-          // If stored state belongs to a different user, clear it
-          if (
-            storedState.user_id &&
-            storedState.user_id !== WebApp?.initDataUnsafe?.user?.id?.toString()
-          ) {
-            console.log(
-              "useUser: Clearing localStorage data from different user:",
-              {
-                storedUserId: storedState.user_id,
-                currentUserId: WebApp?.initDataUnsafe?.user?.id,
-              }
-            );
-            localStorage.removeItem("user");
-            localStorage.removeItem("playerScore");
-            localStorage.removeItem("boosterUsage");
-            localStorage.removeItem("spinProgression");
+
+          // If stored state belongs to a different user
+          if (storedState.user_id && storedState.user_id !== currentUserId) {
+            // Check if this is a legitimate user switch (not first-time initialization)
+            if (lastUserId && lastUserId !== currentUserId) {
+              console.log(
+                "useUser: User switch detected, clearing localStorage data:",
+                {
+                  lastUserId: lastUserId,
+                  storedUserId: storedState.user_id,
+                  currentUserId: currentUserId,
+                }
+              );
+              // Clear localStorage data from previous user
+              localStorage.removeItem("user");
+              localStorage.removeItem("playerScore");
+              localStorage.removeItem("boosterUsage");
+              localStorage.removeItem("spinProgression");
+            } else {
+              console.log(
+                "useUser: Different user detected but no previous user, preserving data:",
+                {
+                  storedUserId: storedState.user_id,
+                  currentUserId: currentUserId,
+                }
+              );
+              // Don't clear data - this might be a legitimate account addition
+            }
           }
+        }
+
+        // Update the last active user ID
+        if (currentUserId) {
+          localStorage.setItem("lastActiveUserId", currentUserId);
         }
       } catch (error) {
         console.error(
@@ -73,6 +93,7 @@ export const useUser = () => {
         localStorage.removeItem("playerScore");
         localStorage.removeItem("boosterUsage");
         localStorage.removeItem("spinProgression");
+        localStorage.removeItem("lastActiveUserId");
       }
     }
 
