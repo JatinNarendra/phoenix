@@ -999,10 +999,53 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
               lastCompletedType: null,
             },
           };
+        } else if (!dbError && dbState !== null) {
+          // No localStorage but database state exists - use database state
+          console.log(
+            "[GAME CONTEXT DEBUG] Using database state (no localStorage):",
+            {
+              hasDbState: !!dbState,
+              currentUserId: user_id.toString(),
+            }
+          );
+          newState = {
+            ...(dbState as GameState),
+            gameVersion: CURRENT_GAME_VERSION,
+            lastUpdate: Date.now(),
+            characterProgression:
+              (dbState as GameState).characterProgression ||
+              initializeCharacterProgression(),
+            // Initialize spin progression if not present in database
+            spinProgression: (dbState as GameState).spinProgression || {
+              currentType: getCurrentlyActiveType() - 1, // Convert to 0-based index
+              currentStep: 0,
+              collectedTokens: 0,
+              requiredTokens: 10,
+              reward: {
+                type: "sparkcoins" as const,
+                value: 1000,
+              },
+              earnedRewards: {
+                sparkcoins: 0,
+                spins: 0,
+                turbo: 0,
+                recharge: 0,
+              },
+              lastCompletedStep: null,
+              lastCompletedType: null,
+            },
+          };
         } else {
           // No valid database state or local storage - create new state
           // Clear the spinProgression data from localStorage since this is a new user
           resetUserProgressionData();
+
+          console.log("[GAME CONTEXT DEBUG] Creating new initial state:", {
+            dbError,
+            hasDbState: !!dbState,
+            hasStoredState: !!storedState,
+            currentUserId: user_id.toString(),
+          });
 
           newState = {
             ...initialGameState,

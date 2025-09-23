@@ -1048,9 +1048,9 @@ The issue was caused by improper handling of localStorage data when users switch
 #### Resolution
 
 - **Date Resolved**: 2025-01-22
-- **Resolution Method**: Implemented intelligent user switching detection with localStorage cleanup and user validation across all user management components
+- **Resolution Method**: Implemented intelligent user switching detection with localStorage cleanup, user validation, and improved database state fallback logic across all user management components
 - **Files Modified**:
-  - `app/context/GameContext.tsx` (lines 694-746, 785-796)
+  - `app/context/GameContext.tsx` (lines 694-746, 785-796, 1002-1038)
   - `app/hooks/useUser.ts` (lines 42-98)
   - `app/lib/userInitializer.ts` (lines 15, 28-60, 70)
 - **Key Changes**:
@@ -1059,6 +1059,7 @@ The issue was caused by improper handling of localStorage data when users switch
   3. **Added user validation**: Ensure stored state belongs to current user before using it
   4. **Made initialization user-specific**: Track last initialized user ID to prevent cross-user initialization
   5. **Added comprehensive error handling**: Handle localStorage parsing errors gracefully
+  6. **Fixed database state fallback**: Added proper fallback to database state when localStorage is cleared due to user switching
 
 #### Code Changes Made
 
@@ -1102,6 +1103,30 @@ if (lastInitializedUserId && lastInitializedUserId !== currentUserId) {
 }
 ```
 
+```typescript
+// GameContext.tsx - Database state fallback when localStorage is cleared
+} else if (!dbError && dbState !== null) {
+  // No localStorage but database state exists - use database state
+  console.log("Using database state (no localStorage)");
+  newState = {
+    ...(dbState as GameState),
+    gameVersion: CURRENT_GAME_VERSION,
+    lastUpdate: Date.now(),
+    characterProgression: (dbState as GameState).characterProgression || initializeCharacterProgression(),
+    spinProgression: (dbState as GameState).spinProgression || {
+      currentType: getCurrentlyActiveType() - 1,
+      currentStep: 0,
+      collectedTokens: 0,
+      requiredTokens: 10,
+      reward: { type: "sparkcoins" as const, value: 1000 },
+      earnedRewards: { sparkcoins: 0, spins: 0, turbo: 0, recharge: 0 },
+      lastCompletedStep: null,
+      lastCompletedType: null,
+    },
+  };
+}
+```
+
 #### Prevention Measures
 
 - **Always validate user data**: Check that stored data belongs to the current user before using it
@@ -1119,6 +1144,8 @@ if (lastInitializedUserId && lastInitializedUserId !== currentUserId) {
 - [x] Verified data preservation when adding new accounts
 - [x] Confirmed user validation prevents data mixing
 - [x] Checked that initialization state is reset appropriately for user switches
+- [x] Verified database state fallback works when localStorage is cleared
+- [x] Confirmed users see their correct data when switching accounts (not initial state)
 - [x] Verified no linting errors were introduced
 - [x] Tested with multiple user accounts and account addition scenarios
 - [x] Verified build passes successfully
