@@ -20,9 +20,9 @@ import { ULTIMATE_PRIZES } from "../spinConstants";
 const formatNumber = (num: number | undefined): string => {
   if (!num) return "";
   if (num >= 1000000) {
-    return `${(num / 1000000).toFixed(1)}m`;
+    return `${Math.floor(num / 1000000)}m`;
   } else if (num >= 1000) {
-    return `${(num / 1000).toFixed(1)}k`;
+    return `${Math.floor(num / 1000)}k`;
   }
   return num.toString();
 };
@@ -116,15 +116,17 @@ const HowItWorksPage = () => {
       </div>
       <div className="p-4">
         <div className="flex flex-col justify-center items-center mb-4">
-          <div className="flex w-[180px] h-[40px] bg-black justify-center items-center border-[1px] border-[#E18700] rounded-[12px] p-2">
+          <div className="flex w-[200px] h-[40px] bg-black justify-center items-center border-[1px] border-[#E18700] rounded-[12px] p-2">
             <Image src={SpinIcon} alt="Token" width={20} height={20} />
             <span className="text-[#E18700] font-bold text-sm ml-2">
-              Ultimate Prize
+              {formatNumber(
+                ULTIMATE_PRIZES[
+                  getCurrentlyActiveType() as keyof typeof ULTIMATE_PRIZES
+                ]?.value || 0
+              )}
             </span>
             <span className="text-[#E18700] font-bold text-sm ml-2">
-              {ULTIMATE_PRIZES[
-                getCurrentlyActiveType() as keyof typeof ULTIMATE_PRIZES
-              ]?.value || 0}
+              Ultimate Prize
             </span>
           </div>
           <h3 className="text-lg font-bold text-white mt-[10px]">
