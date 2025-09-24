@@ -12,11 +12,11 @@ export default function Tap() {
   // Splash screen state - only show once per session
   const [showSplash, setShowSplash] = useState(() => {
     if (typeof window === "undefined") return true;
-    
+
     // Check if splash has been shown in this session
     const splashShownKey = "phoenix_splash_shown_session";
     const hasShownSplash = sessionStorage.getItem(splashShownKey) === "true";
-    
+
     if (!hasShownSplash) {
       console.log("Main Page: First visit in session, will show splash screen");
       return true;
@@ -139,11 +139,11 @@ export default function Tap() {
 
   const handleSplashComplete = () => {
     console.log("Main Page: Splash screen completed");
-    
+
     // Mark splash as shown in this session
     const splashShownKey = "phoenix_splash_shown_session";
     sessionStorage.setItem(splashShownKey, "true");
-    
+
     setShowSplash(false);
   };
 
