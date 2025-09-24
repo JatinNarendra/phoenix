@@ -2159,11 +2159,30 @@ const SpinPage = () => {
   // Add back button functionality
   useEffect(() => {
     if (WebApp) {
+      WebApp.enableClosingConfirmation();
+
       const handleBack = () => {
         router.push("/");
       };
+
+      WebApp.BackButton.onClick(handleBack);
+
+      return () => {
+        WebApp.BackButton.offClick(handleBack);
+      };
     }
   }, [WebApp, router]);
+
+  // Handle back button visibility based on spinning state
+  useEffect(() => {
+    if (WebApp) {
+      if (spinning) {
+        WebApp.BackButton.hide();
+      } else {
+        WebApp.BackButton.show();
+      }
+    }
+  }, [WebApp, spinning]);
 
   // Helper function for tooltip
   const getRewardImage = (type: string) => {
