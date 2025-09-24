@@ -1,12 +1,16 @@
 "use client";
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import HomePhoenixTap from "./HomePhoenixTap/page";
 import { useReferral } from "./context/ReferralContext";
 import { useUser } from "./hooks/useUser";
+import SplashScreen from "./components/SplashScreen";
 
 export default function Tap() {
   console.log("=== ROOT PAGE (app/page.tsx) COMPONENT STARTED ===");
   console.log("Root Page: Current pathname:", window?.location?.pathname);
+
+  // Splash screen state
+  const [showSplash, setShowSplash] = useState(true);
 
   // Get context access
   const { checkUserReferral, resetReferralCheck } = useReferral();
@@ -119,8 +123,14 @@ export default function Tap() {
     }
   }, [resetReferralCheck, checkUserReferral]);
 
+  const handleSplashComplete = () => {
+    console.log("Main Page: Splash screen completed");
+    setShowSplash(false);
+  };
+
   return (
     <div className="h-full w-full">
+      {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       <HomePhoenixTap />
     </div>
   );

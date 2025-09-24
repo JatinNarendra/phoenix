@@ -10,7 +10,6 @@ import React, {
 import { isClientDevEnvironment } from "@/app/lib/urlUtils";
 import type { TelegramWebApp, WebAppInstance } from "@/app/types/telegram";
 import Loader from "@/app/components/ui/Loader";
-import SplashScreen from "@/app/components/SplashScreen";
 
 // Declare custom window interface with our retry counter
 interface CustomWindow extends Window {
@@ -26,95 +25,16 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
   const [error, setError] = useState<Error | null>(null);
   const [isTelegramApp, setIsTelegramApp] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [showSplash, setShowSplash] = useState<boolean>(false);
   const hasInitialized = useRef(false);
   const hasCalledReady = useRef(false);
   const lastKnownUserId = useRef<string | null>(null);
   const initDataCheckInterval = useRef<NodeJS.Timeout | null>(null);
   const refreshCooldownRef = useRef<number>(0);
-  const splashShownKey = "phoenix_splash_shown";
-
-  // Clear splash screen flag when app is refreshed or closed
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem(splashShownKey);
-        sessionStorage.removeItem("webapp_initialized");
-        sessionStorage.removeItem("webapp_data");
-      }
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
-        if (typeof window !== "undefined") {
-          localStorage.removeItem(splashShownKey);
-          sessionStorage.removeItem("webapp_initialized");
-          sessionStorage.removeItem("webapp_data");
-        }
-      }
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("beforeunload", handleBeforeUnload);
-      document.addEventListener("visibilitychange", handleVisibilityChange);
-
-      return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-        document.removeEventListener(
-          "visibilitychange",
-          handleVisibilityChange
-        );
-      };
-    }
-  }, []);
-
-  // Show splash screen only once per app session
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const hasShownSplash = localStorage.getItem(splashShownKey) === "true";
-
-    if (!hasShownSplash) {
-      console.log(
-        "WebAppContext: First time starting app, showing splash screen"
-      );
-      setShowSplash(true);
-      localStorage.setItem(splashShownKey, "true");
-    }
-  }, []);
 
   useEffect(() => {
-    // Check if already initialized globally
-    const isInitialized =
-      typeof window !== "undefined" &&
-      sessionStorage.getItem("webapp_initialized") === "true";
-
-    if (isInitialized) {
-      console.log("WebAppContext: Already initialized, restoring state");
-      // Restore the WebApp state from sessionStorage
-      const webAppData = sessionStorage.getItem("webapp_data");
-      if (webAppData) {
-        try {
-          const data = JSON.parse(webAppData);
-          setWebApp(data.webApp);
-          setIsTelegramApp(data.isTelegramApp);
-          setIsLoading(false);
-          setIsReady(true);
-          console.log("WebAppContext: State restored successfully");
-        } catch (error) {
-          console.error("WebAppContext: Error restoring state:", error);
-          // Clear corrupted data and reinitialize
-          sessionStorage.removeItem("webapp_initialized");
-          sessionStorage.removeItem("webapp_data");
-        }
-      }
-      return;
-    }
-
-    // Mark as initialized
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("webapp_initialized", "true");
-    }
+    if (hasInitialized.current) return;
+    // Set hasInitialized immediately to prevent multiple initialization attempts
+    hasInitialized.current = true;
 
     // Check if we're in a Telegram WebApp environment first
     const isTelegramEnvironment =
@@ -186,16 +106,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsTelegramApp(true);
         setIsLoading(false);
         setIsReady(true);
-        // Save WebApp data for restoration
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem(
-            "webapp_data",
-            JSON.stringify({
-              webApp: dummyNexusWebApp,
-              isTelegramApp: true,
-            })
-          );
-        }
         return;
       }
 
@@ -220,16 +130,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
             setIsTelegramApp(true);
             setIsLoading(false);
             setIsReady(true);
-            // Save WebApp data for restoration
-            if (typeof window !== "undefined") {
-              sessionStorage.setItem(
-                "webapp_data",
-                JSON.stringify({
-                  webApp: telegramWebApp,
-                  isTelegramApp: true,
-                })
-              );
-            }
             return true;
           }
         }
@@ -291,16 +191,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
           setIsTelegramApp(true);
           setIsLoading(false);
           setIsReady(true);
-          // Save WebApp data for restoration
-          if (typeof window !== "undefined") {
-            sessionStorage.setItem(
-              "webapp_data",
-              JSON.stringify({
-                webApp: dummyWebApp,
-                isTelegramApp: true,
-              })
-            );
-          }
         } else {
           if (document.readyState === "complete") {
             console.warn(
@@ -339,16 +229,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
             setIsTelegramApp(false);
             setIsLoading(false);
             setIsReady(true);
-            // Save WebApp data for restoration
-            if (typeof window !== "undefined") {
-              sessionStorage.setItem(
-                "webapp_data",
-                JSON.stringify({
-                  webApp: fallbackWebApp,
-                  isTelegramApp: false,
-                })
-              );
-            }
           } else {
             const maxRetries = 10;
             const retryCount = window.__webAppInitRetries || 0;
@@ -396,16 +276,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
               setIsTelegramApp(false);
               setIsLoading(false);
               setIsReady(true);
-              // Save WebApp data for restoration
-              if (typeof window !== "undefined") {
-                sessionStorage.setItem(
-                  "webapp_data",
-                  JSON.stringify({
-                    webApp: fallbackWebApp,
-                    isTelegramApp: false,
-                  })
-                );
-              }
             }
           }
         }
@@ -415,10 +285,12 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
     initializeWebApp();
   }, []);
 
-  // Add initData monitoring to detect account switches - DISABLED to prevent reloads
+  // Add initData monitoring to detect account switches
   useEffect(() => {
-    // Disabled to prevent page reloads during navigation
-    return;
+    // Only enable monitoring for Telegram apps, not Nexus or localhost
+    if (!isTelegramApp || !WebApp || WebApp.initDataUnsafe?.user?.id === 0) {
+      return;
+    }
 
     if (!isTelegramApp || !WebApp) return;
 
@@ -482,18 +354,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [isTelegramApp, WebApp]);
 
-  // Add timeout to hide splash screen if it stays too long
-  useEffect(() => {
-    if (showSplash) {
-      const splashTimeout = setTimeout(() => {
-        console.log("WebAppContext: Splash screen timeout, forcing hide");
-        setShowSplash(false);
-      }, 10000);
-
-      return () => clearTimeout(splashTimeout);
-    }
-  }, [showSplash]);
-
   const showBackButton = () => {
     if (WebApp?.BackButton) {
       WebApp.BackButton.show();
@@ -532,7 +392,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
     error,
     isTelegramApp,
     isReady,
-    showSplash,
     showBackButton,
     hideBackButton,
     enableCloseConfirmation,
@@ -541,23 +400,13 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   console.log("WebAppContext: Rendering with state:", {
-    showSplash,
     isReady,
     isLoading,
     isTelegramApp,
   });
 
   return (
-    <WebAppContext.Provider value={value}>
-      <SplashScreen
-        isVisible={showSplash}
-        onComplete={() => {
-          console.log("WebAppContext: Splash screen completed, hiding splash");
-          setShowSplash(false);
-        }}
-      />
-      {children}
-    </WebAppContext.Provider>
+    <WebAppContext.Provider value={value}>{children}</WebAppContext.Provider>
   );
 };
 

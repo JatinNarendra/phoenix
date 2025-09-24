@@ -6,27 +6,15 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface SplashScreenProps {
   onComplete: () => void;
-  isVisible: boolean;
 }
 
-const SplashScreen: React.FC<SplashScreenProps> = ({
-  onComplete,
-  isVisible,
-}) => {
-  const [showSplash, setShowSplash] = useState(false);
-  const [startTime] = useState(Date.now());
+const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    if (!isVisible) return;
-
     console.log("SplashScreen: Starting splash screen display");
-    setShowSplash(true);
 
-    // Ensure minimum display time of 3 seconds
-    const minDisplayTime = 3000;
-    const elapsed = Date.now() - startTime;
-    const remainingTime = Math.max(0, minDisplayTime - elapsed);
-
+    // Show splash for 3 seconds
     const timer = setTimeout(() => {
       console.log("SplashScreen: Hiding splash screen");
       setShowSplash(false);
@@ -35,12 +23,10 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
         console.log("SplashScreen: Splash screen completed");
         onComplete();
       }, 500);
-    }, remainingTime);
+    }, 3000);
 
     return () => clearTimeout(timer);
-  }, [isVisible, onComplete, startTime]);
-
-  if (!isVisible) return null;
+  }, [onComplete]);
 
   return (
     <AnimatePresence>
@@ -52,9 +38,8 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
           className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
         >
           <div className="relative w-full h-full flex items-center justify-center">
-            {/* Background with phoenix and chips */}
             <Image
-              src="/assets/firstscreen.png"
+              src="/assets/splashscreen.png"
               alt="Phoenix Game Splash Screen"
               fill
               className="object-cover"

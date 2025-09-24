@@ -314,6 +314,62 @@ export const initializeOrUpdateUser = async (
 
     console.log("Initializing/updating user:", userData.id);
 
+    if (!userData?.id) {
+      console.error("Invalid user data:", userData);
+      return {
+        success: false,
+        isNewUser: false,
+        error: "Invalid user data received: missing ID",
+      };
+    }
+
+    const now = new Date().toISOString();
+    console.log("Checking if user exists...");
+
+    // Check if user exists and get their current state
+    const { data: existingUser, error: fetchError } = await supabaseAdmin
+      .from("telegram_users")
+      .select("*, game_state")
+      .eq("user_id", userData.id.toString())
+      .maybeSingle();
+
+    if (fetchError && fetchError.code !== "PGRST116") {
+      console.error("Error checking existing user:", fetchError);
+      throw fetchError;
+    }
+
+    const isNewUser = !existingUser;
+
+    // If user exists, just update metadata and return early
+    if (existingUser) {
+      console.log("User exists, updating metadata only");
+
+      // Update only metadata, preserve game_state
+      const { error: updateError } = await supabaseAdmin
+        .from("telegram_users")
+        .update({
+          username: userData.username || null,
+          first_name: userData.first_name,
+          last_name: userData.last_name || null,
+          language_code: userData.language_code || null,
+          photo_url: userData.photo_url || null,
+          last_active: now,
+          updated_at: now,
+        })
+        .eq("user_id", userData.id.toString());
+
+      if (updateError) {
+        console.error("Error updating user metadata:", updateError);
+        throw updateError;
+      }
+
+      console.log("User metadata updated successfully");
+      return { success: true, isNewUser: false };
+    }
+
+    // Rest of the function for new users...
+    console.log("Creating new user with default game state");
+
     // Create default game state
     const defaultGameState: TelegramGameState = {
       user_id: userData.id.toString(),
@@ -443,18 +499,16 @@ export const initializeOrUpdateUser = async (
       photo_url: userData.photo_url || null,
       is_bot: userData.is_bot,
       game_state: defaultGameState,
-      last_login: new Date().toISOString(),
-      last_active: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      last_login: now,
+      last_active: now,
+      updated_at: now,
+      created_at: now,
     };
 
-    // Use upsert to insert or update
+    // Use insert for new users only (not upsert to avoid overwriting existing data)
     const { data, error } = await supabaseAdmin
       .from("telegram_users")
-      .upsert(userDataToSave, {
-        onConflict: "user_id",
-        ignoreDuplicates: false,
-      })
+      .insert(userDataToSave)
       .select();
 
     if (error) {
@@ -462,11 +516,13 @@ export const initializeOrUpdateUser = async (
       throw new Error(`Database error: ${error.message}`);
     }
 
-    console.log("User data saved successfully:", data);
-    return data?.[0] || userDataToSave;
+    console.log("New user created successfully:", data);
+    return { success: true, isNewUser: true };
   } catch (error) {
-    console.error("Error in initializeOrUpdateUser:", error);
-    throw error;
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    console.error("Error in initializeOrUpdateUser:", errorMessage);
+    return { success: false, isNewUser: false, error: errorMessage };
   }
 };
 

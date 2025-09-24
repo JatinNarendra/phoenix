@@ -2159,17 +2159,8 @@ const SpinPage = () => {
   // Add back button functionality
   useEffect(() => {
     if (WebApp) {
-      WebApp.BackButton.show();
-      WebApp.enableClosingConfirmation();
-
       const handleBack = () => {
         router.push("/");
-      };
-
-      WebApp.BackButton.onClick(handleBack);
-
-      return () => {
-        WebApp.BackButton.offClick(handleBack);
       };
     }
   }, [WebApp, router]);

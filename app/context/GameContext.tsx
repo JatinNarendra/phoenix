@@ -60,6 +60,22 @@ import {
 
 // Context creation
 const GameContext = createContext<GameContextType | undefined>(undefined);
+// Below is an essential helper function that is used only for user 6042897820 (production user) and 123456789(localhost testing). This is needed for when developer
+// wants to cleanup the storage cache for specifically these 2 users.
+// Helper function to detect users that should be re-initialized when DB entry is missing
+const shouldReinitializeOnMissing = (userId: string): boolean => {
+  const reinitUserIds = [
+    "6042897820", // Real Telegram user
+    "123456789", // Dummy user (for localhost testing)
+  ];
+
+  return reinitUserIds.includes(userId);
+};
+
+// Helper function to detect dummy user
+const isDummyUser = (userId: string): boolean => {
+  return userId === "123456789";
+};
 
 // Provider component
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -775,6 +791,38 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
             ) {
               dbError = false; // Not treating this as a regular database error
               dbState = null; // Ensure we create a new state
+
+              // ESSENTIAL: Check if this user should be re-initialized when DB entry is missing
+              if (shouldReinitializeOnMissing(user_id.toString())) {
+                const storedStateStr = localStorage.getItem(STORAGE_KEYS.USER);
+                if (storedStateStr) {
+                  try {
+                    const cachedState = JSON.parse(storedStateStr);
+                    if (
+                      cachedState &&
+                      cachedState.user_id === user_id.toString()
+                    ) {
+                      console.log(
+                        "[GAME CONTEXT DEBUG] User database entry manually removed, re-initializing with cached data:",
+                        {
+                          userId: user_id.toString(),
+                          cachedCoins: cachedState.coins,
+                          cachedLevel: cachedState.level,
+                          isDummyUser: isDummyUser(user_id.toString()),
+                        }
+                      );
+
+                      // Mark this user for re-initialization
+                      localStorage.setItem(`needsReinit_${user_id}`, "true");
+
+                      // Use cached state as the base
+                      dbState = cachedState;
+                    }
+                  } catch (e) {
+                    console.error("Error parsing cached state:", e);
+                  }
+                }
+              }
             } else {
               // This is another type of database error
               dbError = true;
@@ -818,6 +866,10 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
           localStorage.removeItem(STORAGE_KEYS.USER);
         }
 
+        // Check if this user needs re-initialization
+        const needsReinit =
+          localStorage.getItem(`needsReinit_${user_id}`) === "true";
+
         let newState: GameState;
 
         console.log("[GAME CONTEXT DEBUG] Decision logic inputs:", {
@@ -831,13 +883,122 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
           currentUserId: user_id.toString(),
           userSwitchCleared:
             localStorage.getItem("userSwitchCleared") === "true",
+          needsReinit,
+          shouldReinitializeOnMissing: shouldReinitializeOnMissing(
+            user_id.toString()
+          ),
+          isDummyUser: isDummyUser(user_id.toString()),
         });
 
         // Decision logic for which state to use:
         const userSwitchCleared =
           localStorage.getItem("userSwitchCleared") === "true";
 
-        if (dbState) {
+        // ESSENTIAL: If user needs re-initialization, use cached state and mark for DB sync
+        if (needsReinit && storedState) {
+          console.log(
+            "[GAME CONTEXT DEBUG] Using cached state for re-initialization"
+          );
+          newState = {
+            ...storedState,
+            user_id: user_id.toString(),
+            gameVersion: CURRENT_GAME_VERSION,
+            lastUpdate: Date.now(),
+            // Initialize spin progression if not present in stored state
+            spinProgression: storedState.spinProgression || {
+              currentType: getCurrentlyActiveType() - 1,
+              currentStep: 0,
+              collectedTokens: 0,
+              requiredTokens: 10,
+              reward: {
+                type: "sparkcoins",
+                value: 100,
+              },
+              earnedRewards: {
+                sparkcoins: 0,
+                spins: 0,
+                turbo: 0,
+                recharge: 0,
+              },
+              lastCompletedStep: null,
+              lastCompletedType: null,
+            },
+          };
+
+          // Clear the re-init flag
+          localStorage.removeItem(`needsReinit_${user_id}`);
+
+          // Mark for immediate database sync
+          setTimeout(async () => {
+            try {
+              // First, ensure the user exists in the database
+              console.log(
+                "[GAME CONTEXT DEBUG] Creating database entry for re-initialized user"
+              );
+
+              // Import the initializeOrUpdateUser function
+              const { initializeOrUpdateUser } = await import(
+                "../lib/telegram"
+              );
+
+              // Create user data from the current WebApp context
+              // Try to get real user data from WebApp, fallback to dummy data
+              let userData;
+
+              if (
+                typeof window !== "undefined" &&
+                (window as any).Telegram?.WebApp?.initDataUnsafe?.user
+              ) {
+                // Real Telegram user data
+                const telegramUser = (window as any).Telegram.WebApp
+                  .initDataUnsafe.user;
+                userData = {
+                  id: telegramUser.id,
+                  username: telegramUser.username,
+                  first_name: telegramUser.first_name,
+                  last_name: telegramUser.last_name,
+                  language_code: telegramUser.language_code,
+                  photo_url: telegramUser.photo_url,
+                  is_bot: false,
+                };
+              } else {
+                // Fallback to dummy user data
+                userData = {
+                  id: parseInt(user_id.toString()),
+                  username: "testuser",
+                  first_name: "Test",
+                  last_name: "User",
+                  language_code: "en",
+                  photo_url: undefined,
+                  is_bot: false,
+                };
+              }
+
+              // Initialize the user in the database
+              const initResult = await initializeOrUpdateUser(userData, false);
+
+              if (initResult.success) {
+                console.log(
+                  "[GAME CONTEXT DEBUG] User database entry created successfully"
+                );
+
+                // Now save the game state
+                debouncedSave(newState);
+                debouncedSave.flush(); // Force immediate save
+              } else {
+                console.error(
+                  "[GAME CONTEXT DEBUG] Failed to create user database entry:",
+                  initResult.error
+                );
+              }
+            } catch (error) {
+              console.error(
+                "[GAME CONTEXT DEBUG] Error during user re-initialization:",
+                error
+              );
+            }
+          }, 1000);
+        } else if (dbState) {
           // Database state exists - check if it has meaningful data
           // If database has 0 coins but localStorage has coins, prefer localStorage
           // UNLESS we cleared localStorage due to user switching
