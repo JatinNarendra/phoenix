@@ -14,6 +14,7 @@ import HourglassIcon from "@/public/assets/spin/hourglass.png";
 import { BsCheckCircleFill } from "react-icons/bs";
 
 import { useWebApp } from "@/app/hooks/useWebApp";
+import { ULTIMATE_PRIZES } from "../spinConstants";
 
 // Format number with k, m suffix
 const formatNumber = (num: number | undefined): string => {
@@ -119,6 +120,11 @@ const HowItWorksPage = () => {
             <Image src={SpinIcon} alt="Token" width={20} height={20} />
             <span className="text-[#E18700] font-bold text-sm ml-2">
               Ultimate Prize
+            </span>
+            <span className="text-[#E18700] font-bold text-sm ml-2">
+              {ULTIMATE_PRIZES[
+                getCurrentlyActiveType() as keyof typeof ULTIMATE_PRIZES
+              ]?.value || 0}
             </span>
           </div>
           <h3 className="text-lg font-bold text-white mt-[10px]">
