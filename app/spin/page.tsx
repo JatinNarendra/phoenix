@@ -2162,7 +2162,7 @@ const SpinPage = () => {
       WebApp.enableClosingConfirmation();
 
       const handleBack = () => {
-        router.push("/");
+        router.back();
       };
 
       WebApp.BackButton.onClick(handleBack);
