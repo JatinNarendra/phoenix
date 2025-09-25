@@ -49,7 +49,7 @@ const HowItWorksPage = () => {
       WebApp.enableClosingConfirmation();
 
       const handleBack = () => {
-        router.push("/spin");
+        router.back();
       };
 
       WebApp.BackButton.onClick(handleBack);
