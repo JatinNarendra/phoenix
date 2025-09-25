@@ -1848,7 +1848,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
             levelConfig[gameState.level].levelCompletionReward;
           setTimeout(() => {
             gameToast.reward(
-              `Level ${newLevel} reached\nLevel bonus ${levelReward.toLocaleString()}`,
+              `Level ${newLevel} reached!\nLevel bonus: ${levelReward.toLocaleString()} coins`,
               { duration: 5000 }
             );
           }, 1000);

@@ -158,19 +158,19 @@ const PhoenixTapArea: React.FC = () => {
         // Add this level to processed level ups
         processedLevelUpsRef.current.push(currentLevel);
 
-        // Use reward from the level being reached (not the completed level)
-        const reachedLevel = currentLevel + 1;
-        const levelReward = levelConfig[reachedLevel].levelCompletionReward;
+        // Get the reward for the level that was just completed (the previous level)
+        const completedLevel = gameState.level;
+        const levelReward = levelConfig[completedLevel].levelCompletionReward;
 
-        // Show level up animation
+        // Show level up animation for the new level
         if (showLevelUpAnimation) {
-          showLevelUpAnimation(reachedLevel);
+          showLevelUpAnimation(currentLevel);
         }
 
-        // Show toast
+        // Show toast with correct level and reward
         setTimeout(() => {
           gameToast.reward(
-            `Level ${reachedLevel} reached\nLevel bonus ${levelReward.toLocaleString()}`,
+            `Level ${currentLevel} reached!\nLevel bonus: ${levelReward.toLocaleString()} coins`,
             { duration: 5000 }
           );
         }, 1000);
@@ -179,11 +179,11 @@ const PhoenixTapArea: React.FC = () => {
       persistState((prev) => ({
         ...prev,
         level: currentLevel,
-        // Add reward coins using the reward for the level reached, not the previous level
+        // Add reward coins for the level that was completed (previous level) only on level up
         coins:
           prev.coins +
           (currentLevel > prev.level
-            ? levelConfig[currentLevel].levelCompletionReward
+            ? levelConfig[prev.level].levelCompletionReward
             : 0),
       }));
     }
@@ -328,7 +328,7 @@ const PhoenixTapArea: React.FC = () => {
         // Initialize level reward value
         let levelReward = 0;
 
-        // Special case for level 1 to 2 transition
+        // Check if this is a level up
         const shouldTriggerLevelUp =
           newLevel > prev.level && !prev.pendingLevelUp;
 
@@ -339,20 +339,19 @@ const PhoenixTapArea: React.FC = () => {
           // Add this level to processed level ups
           processedLevelUpsRef.current.push(newLevel);
 
-          // Get the reward for the level being reached
-          const reachedLevel = newLevel + 1;
-          levelReward = levelConfig[reachedLevel].levelCompletionReward;
+          // Get the reward for the level that was just completed (the previous level)
+          const completedLevel = prev.level;
+          levelReward = levelConfig[completedLevel].levelCompletionReward;
 
-          // Trigger the level up animation directly
+          // Trigger the level up animation for the new level
           if (showLevelUpAnimation) {
-            // Show the next level being unlocked, not the current level
-            showLevelUpAnimation(reachedLevel);
+            showLevelUpAnimation(newLevel);
           }
 
-          // Show level up toast with reward
+          // Show level up toast with correct level and reward
           setTimeout(() => {
             gameToast.reward(
-              `Level ${reachedLevel} reached\nLevel bonus ${levelReward.toLocaleString()}`,
+              `Level ${newLevel} reached!\nLevel bonus: ${levelReward.toLocaleString()} coins`,
               { duration: 5000 }
             );
 
@@ -372,7 +371,7 @@ const PhoenixTapArea: React.FC = () => {
           coins:
             newCoins +
             (shouldTriggerLevelUp
-              ? levelConfig[newLevel + 1].levelCompletionReward
+              ? levelConfig[prev.level].levelCompletionReward
               : 0),
           level: newLevel,
           pendingLevelUp: shouldTriggerLevelUp,
@@ -504,7 +503,7 @@ const PhoenixTapArea: React.FC = () => {
         // Initialize level reward value
         let levelReward = 0;
 
-        // Special case for level 1 to 2 transition
+        // Check if this is a level up
         const shouldTriggerLevelUp =
           newLevel > prev.level && !prev.pendingLevelUp;
 
@@ -515,20 +514,19 @@ const PhoenixTapArea: React.FC = () => {
           // Add this level to processed level ups
           processedLevelUpsRef.current.push(newLevel);
 
-          // Get the reward for the level being reached
-          const reachedLevel = newLevel + 1;
-          levelReward = levelConfig[reachedLevel].levelCompletionReward;
+          // Get the reward for the level that was just completed (the previous level)
+          const completedLevel = prev.level;
+          levelReward = levelConfig[completedLevel].levelCompletionReward;
 
-          // Trigger the level up animation directly
+          // Trigger the level up animation for the new level
           if (showLevelUpAnimation) {
-            // Show the next level being unlocked, not the current level
-            showLevelUpAnimation(reachedLevel);
+            showLevelUpAnimation(newLevel);
           }
 
-          // Show level up toast with reward
+          // Show level up toast with correct level and reward
           setTimeout(() => {
             gameToast.reward(
-              `Level ${reachedLevel} reached\nLevel bonus ${levelReward.toLocaleString()}`,
+              `Level ${newLevel} reached!\nLevel bonus: ${levelReward.toLocaleString()} coins`,
               { duration: 5000 }
             );
 
@@ -548,7 +546,7 @@ const PhoenixTapArea: React.FC = () => {
           coins:
             newCoins +
             (shouldTriggerLevelUp
-              ? levelConfig[newLevel + 1].levelCompletionReward
+              ? levelConfig[prev.level].levelCompletionReward
               : 0),
           level: newLevel,
           pendingLevelUp: shouldTriggerLevelUp,
