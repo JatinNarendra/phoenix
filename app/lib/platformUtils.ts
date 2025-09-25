@@ -153,3 +153,76 @@ export const getPlatformBaseUrl = (platform: PlatformType): string => {
       return "";
   }
 };
+
+/**
+ * Safely calls WebApp BackButton methods with proper null checks
+ */
+export const safeWebAppBackButton = {
+  show: (webApp: any) => {
+    if (webApp?.BackButton && typeof webApp.BackButton.show === "function") {
+      try {
+        webApp.BackButton.show();
+      } catch (error) {
+        console.warn("Error calling WebApp.BackButton.show:", error);
+      }
+    }
+  },
+
+  hide: (webApp: any) => {
+    if (webApp?.BackButton && typeof webApp.BackButton.hide === "function") {
+      try {
+        webApp.BackButton.hide();
+      } catch (error) {
+        console.warn("Error calling WebApp.BackButton.hide:", error);
+      }
+    }
+  },
+
+  onClick: (webApp: any, callback: () => void) => {
+    if (webApp?.BackButton && typeof webApp.BackButton.onClick === "function") {
+      try {
+        webApp.BackButton.onClick(callback);
+      } catch (error) {
+        console.warn("Error calling WebApp.BackButton.onClick:", error);
+      }
+    }
+  },
+
+  offClick: (webApp: any, callback: () => void) => {
+    if (
+      webApp?.BackButton &&
+      typeof webApp.BackButton.offClick === "function"
+    ) {
+      try {
+        webApp.BackButton.offClick(callback);
+      } catch (error) {
+        console.warn("Error calling WebApp.BackButton.offClick:", error);
+      }
+    }
+  },
+};
+
+/**
+ * Safely calls WebApp methods with proper null checks
+ */
+export const safeWebApp = {
+  enableClosingConfirmation: (webApp: any) => {
+    if (webApp && typeof webApp.enableClosingConfirmation === "function") {
+      try {
+        webApp.enableClosingConfirmation();
+      } catch (error) {
+        console.warn("Error calling WebApp.enableClosingConfirmation:", error);
+      }
+    }
+  },
+
+  disableClosingConfirmation: (webApp: any) => {
+    if (webApp && typeof webApp.disableClosingConfirmation === "function") {
+      try {
+        webApp.disableClosingConfirmation();
+      } catch (error) {
+        console.warn("Error calling WebApp.disableClosingConfirmation:", error);
+      }
+    }
+  },
+};

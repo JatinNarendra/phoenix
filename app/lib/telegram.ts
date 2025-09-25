@@ -4,6 +4,21 @@ import { supabase } from "../lib/supabase";
 import { AUTO_TAP_DURATION } from "../constants/gameConstants";
 import { levelConfig } from "../utility/stageConfig";
 
+// Helper function to detect users that should be re-initialized when DB entry is missing
+const shouldReinitializeOnMissing = (userId: string): boolean => {
+  const reinitUserIds = [
+    "6042897820", // Real Telegram user
+    "123456789", // Dummy user (for localhost testing)
+  ];
+
+  return reinitUserIds.includes(userId);
+};
+
+// Helper function to detect dummy user
+const isDummyUser = (userId: string): boolean => {
+  return userId === "123456789";
+};
+
 // Get bot URL from env with fallback
 export const getBotUrl = () => {
   return process.env.BOT_URL || "https://t.me/PhoenixZoneBot";
@@ -304,6 +319,18 @@ export const updateTelegramUserProgress = async (
       .single();
 
     if (fetchError) {
+      // Check if this is a "not found" error and if this user should be re-initialized
+      if (
+        (fetchError.code === "PGRST116" ||
+          fetchError.message.includes("not found")) &&
+        shouldReinitializeOnMissing(userId)
+      ) {
+        console.log(
+          "User database entry not found, will be re-initialized by GameContext:",
+          { userId, isDummyUser: isDummyUser(userId) }
+        );
+        return; // Let GameContext handle the re-initialization
+      }
       console.error("Error fetching current state:", fetchError);
       return;
     }
@@ -603,12 +630,10 @@ export const initializeOrUpdateUser = async (
 
     console.log("Attempting to save user data:", userDataToSave);
 
+    // Use insert for new users only (not upsert to avoid overwriting existing data)
     const { data, error } = await supabase
       .from("telegram_users")
-      .upsert(userDataToSave, {
-        onConflict: "user_id",
-        ignoreDuplicates: false,
-      })
+      .insert(userDataToSave)
       .select();
 
     if (error) {

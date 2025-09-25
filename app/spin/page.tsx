@@ -162,21 +162,6 @@ const SpinPage = () => {
     sparkytokens: 0,
   });
 
-  // Debug state for tracking spin outcomes
-  const [debugData, setDebugData] = useState<
-    Array<{
-      spinNumber: number;
-      symbols: string[];
-      winningCombo: string | null;
-      reward: {
-        type: string;
-        amount: number;
-      } | null;
-      sparkytokens: number;
-    }>
-  >([]);
-  const [showDebugOverlay, setShowDebugOverlay] = useState(false);
-
   // Timer state variables - Unified with global rotation timer
   const [timeUntilGlobalRotation, setTimeUntilGlobalRotation] = useState<{
     hours: number;
@@ -1216,9 +1201,6 @@ const SpinPage = () => {
       };
       setIsMultiSpin(spinLevel > 1);
 
-      // Reset debug data for new spin session
-      setDebugData([]);
-
       // Apply different CSS classes based on spin type
       if (spinLevel > 1) {
         // For multi-spin, use faster animation classes
@@ -1707,35 +1689,6 @@ const SpinPage = () => {
                     tokensToAdd = 0;
                   }
                 }
-
-                // Add debug data for this spin
-                setDebugData((prev) => [
-                  ...prev,
-                  {
-                    spinNumber: spinIndex + 1,
-                    symbols: symbols,
-                    winningCombo: result.winningCombo,
-                    reward: result.newPrize
-                      ? {
-                          type: result.newPrize.type,
-                          amount: result.newPrize.amount,
-                        }
-                      : null,
-                    sparkytokens: tokensToAdd,
-                  },
-                ]);
-              } else {
-                // Add debug data for losing spin
-                setDebugData((prev) => [
-                  ...prev,
-                  {
-                    spinNumber: spinIndex + 1,
-                    symbols: symbols,
-                    winningCombo: null,
-                    reward: null,
-                    sparkytokens: 0,
-                  },
-                ]);
               }
 
               // Accumulate rewards directly in the ref to avoid state update race conditions
@@ -2054,7 +2007,6 @@ const SpinPage = () => {
     setStoppingReels,
     setAggregatedRewards,
     setIsMultiSpin,
-    setDebugData,
     setPrize,
     setLastReward,
     setRewardDisplay,
@@ -2159,11 +2111,10 @@ const SpinPage = () => {
   // Add back button functionality
   useEffect(() => {
     if (WebApp) {
-      WebApp.BackButton.show();
       WebApp.enableClosingConfirmation();
 
       const handleBack = () => {
-        router.push("/");
+        router.back();
       };
 
       WebApp.BackButton.onClick(handleBack);
@@ -2173,6 +2124,17 @@ const SpinPage = () => {
       };
     }
   }, [WebApp, router]);
+
+  // Handle back button visibility based on spinning state
+  useEffect(() => {
+    if (WebApp) {
+      if (spinning) {
+        WebApp.BackButton.hide();
+      } else {
+        WebApp.BackButton.show();
+      }
+    }
+  }, [WebApp, spinning]);
 
   // Helper function for tooltip
   const getRewardImage = (type: string) => {
@@ -3034,231 +2996,6 @@ GameState spins: ${gameState.spins}
                     </div>
                   )}
 
-                {/* Debug Overlay */}
-                {showDebugOverlay && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden  z-40">
-                    <div
-                      className="absolute inset-0 bg-black bg-opacity-70"
-                      onClick={() => setShowDebugOverlay(false)}
-                    ></div>
-                    <div className="relative bg-[rgba(31,14,14,0.98)] border border-[rgba(255,255,255,0.2)] rounded-[10px] p-4 max-w-[90vw] max-h-[80vh] overflow-y-auto">
-                      {/* Header */}
-                      <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-[#FFA501] text-xl font-bold">
-                          Multi-Spin Results
-                        </h2>
-                        <button
-                          className="text-[#FFA501] text-2xl font-bold hover:opacity-70"
-                          onClick={() => setShowDebugOverlay(false)}
-                        >
-                          &times;
-                        </button>
-                      </div>
-
-                      {/* Debug Data */}
-                      {debugData.length > 0 ? (
-                        <>
-                          {/* Table Header */}
-                          <div className="grid grid-cols-5 gap-2 text-[#FFA501] font-bold text-center text-sm border-b border-[rgba(255,255,255,0.2)] pb-2">
-                            <div>Spin #</div>
-                            <div>1</div>
-                            <div>2</div>
-                            <div>3</div>
-                            <div>Results</div>
-                          </div>
-
-                          {/* Table Rows */}
-                          {debugData.map((spin, index) => {
-                            // Helper function to get symbol image
-                            const getSymbolImage = (symbolId: string) => {
-                              const symbol = SYMBOLS.find(
-                                (s) => s.id === symbolId
-                              );
-                              return symbol
-                                ? symbol.image
-                                : "/assets/spin/sparkcoin.png";
-                            };
-
-                            return (
-                              <div
-                                key={index}
-                                className="grid grid-cols-5 gap-2 items-center bg-[rgba(0,0,0,0.3)] p-3 "
-                              >
-                                {/* Spin Number */}
-                                <div className="text-[#FFA501] font-bold text-center">
-                                  {spin.spinNumber}
-                                </div>
-
-                                {/* Symbol Icons */}
-                                <div className="flex justify-center">
-                                  <Image
-                                    src={getSymbolImage(spin.symbols[0])}
-                                    alt={spin.symbols[0]}
-                                    width={24}
-                                    height={24}
-                                    style={imageStyle}
-                                    className="object-contain"
-                                  />
-                                </div>
-                                <div className="flex justify-center">
-                                  <Image
-                                    src={getSymbolImage(spin.symbols[1])}
-                                    alt={spin.symbols[1]}
-                                    width={24}
-                                    height={24}
-                                    style={imageStyle}
-                                    className="object-contain"
-                                  />
-                                </div>
-                                <div className="flex justify-center">
-                                  <Image
-                                    src={getSymbolImage(spin.symbols[2])}
-                                    alt={spin.symbols[2]}
-                                    width={24}
-                                    height={24}
-                                    style={imageStyle}
-                                    className="object-contain"
-                                  />
-                                </div>
-
-                                {/* Results */}
-                                <div className="text-white text-xs text-center space-y-1">
-                                  {spin.winningCombo ? (
-                                    <>
-                                      <div className="text-green-400 font-semibold text-[10px]">
-                                        {spin.winningCombo}
-                                      </div>
-                                      {spin.reward && (
-                                        <div className="flex items-center justify-center gap-1">
-                                          <Image
-                                            src={getRewardImage(
-                                              spin.reward.type
-                                            )}
-                                            alt={spin.reward.type}
-                                            width={16}
-                                            height={16}
-                                            style={imageStyle}
-                                            className="object-contain"
-                                          />
-                                          <span>{spin.reward.amount}</span>
-                                        </div>
-                                      )}
-                                      {spin.sparkytokens > 0 && (
-                                        <div className="flex items-center justify-center gap-1">
-                                          <span>{spin.sparkytokens}</span>
-                                          <Image
-                                            src="/assets/spin/token.png"
-                                            alt="SparkTokens"
-                                            width={16}
-                                            height={16}
-                                            style={imageStyle}
-                                            className="object-contain"
-                                          />
-                                        </div>
-                                      )}
-                                    </>
-                                  ) : (
-                                    <div className="text-gray-400">No win</div>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-
-                          {/* Summary */}
-                          <div className="mt-6 p-4 bg-[rgba(255,165,1,0.1)] rounded border border-[#FFA501]">
-                            <div className="text-[#FFA501] font-bold mb-3 text-center">
-                              Reward Overlay Summary
-                            </div>
-                            <div className="grid grid-cols-2 gap-4 text-white text-sm">
-                              <div className="flex items-center justify-between">
-                                <span className="text-yellow-400">
-                                  SparkCoins:
-                                </span>
-                                <div className="flex items-center gap-2">
-                                  <span>
-                                    {finalCombinedRewards.sparkcoins.toLocaleString()}
-                                  </span>
-                                  <Image
-                                    src="/assets/spin/sparkcoin.png"
-                                    alt="SparkCoins"
-                                    width={20}
-                                    height={20}
-                                    style={imageStyle}
-                                  />
-                                </div>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-yellow-400">Spins:</span>
-                                <div className="flex items-center gap-2">
-                                  <span>{finalCombinedRewards.spins}</span>
-                                  <Image
-                                    src="/assets/spin/spin.png"
-                                    alt="Spins"
-                                    width={20}
-                                    height={20}
-                                    style={imageStyle}
-                                  />
-                                </div>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-yellow-400">Turbo:</span>
-                                <div className="flex items-center gap-2">
-                                  <span>{finalCombinedRewards.turbo}</span>
-                                  <Image
-                                    src="/assets/spin/turbo.png"
-                                    alt="Turbo"
-                                    width={20}
-                                    height={20}
-                                    style={imageStyle}
-                                  />
-                                </div>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-yellow-400">
-                                  Recharge:
-                                </span>
-                                <div className="flex items-center gap-2">
-                                  <span>{finalCombinedRewards.recharge}</span>
-                                  <Image
-                                    src="/assets/spin/recharge.png"
-                                    alt="Recharge"
-                                    width={20}
-                                    height={20}
-                                    style={imageStyle}
-                                  />
-                                </div>
-                              </div>
-                              <div className="flex items-center justify-between col-span-2">
-                                <span className="text-yellow-400">
-                                  SparkTokens:
-                                </span>
-                                <div className="flex items-center gap-2">
-                                  <span>
-                                    {finalCombinedRewards.sparkytokens}
-                                  </span>
-                                  <Image
-                                    src="/assets/spin/token.png"
-                                    alt="SparkTokens"
-                                    width={20}
-                                    height={20}
-                                    style={imageStyle}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ) : (
-                        <div className="text-white text-center py-8">
-                          No debug data available. Perform a multi-spin to see
-                          results.
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
                 {/* Spin Level Selector */}
                 <div className="w-full flex justify-center">
                   <button
@@ -3410,72 +3147,6 @@ GameState spins: ${gameState.spins}
                         ? "Click to stop"
                         : "Hold for auto spin"}
                     </span>
-                  </div>
-
-                  {/* Control Buttons Row - Moved to right end */}
-                  <div className="flex-col justify-end pr-2 absolute right-0 space-y-2">
-                    <Tooltip
-                      content={tooltipContent}
-                      position="top"
-                      spinProgression={{
-                        currentStep: state.currentStep,
-                        totalSteps:
-                          getProgressionType(currentGlobalType)?.steps.length ||
-                          0,
-                        collectedTokens: state.collectedTokens,
-                        requiredTokens: state.requiredTokens,
-                      }}
-                    >
-                      <div className="cursor-pointer bg-[#301402] rounded-full p-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="text-yellow-500"
-                        >
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <path d="M12 16v-4"></path>
-                          <path d="M12 8h.01"></path>
-                        </svg>
-                      </div>
-                    </Tooltip>
-
-                    {/* Debug icon */}
-                    <div
-                      className="cursor-pointer bg-[#301402] rounded-full p-2"
-                      onClick={() => setShowDebugOverlay(true)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="text-green-500"
-                      >
-                        <path d="m8 2 1.88 1.88"></path>
-                        <path d="M14.12 3.88 16 2"></path>
-                        <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"></path>
-                        <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"></path>
-                        <path d="M12 20v-9"></path>
-                        <path d="M6.53 9C4.6 8.8 3 7.1 3 5"></path>
-                        <path d="M6 13H2"></path>
-                        <path d="M3 21c0-2.1 1.7-3.9 3.8-4"></path>
-                        <path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"></path>
-                        <path d="M22 13h-4"></path>
-                        <path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"></path>
-                      </svg>
-                    </div>
                   </div>
                 </div>
               </div>

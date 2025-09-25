@@ -1,12 +1,30 @@
 "use client";
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import HomePhoenixTap from "./HomePhoenixTap/page";
 import { useReferral } from "./context/ReferralContext";
 import { useUser } from "./hooks/useUser";
+import SplashScreen from "./components/SplashScreen";
 
 export default function Tap() {
   console.log("=== ROOT PAGE (app/page.tsx) COMPONENT STARTED ===");
   console.log("Root Page: Current pathname:", window?.location?.pathname);
+
+  // Splash screen state - only show once per session
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window === "undefined") return true;
+
+    // Check if splash has been shown in this session
+    const splashShownKey = "phoenix_splash_shown_session";
+    const hasShownSplash = sessionStorage.getItem(splashShownKey) === "true";
+
+    if (!hasShownSplash) {
+      console.log("Main Page: First visit in session, will show splash screen");
+      return true;
+    } else {
+      console.log("Main Page: Splash already shown in this session, skipping");
+      return false;
+    }
+  });
 
   // Get context access
   const { checkUserReferral, resetReferralCheck } = useReferral();
@@ -119,8 +137,19 @@ export default function Tap() {
     }
   }, [resetReferralCheck, checkUserReferral]);
 
+  const handleSplashComplete = () => {
+    console.log("Main Page: Splash screen completed");
+
+    // Mark splash as shown in this session
+    const splashShownKey = "phoenix_splash_shown_session";
+    sessionStorage.setItem(splashShownKey, "true");
+
+    setShowSplash(false);
+  };
+
   return (
     <div className="h-full w-full">
+      {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       <HomePhoenixTap />
     </div>
   );

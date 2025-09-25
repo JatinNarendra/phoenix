@@ -142,28 +142,50 @@ export const useUser = () => {
 
       // Check if initData contains the correct user ID
       if (initData && telegramUser?.id) {
-        const userIdInInitData = initData.includes(`"id":${telegramUser.id}`);
-        if (!userIdInInitData) {
-          console.error("useUser: initData mismatch detected!", {
+        try {
+          // Decode URL-encoded initData to check for user ID
+          const decodedInitData = decodeURIComponent(initData);
+          const userIdInInitData = decodedInitData.includes(
+            `"id":${telegramUser.id}`
+          );
+
+          console.log("useUser: initData validation:", {
             telegramUserId: telegramUser.id,
             initData: initData,
-            initDataUnsafe: WebApp.initDataUnsafe,
+            decodedInitData: decodedInitData,
+            userIdInInitData: userIdInInitData,
           });
 
-          // Only refresh if we haven't refreshed recently
-          const lastRefresh = localStorage.getItem("lastInitDataRefresh");
-          const now = Date.now();
-          if (!lastRefresh || now - parseInt(lastRefresh) > 5000) {
-            // 5 second cooldown
-            localStorage.setItem("lastInitDataRefresh", now.toString());
-            console.log(
-              "useUser: Forcing page refresh due to initData mismatch"
-            );
-            window.location.reload();
-            return;
-          } else {
-            console.log("useUser: Skipping refresh due to cooldown");
+          if (!userIdInInitData) {
+            console.error("useUser: initData mismatch detected!", {
+              telegramUserId: telegramUser.id,
+              initData: initData,
+              decodedInitData: decodedInitData,
+              initDataUnsafe: WebApp.initDataUnsafe,
+            });
+
+            // Only refresh if we haven't refreshed recently
+            const lastRefresh = localStorage.getItem("lastInitDataRefresh");
+            const now = Date.now();
+            if (!lastRefresh || now - parseInt(lastRefresh) > 5000) {
+              // 5 second cooldown
+              localStorage.setItem("lastInitDataRefresh", now.toString());
+              console.log(
+                "useUser: Forcing page refresh due to initData mismatch"
+              );
+              window.location.reload();
+              return;
+            } else {
+              console.log("useUser: Skipping refresh due to cooldown");
+            }
           }
+        } catch (error) {
+          console.warn(
+            "useUser: Error decoding initData, skipping validation:",
+            error
+          );
+          // If we can't decode the initData, we'll proceed without validation
+          // This prevents the app from breaking due to malformed initData
         }
       }
 

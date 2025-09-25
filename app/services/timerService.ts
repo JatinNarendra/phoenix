@@ -10,6 +10,21 @@ import { supabase } from "../lib/supabase";
 import { GameState } from "../types/gameTypes";
 import { calculateRetroactiveSpins } from "../utility/spinUtils";
 
+// Helper function to detect users that should be re-initialized when DB entry is missing
+const shouldReinitializeOnMissing = (userId: string): boolean => {
+  const reinitUserIds = [
+    "6042897820", // Real Telegram user
+    "123456789", // Dummy user (for localhost testing)
+  ];
+
+  return reinitUserIds.includes(userId);
+};
+
+// Helper function to detect dummy user
+const isDummyUser = (userId: string): boolean => {
+  return userId === "123456789";
+};
+
 // Local interfaces
 interface Timer extends TimerData {
   timerId: string;
@@ -409,7 +424,39 @@ export const getAutoTapState = async (
       .eq("user_id", userId)
       .single();
 
-    if (error) throw error;
+    if (error) {
+      // Check if this is a "not found" error and if this user should be re-initialized
+      if (
+        (error.code === "PGRST116" || error.message.includes("not found")) &&
+        shouldReinitializeOnMissing(userId)
+      ) {
+        console.log(
+          "User database entry not found, checking localStorage for auto-tap state:",
+          { userId, isDummyUser: isDummyUser(userId) }
+        );
+
+        // Try to get state from localStorage
+        try {
+          const storedStateStr = localStorage.getItem("user");
+          if (storedStateStr) {
+            const cachedState = JSON.parse(storedStateStr);
+            if (cachedState && cachedState.user_id === userId) {
+              // Return auto-tap state from cache
+              if (cachedState.autoTapDaily) {
+                return {
+                  dailyUsesRemaining: cachedState.autoTapDaily.usesRemaining,
+                  lastDailyReset: cachedState.autoTapDaily.lastReset,
+                  coinsEarned: cachedState.autoTapCoins || 0,
+                };
+              }
+            }
+          }
+        } catch (e) {
+          console.error("Error reading cached auto-tap state:", e);
+        }
+      }
+      throw error;
+    }
 
     const gameState = userData?.game_state as GameState;
 

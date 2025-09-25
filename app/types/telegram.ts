@@ -51,7 +51,6 @@ export interface WebAppInstance {
   error: Error | null;
   isTelegramApp: boolean;
   isReady: boolean;
-  showSplash: boolean;
   showBackButton: () => void;
   hideBackButton: () => void;
   enableCloseConfirmation: () => void;
