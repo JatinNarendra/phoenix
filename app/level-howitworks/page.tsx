@@ -23,13 +23,13 @@ const LevelHowItWorksPage = () => {
     if (WebApp) {
       WebApp.BackButton.show();
       WebApp.enableClosingConfirmation();
-      
+
       const handleBack = () => {
-        router.push('/level-details');
+        router.push("/level-details");
       };
 
       WebApp.BackButton.onClick(handleBack);
-      
+
       return () => {
         WebApp.BackButton.offClick(handleBack);
       };
@@ -41,7 +41,7 @@ const LevelHowItWorksPage = () => {
     try {
       return `/assets/homebackground/badge${level}.png`;
     } catch {
-      return '/assets/homebackground/badge1.png';
+      return "/assets/homebackground/badge1.png";
     }
   };
 
@@ -61,7 +61,7 @@ const LevelHowItWorksPage = () => {
         break;
       }
     }
-    
+
     // Current level is the one we're working toward
     // If we've completed level 10, stay at 10
     return completedLevel < 10 ? completedLevel + 1 : 10;
@@ -76,7 +76,7 @@ const LevelHowItWorksPage = () => {
             src={TopYourLevelIcon}
             alt="Top Your Level"
             fill
-            style={{ objectFit:"contain"}}
+            style={{ objectFit: "contain" }}
             quality={100}
             priority
           />
@@ -100,8 +100,9 @@ const LevelHowItWorksPage = () => {
             <Image src={BundleIcon} alt="Sparky Bonus" width={24} height={24} />
             <h2 className="text-lg font-bold">Sparky Bonus Rewards</h2>
           </div>
-            <p className="text-sm text-gray-500 font-bold mb-6">
-            Earn powerful bonuses as you rise through the legendary phoenix tiers.
+          <p className="text-sm text-gray-500 font-bold mb-6">
+            Earn powerful bonuses as you rise through the legendary phoenix
+            tiers.
           </p>
 
           {/* Level Rewards List */}
@@ -127,7 +128,6 @@ const LevelHowItWorksPage = () => {
                     </div>
                     <div className="flex flex-col items-end">
                       <div className="flex items-center gap-2 mt-1">
-                        
                         <Image
                           src={sparkicon}
                           alt="Spark"
@@ -201,7 +201,6 @@ const LevelHowItWorksPage = () => {
                     </div>
                     <div className="flex flex-col items-end">
                       <div className="flex items-center gap-2 mt-1">
-                        
                         <Image
                           src={sparkicon}
                           alt="Spark"
@@ -209,9 +208,7 @@ const LevelHowItWorksPage = () => {
                           height={14}
                         />
                         <span className="text-base font-medium text-[#909090]">
-                          {levelConfig[
-                            level
-                          ].sparkRequired.toLocaleString()}
+                          {levelConfig[level].sparkRequired.toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -228,7 +225,9 @@ const LevelHowItWorksPage = () => {
           <div className="grid grid-cols-2 gap-3">
             <button
               className="flex items-center justify-center gap-2 bg-[#1F1212] rounded-[10px] p-4 hover:bg-[#2A1818]"
-              onClick={() => window.open("https://t.me/SparkyTapGame", "_blank")}
+              onClick={() =>
+                window.open("https://t.me/SparkyTapGame", "_blank")
+              }
             >
               <Image src={telegramIcon} alt="Telegram" width={24} height={24} />
               <span>Telegram</span>
@@ -265,4 +264,4 @@ const LevelHowItWorksPage = () => {
   );
 };
 
-export default LevelHowItWorksPage; 
+export default LevelHowItWorksPage;
