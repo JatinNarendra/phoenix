@@ -602,7 +602,7 @@ export default function BoostersPage() {
 
           persistState((prev) => ({
             ...prev,
-            coins: prev.coins - upgradeCost,
+            coins: Math.max(0, prev.coins - upgradeCost),
             RechargeLevel: nextLevel,
             upgrades: {
               ...prev.upgrades,
@@ -639,7 +639,7 @@ export default function BoostersPage() {
 
           persistState((prev) => ({
             ...prev,
-            coins: prev.coins - upgradeCost,
+            coins: Math.max(0, prev.coins - upgradeCost),
             energyCapacity: energyConfig.maxRecharge,
             maxPhoenixEnergy: energyConfig.maxRecharge,
             upgrades: {
@@ -714,7 +714,7 @@ export default function BoostersPage() {
         // If autotap is not active, apply the upgrade immediately
         persistState((prev) => ({
           ...prev,
-          coins: prev.coins - upgrade.coinPrice!,
+          coins: Math.max(0, prev.coins - upgrade.coinPrice!),
           upgrades: {
             ...prev.upgrades,
             tapLevel: nextTapLevel,
@@ -729,7 +729,7 @@ export default function BoostersPage() {
         // Handle other upgrade types
         persistState((prev) => ({
           ...prev,
-          coins: prev.coins - upgrade.coinPrice!,
+          coins: Math.max(0, prev.coins - upgrade.coinPrice!),
           upgrades: {
             ...prev.upgrades,
             tapLevel: (prev.upgrades.tapLevel || 0) + 1,
@@ -1098,7 +1098,7 @@ export default function BoostersPage() {
               style={{ width: "auto", height: "auto" }}
             />
             <h4 className="text-4xl font-bold text-white">
-              {gameState.coins.toLocaleString()}
+              {Math.max(0, gameState.coins).toLocaleString()}
             </h4>
           </div>
           <h2

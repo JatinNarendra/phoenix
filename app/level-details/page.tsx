@@ -123,7 +123,7 @@ const LevelDetailsPage = () => {
           const userGameState = user.game_state as { coins?: number };
           return {
             name: user.username || user.first_name || "Anonymous",
-            spark: (userGameState?.coins || 0).toLocaleString(),
+            spark: Math.max(0, userGameState?.coins || 0).toLocaleString(),
             rank: index + 1,
             level: selectedLevel,
             photo_url: user.photo_url || null,
@@ -359,7 +359,7 @@ const LevelDetailsPage = () => {
                           }}
                           key={gameState.coins}
                         >
-                          {gameState.coins.toLocaleString()}
+                          {Math.max(0, gameState.coins).toLocaleString()}
                         </motion.span>
                         <span>/</span>
                         <span>

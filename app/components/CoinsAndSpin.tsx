@@ -54,7 +54,7 @@ const CoinsAndSpin = () => {
             </div>
             {/* Coins amount */}
             <span className="text-sm ml-2">
-              {formatNumber(gameState.coins || 0)}
+              {formatNumber(Math.max(0, gameState.coins || 0))}
             </span>
           </div>
         </div>

@@ -1282,7 +1282,7 @@ const PhoenixTapArea: React.FC = () => {
                 }}
                 key={gameState.coins}
               >
-                {gameState.coins.toLocaleString()}
+                {Math.max(0, gameState.coins).toLocaleString()}
               </motion.div>
               /
               {(() => {

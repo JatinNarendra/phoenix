@@ -608,7 +608,7 @@ const AutoTapPopup: React.FC<AutoTapPopupProps> = ({
     try {
       await criticalStateUpdate({
         ...gameState,
-        coins: gameState.coins - AUTO_TAP_UNLOCK_COST,
+        coins: Math.max(0, gameState.coins - AUTO_TAP_UNLOCK_COST),
         application_state: {
           ...(gameState.application_state || {}),
           isAutotapPurchased: true,
@@ -676,7 +676,7 @@ const AutoTapPopup: React.FC<AutoTapPopupProps> = ({
           game_state: {
             ...gameState,
             coins: !gameState.application_state?.isAutotapPurchased
-              ? gameState.coins - AUTO_TAP_UNLOCK_COST
+              ? Math.max(0, gameState.coins - AUTO_TAP_UNLOCK_COST)
               : gameState.coins,
             application_state: {
               ...(gameState.application_state || {}),
@@ -712,7 +712,7 @@ const AutoTapPopup: React.FC<AutoTapPopupProps> = ({
           ...prev,
           user_id: userId,
           coins: !prev.application_state?.isAutotapPurchased
-            ? prev.coins - AUTO_TAP_UNLOCK_COST
+            ? Math.max(0, prev.coins - AUTO_TAP_UNLOCK_COST)
             : prev.coins,
           application_state: {
             ...(prev.application_state || {}),

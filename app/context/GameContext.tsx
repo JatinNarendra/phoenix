@@ -1733,7 +1733,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 
       persistState((prev) => ({
         ...prev,
-        coins: prev.coins - cost,
+        coins: Math.max(0, prev.coins - cost),
         ...(rewards || {}),
       }));
       return true;
@@ -2747,7 +2747,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
         persistState((prev) => ({
           ...prev,
           // Deduct the cost from the coins as it wasn't deducted during the purchase
-          coins: prev.coins - upgradeCost,
+          coins: Math.max(0, prev.coins - upgradeCost),
           upgrades: {
             ...prev.upgrades,
             tapLevel: pendingLevel,
@@ -2773,7 +2773,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         await criticalStateUpdate({
           ...gameState,
-          coins: gameState.coins - AUTO_TAP_UNLOCK_COST,
+          coins: Math.max(0, gameState.coins - AUTO_TAP_UNLOCK_COST),
           application_state: {
             isAutotapPurchased: true,
             has_visited_earn_page: true,
