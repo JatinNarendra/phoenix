@@ -245,7 +245,7 @@ const LevelHowItWorksPage = () => {
             <button
               className="flex items-center justify-center gap-2 bg-[#1F1212] rounded-[10px] p-4 hover:bg-[#2A1818]"
               onClick={() =>
-                window.open("https://discord.gg/phoenixgame", "_blank")
+                window.open("https://discord.gg/vXfzRqBSPH", "_blank")
               }
             >
               <Image src={discordIcon} alt="Discord" width={24} height={24} />
