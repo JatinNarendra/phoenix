@@ -20,6 +20,9 @@ const supabaseAdmin =
           autoRefreshToken: false,
           persistSession: false,
         },
+        db: {
+          schema: "public",
+        },
       })
     : null;
 
@@ -196,8 +199,25 @@ export async function DELETE(
     });
   } catch (error) {
     console.error("Error deleting customer:", error);
+
+    // Log more detailed error information
+    if (error instanceof Error) {
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+      });
+    }
+
+    // Return more specific error information
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { error: "Failed to delete customer" },
+      {
+        error: "Failed to delete customer",
+        details: errorMessage,
+        customerId: customerId,
+      },
       { status: 500 }
     );
   }
