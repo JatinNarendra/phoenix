@@ -154,7 +154,7 @@ export const STORAGE_KEYS = {
 
 // Constants
 export const AUTO_TAP_UNLOCK_COST = 100;
-export const AUTO_TAP_DURATION = 7200; // 2 hours
+export const AUTO_TAP_DURATION = 10800; // 3 hours
 
 // Timer configuration
 export const TIMER_CONFIG: Record<
