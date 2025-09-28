@@ -146,7 +146,8 @@ export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ customerId: string }> }
 ) {
-  console.log("DELETE method called for customer:", await params);
+  const { customerId } = await params;
+  console.log("DELETE method called for customer:", customerId);
   try {
     if (!supabaseAdmin) {
       return NextResponse.json(
@@ -154,8 +155,6 @@ export async function DELETE(
         { status: 500 }
       );
     }
-
-    const { customerId } = await params;
     console.log("Customer ID:", customerId);
     const { password } = await request.json();
     console.log("Password provided:", !!password);
