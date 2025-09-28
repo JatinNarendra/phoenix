@@ -14,6 +14,7 @@ import {
   AUTO_TAP_UNLOCK_COST,
   AUTO_TAP_DURATION,
 } from "../constants/gameConstants";
+import { calculateAutoTapReward } from "../utility/gameUtils";
 import Image from "next/image";
 
 import BoosterBackground from "../../public/images/BooseterBackground.png";
@@ -884,7 +885,7 @@ export default function BoostersPage() {
                     />
                     <span>{currentSpark.toLocaleString()}</span>
                     <span className="text-gray-400">
-                      /{(tapPowerLevel * AUTO_TAP_DURATION).toLocaleString()}
+                      /{calculateAutoTapReward(tapPowerLevel).toLocaleString()}
                     </span>
                   </div>
                 ) : (
@@ -897,7 +898,7 @@ export default function BoostersPage() {
                       style={{ width: "auto", height: "auto" }}
                     />
                     <span>
-                      {(tapPowerLevel * AUTO_TAP_DURATION).toLocaleString()}
+                      {calculateAutoTapReward(tapPowerLevel).toLocaleString()}
                     </span>
                   </div>
                 )}
