@@ -238,17 +238,7 @@ const CustomerTable = forwardRef<CustomerTableRef>((props, ref) => {
     }
 
     try {
-      // First, delete all social links
-      const { error: socialLinksError } = await supabase!
-        .from("customer_social_links")
-        .delete()
-        .eq("customer_id", customerToDelete.id);
-
-      if (socialLinksError) {
-        console.error("Error deleting social links:", socialLinksError);
-      }
-
-      // Then delete the customer
+      // Delete the customer - social links will be automatically deleted via CASCADE
       const response = await fetch(
         `/api/nexus/customers/${customerToDelete.id}`,
         {
