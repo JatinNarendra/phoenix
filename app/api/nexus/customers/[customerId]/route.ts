@@ -184,7 +184,32 @@ export async function DELETE(
       throw customerCheckError;
     }
 
-    // Delete customer (this will cascade delete related records if foreign key constraints are set up)
+    // First, get all social link IDs for this customer
+    const { data: socialLinks, error: socialLinksError } = await supabaseAdmin
+      .from("customer_social_links")
+      .select("id")
+      .eq("customer_id", customerId);
+
+    if (socialLinksError) {
+      console.error("Error fetching social links:", socialLinksError);
+      throw socialLinksError;
+    }
+
+    // Delete user_task_completions that reference these social links
+    if (socialLinks && socialLinks.length > 0) {
+      const socialLinkIds = socialLinks.map((link) => link.id);
+      const { error: taskCompletionsError } = await supabaseAdmin
+        .from("user_task_completions")
+        .delete()
+        .in("task_id", socialLinkIds);
+
+      if (taskCompletionsError) {
+        console.error("Error deleting task completions:", taskCompletionsError);
+        // Continue anyway - this might not be critical
+      }
+    }
+
+    // Delete customer (this will cascade delete social links)
     const { error: deleteError } = await supabaseAdmin
       .from("customers")
       .delete()
