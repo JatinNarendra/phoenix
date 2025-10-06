@@ -5,12 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useProgression } from "../../context/ProgressionContext";
 
-// Import token images
-import charactertokenpheonix from "../../../public/assets/spin/charactertokenpheonix.png";
-import BrownQuestionMarkDiamond from "../../../public/assets/spin/brownquestionmarkdiamond.png";
-import SpinHowItWorksImage from "../../../public/assets/spin/spinhowitworks.png";
-import SpinIcon from "@/public/assets/SpinIcon.png";
-import HourglassIcon from "@/public/assets/spin/hourglass.png";
+// Remove image imports - we'll use src paths instead
 import { BsCheckCircleFill } from "react-icons/bs";
 
 import { useWebApp } from "@/app/hooks/useWebApp";
@@ -107,7 +102,7 @@ const HowItWorksPage = () => {
     >
       <div className="mb-6 mt-2 flex justify-center">
         <Image
-          src={SpinHowItWorksImage}
+          src="/assets/spin/spinhowitworks.png"
           alt="Spin How It Works"
           width={350}
           height={200}
@@ -117,7 +112,12 @@ const HowItWorksPage = () => {
       <div className="p-4">
         <div className="flex flex-col justify-center items-center mb-4">
           <div className="flex w-[200px] h-[40px] bg-black justify-center items-center border-[1px] border-[#E18700] rounded-[12px] p-2">
-            <Image src={SpinIcon} alt="Token" width={20} height={20} />
+            <Image
+              src="/assets/SpinIcon.png"
+              alt="Token"
+              width={20}
+              height={20}
+            />
             <span className="text-[#E18700] font-bold text-sm ml-2">
               {formatNumber(
                 ULTIMATE_PRIZES[
@@ -141,7 +141,7 @@ const HowItWorksPage = () => {
             <div className="flex items-center justify-between w-full px-4">
               <div className="flex flex-col items-center">
                 <Image
-                  src={HourglassIcon}
+                  src="/assets/spin/hourglass.png"
                   alt="Hourglass"
                   width={24}
                   height={24}
@@ -206,7 +206,7 @@ const HowItWorksPage = () => {
                 <div className="flex space-x-2">
                   <div className="w-8 h-8 bg-[#3A1C09] rounded-md flex items-center justify-center overflow-hidden">
                     <Image
-                      src={charactertokenpheonix}
+                      src="/assets/spin/charactertokenpheonix.png"
                       alt="Token"
                       width={20}
                       height={20}
@@ -218,7 +218,7 @@ const HowItWorksPage = () => {
                 <div className="flex items-center">
                   <span className="text-amber-500 font-bold mr-1">1</span>
                   <Image
-                    src={charactertokenpheonix}
+                    src="/assets/spin/charactertokenpheonix.png"
                     alt="Token"
                     width={20}
                     height={20}
@@ -236,7 +236,7 @@ const HowItWorksPage = () => {
                 <div className="flex space-x-2">
                   <div className="w-8 h-8 bg-[#3A1C09] rounded-md flex items-center justify-center overflow-hidden">
                     <Image
-                      src={charactertokenpheonix}
+                      src="/assets/spin/charactertokenpheonix.png"
                       alt="Token"
                       width={20}
                       height={20}
@@ -244,7 +244,7 @@ const HowItWorksPage = () => {
                   </div>
                   <div className="w-8 h-8 bg-[#3A1C09] rounded-md flex items-center justify-center overflow-hidden">
                     <Image
-                      src={charactertokenpheonix}
+                      src="/assets/spin/charactertokenpheonix.png"
                       alt="Token"
                       width={20}
                       height={20}
@@ -255,7 +255,7 @@ const HowItWorksPage = () => {
                 <div className="flex items-center">
                   <span className="text-amber-500 font-bold mr-1">3</span>
                   <Image
-                    src={charactertokenpheonix}
+                    src="/assets/spin/charactertokenpheonix.png"
                     alt="Token"
                     width={20}
                     height={20}
@@ -273,7 +273,7 @@ const HowItWorksPage = () => {
                 <div className="flex space-x-2">
                   <div className="w-8 h-8 bg-[#3A1C09] rounded-md flex items-center justify-center overflow-hidden">
                     <Image
-                      src={charactertokenpheonix}
+                      src="/assets/spin/charactertokenpheonix.png"
                       alt="Token"
                       width={20}
                       height={20}
@@ -281,7 +281,7 @@ const HowItWorksPage = () => {
                   </div>
                   <div className="w-8 h-8 bg-[#3A1C09] rounded-md flex items-center justify-center overflow-hidden">
                     <Image
-                      src={charactertokenpheonix}
+                      src="/assets/spin/charactertokenpheonix.png"
                       alt="Token"
                       width={20}
                       height={20}
@@ -289,7 +289,7 @@ const HowItWorksPage = () => {
                   </div>
                   <div className="w-8 h-8 bg-[#3A1C09] rounded-md flex items-center justify-center overflow-hidden">
                     <Image
-                      src={charactertokenpheonix}
+                      src="/assets/spin/charactertokenpheonix.png"
                       alt="Token"
                       width={20}
                       height={20}
@@ -299,7 +299,7 @@ const HowItWorksPage = () => {
                 <div className="flex items-center">
                   <span className="text-amber-500 font-bold mr-1">9</span>
                   <Image
-                    src={charactertokenpheonix}
+                    src="/assets/spin/charactertokenpheonix.png"
                     alt="Token"
                     width={20}
                     height={20}
@@ -313,7 +313,7 @@ const HowItWorksPage = () => {
             <div className="h-[1px] bg-gray-800"></div>
             <div className="mt-4 mb-2 flex items-center justify-center text-xs text-gray-400">
               <Image
-                src={BrownQuestionMarkDiamond}
+                src="/assets/spin/brownquestionmarkdiamond.png"
                 alt="Task Completed"
                 width={16}
                 height={16}
