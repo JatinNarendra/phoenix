@@ -3,8 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { toast, Toast } from "react-hot-toast";
-import TaskCompletedDiamond from "../../public/assets/TaskCompletedDiamond.png";
-import Close from "../../public/assets/Close.png";
+// Remove image imports - we'll use src paths instead
 
 interface ToastContentProps {
   t: Toast;
@@ -23,11 +22,11 @@ export const GameToastContent = ({
       case "error":
         return "/assets/reddiamondicon.png";
       case "reward":
-        return TaskCompletedDiamond; // Use TaskCompletedDiamond for reward/success
+        return "/assets/TaskCompletedDiamond.png"; // Use TaskCompletedDiamond for reward/success
       case "success":
-        return TaskCompletedDiamond; // Use TaskCompletedDiamond for success
+        return "/assets/TaskCompletedDiamond.png"; // Use TaskCompletedDiamond for success
       default:
-        return TaskCompletedDiamond;
+        return "/assets/TaskCompletedDiamond.png";
     }
   };
 
@@ -52,7 +51,7 @@ export const GameToastContent = ({
         className="flex-shrink-0 relative w-[29px] h-[29px] flex items-center"
       >
         <Image
-          src={Close}
+          src="/assets/Close.png"
           alt="Close"
           width={29}
           height={29}
