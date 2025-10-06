@@ -4,14 +4,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from 'next/image'
 import { useWebApp } from "@/app/hooks/useWebApp";
-import boosttappower from "@/public/assets/boosttappower.png";
-import playendlessly from '@/public/assets/playendlessly.png'
-import winwithfriends from '@/public/assets/winwithfriends.png'
-import boostwithreward from '@/public/assets/boostwithreward.png'
-import xicon from '@/public/assets/xicon.png'
-import telegramicon from '@/public/assets/telegramicon.png'
-import discordicon from '@/public/assets/discordicon.png'
-import websiteicon from "@/public/assets/websiteicon.png";
+// Remove image imports - we'll use src paths instead
 
 const HowItWorksPage = () => {
   const router = useRouter();
@@ -42,7 +35,7 @@ const HowItWorksPage = () => {
       <div className="container mx-auto pt-10 text-center space-y-4 h-full">
         <div className="relative w-full max-w-[200px] mx-auto mb-4">
           <Image
-            src={boostwithreward}
+            src="/assets/boostwithreward.png"
             alt="Boost With Rewards"
             width={200}
             height={200}
@@ -67,7 +60,7 @@ const HowItWorksPage = () => {
         <div className=" p-4 rounded-lg">
           <div className="flex items-center gap-4">
             <Image
-              src={boosttappower}
+              src="/assets/boosttappower.png"
               alt="Boost Tap Power"
               width={48}
               height={48}
@@ -87,7 +80,7 @@ const HowItWorksPage = () => {
         <div className="p-4 rounded-lg">
           <div className="flex items-center gap-4">
             <Image
-              src={playendlessly}
+              src="/assets/playendlessly.png"
               alt="Play Endlessly"
               width={48}
               height={48}
@@ -108,7 +101,7 @@ const HowItWorksPage = () => {
         <div className=" p-4 rounded-lg">
           <div className="flex items-center gap-4">
             <Image
-              src={winwithfriends}
+              src="/assets/winwithfriends.png"
               alt="Win With Friends"
               width={48}
               height={48}
@@ -135,7 +128,7 @@ const HowItWorksPage = () => {
           className="flex items-center bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-6 rounded-lg"
         >
           <Image
-            src={telegramicon}
+            src="/assets/telegramicon.png"
             alt="Telegram"
             width={32}
             height={32}
@@ -151,7 +144,7 @@ const HowItWorksPage = () => {
           className="flex items-center bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-6 rounded-lg"
         > 
           <Image
-            src={xicon}
+            src="/assets/xicon.png"
             alt="X (Twitter)"
             width={32}
             height={32}
@@ -167,7 +160,7 @@ const HowItWorksPage = () => {
           className="flex items-center bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-6 rounded-lg"
         >
           <Image
-            src={discordicon}
+            src="/assets/discordicon.png"
             alt="Discord"
             width={32}
             height={32}
@@ -183,7 +176,7 @@ const HowItWorksPage = () => {
           className="flex items-center bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-6 rounded-lg"
         >
           <Image
-            src={websiteicon}
+            src="/assets/websiteicon.png"
             alt="Website"
             width={30}
             height={28}
