@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { useWebApp } from "../hooks/useWebApp";
 import CoinsAndSpin from "../components/CoinsAndSpin";
 import Image from "next/image";
-import TaskTelegram from "../../public/assets/TaskTelegramIcon.png";
-import TaskYoutube from "../../public/assets/TaskYoutubeIcon.png";
-import TaskX from "../../public/assets/TaskXIcon.png";
-import SparkyIcon from "../../public/assets/SparkyIcon.png";
+
+
+
+
 import { supabase } from "@/lib/supabase";
 import {
   PlatformType,
@@ -16,7 +16,7 @@ import {
   SpecialTask,
   CampaignTask,
 } from "@/app/types/Customer";
-import SpinIcon from "../../public/assets/SpinIcon.png";
+
 import { getPlatformName } from "../lib/platformUtils";
 import SpecialTaskPopup from "./components/TaskPopup";
 import TaskCompletedDiamond from "../../public/assets/TaskCompletedDiamond.png";
@@ -28,13 +28,13 @@ import DailyRewardTimer from "./components/DailyRewardTimer";
 import CampaignIconBackground from "../../public/assets/Earn/campaignicongb.png";
 
 const platformIcons = {
-  TELEGRAM_CHANNEL: TaskTelegram.src,
-  TELEGRAM_GROUP: TaskTelegram.src,
-  X: TaskX.src,
-  YOUTUBE_VIEWS: TaskYoutube.src,
-  YOUTUBE_SUBSCRIBERS: TaskYoutube.src,
-  YOUTUBE: TaskYoutube.src,
-  TELEGRAM: TaskTelegram.src,
+  TELEGRAM_CHANNEL: "/assets/TaskTelegramIcon.png",
+  TELEGRAM_GROUP: "/assets/TaskTelegramIcon.png",
+  X: "/assets/TaskXIcon.png",
+  YOUTUBE_VIEWS: "/assets/TaskYoutubeIcon.png",
+  YOUTUBE_SUBSCRIBERS: "/assets/TaskYoutubeIcon.png",
+  YOUTUBE: "/assets/TaskYoutubeIcon.png",
+  TELEGRAM: "/assets/TaskTelegramIcon.png",
 };
 
 const getGradientForPlatform = (platform: PlatformType): string => {
@@ -434,7 +434,7 @@ export default function EarnPage() {
                         </h3>
                         <div className="flex items-center gap-2 mt-2 text-sm">
                           <Image
-                            src={SparkyIcon}
+                            src="/assets/SparkyIcon.png"
                             alt="Sparky"
                             width={20}
                             height={20}
@@ -443,7 +443,7 @@ export default function EarnPage() {
                             {task.coins.toLocaleString()}
                           </span>
                           <Image
-                            src={SpinIcon}
+                            src="/assets/SpinIcon.png"
                             alt="Spins"
                             width={20}
                             height={20}
@@ -570,7 +570,7 @@ export default function EarnPage() {
                       <div className="flex items-center gap-2.5 mt-2">
                         <div className="flex items-center gap-1">
                           <Image
-                            src={SparkyIcon}
+                            src="/assets/SparkyIcon.png"
                             alt="Sparky"
                             width={16}
                             height={16}
@@ -582,7 +582,7 @@ export default function EarnPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Image
-                            src={SpinIcon}
+                            src="/assets/SpinIcon.png"
                             alt="Spins"
                             width={16}
                             height={16}
