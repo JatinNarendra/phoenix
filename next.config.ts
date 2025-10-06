@@ -19,6 +19,14 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/public/**",
       },
     ],
+    // Enable unoptimized images for dynamic paths in production
+    unoptimized: process.env.NODE_ENV === "production",
+    // Alternative: Use loader for better control
+    loader: "default",
+    // Ensure proper handling of dynamic image paths
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 

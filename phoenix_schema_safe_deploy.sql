@@ -3,7 +3,7 @@
 -- This file uses IF NOT EXISTS and CREATE OR REPLACE statements
 -- Safe to run multiple times in Supabase SQL Editor
 -- 
--- ✅ SAFE DEPLOYMENT VERSION WITH ALL CRITICAL FIXES
+-- ✅ SAFE DEPLOYMENT VERSION
 -- Based on verified live database schema (2025-01-15)
 -- Database: xmsyjijnribmnfundfto.supabase.co
 -- Total Tables: 9
@@ -14,12 +14,6 @@
 -- - CREATE OR REPLACE for functions
 -- - Conditional constraint and policy creation
 -- - Safe to run multiple times without errors
--- 
--- 🔧 CRITICAL FIXES INCLUDED:
--- - Foreign key CASCADE DELETE for customer deletion
--- - Service role policies for admin operations
--- - Disabled RLS for telegram_users (service role auth)
--- - Complete RLS policies for all tables
 -- =====================================================
 
 -- Enable UUID extension (safe to run multiple times)
@@ -274,7 +268,7 @@ BEGIN
             FOREIGN KEY (referrer_id) REFERENCES telegram_users(user_id);
     END IF;
 
-    -- Add foreign key constraint for user_task_completions -> customer_social_links
+    -- Add foreign key constraint for user_task_completions -> customer_social_links (with CASCADE DELETE)
     IF NOT EXISTS (
         SELECT 1 FROM information_schema.table_constraints 
         WHERE constraint_name = 'user_task_completions_task_id_fkey'
@@ -290,8 +284,7 @@ END $$;
 -- =====================================================
 
 -- Enable RLS on all tables (safe to run multiple times)
--- Note: telegram_users has RLS disabled for service role authentication
-ALTER TABLE telegram_users DISABLE ROW LEVEL SECURITY;
+ALTER TABLE telegram_users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE customer_social_links ENABLE ROW LEVEL SECURITY;
 ALTER TABLE daily_rewards ENABLE ROW LEVEL SECURITY;
@@ -308,49 +301,31 @@ ALTER TABLE user_task_completions ENABLE ROW LEVEL SECURITY;
 -- Function to safely create RLS policies
 DO $$
 BEGIN
-    -- Note: telegram_users has RLS disabled for service role authentication
-    -- No policies needed for telegram_users table
+    -- RLS Policies for telegram_users (disabled for service role access)
+    -- Since we're using service role authentication through API routes,
+    -- we disable RLS for this table for easier management
+    ALTER TABLE telegram_users DISABLE ROW LEVEL SECURITY;
 
-    -- RLS Policies for customers (public read access + service role full access)
+    -- RLS Policies for customers (with service role access)
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customers' AND policyname = 'Anyone can view customers') THEN
         CREATE POLICY "Anyone can view customers" ON customers
             FOR SELECT USING (true);
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customers' AND policyname = 'Service role can insert customers') THEN
-        CREATE POLICY "Service role can insert customers" ON customers
-            FOR INSERT WITH CHECK (true);
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customers' AND policyname = 'Service role can manage customers') THEN
+        CREATE POLICY "Service role can manage customers" ON customers
+            FOR ALL USING (true);
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customers' AND policyname = 'Service role can update customers') THEN
-        CREATE POLICY "Service role can update customers" ON customers
-            FOR UPDATE USING (true);
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customers' AND policyname = 'Service role can delete customers') THEN
-        CREATE POLICY "Service role can delete customers" ON customers
-            FOR DELETE USING (true);
-    END IF;
-
-    -- RLS Policies for customer_social_links (public read access + service role full access)
+    -- RLS Policies for customer_social_links (public read access + service role management)
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customer_social_links' AND policyname = 'Anyone can view social links') THEN
         CREATE POLICY "Anyone can view social links" ON customer_social_links
             FOR SELECT USING (true);
     END IF;
 
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customer_social_links' AND policyname = 'Service role can insert social links') THEN
-        CREATE POLICY "Service role can insert social links" ON customer_social_links
-            FOR INSERT WITH CHECK (true);
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customer_social_links' AND policyname = 'Service role can update social links') THEN
-        CREATE POLICY "Service role can update social links" ON customer_social_links
-            FOR UPDATE USING (true);
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customer_social_links' AND policyname = 'Service role can delete social links') THEN
-        CREATE POLICY "Service role can delete social links" ON customer_social_links
-            FOR DELETE USING (true);
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customer_social_links' AND policyname = 'Service role can manage social links') THEN
+        CREATE POLICY "Service role can manage social links" ON customer_social_links
+            FOR ALL USING (true);
     END IF;
 
     -- RLS Policies for daily_rewards
