@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import Close from "../../public/assets/Close.png";
-import SparkyIcon from "../../public/assets/SparkyIcon.png";
-import RechargeSpeedIcon from "../../public/assets/energyrechargeratepopupicon.png";
+// Remove image imports - we'll use src paths instead
 import { useGame } from "../context/GameContext";
 import CustomYellowButton from "@/app/ui/CustomYellowButton";
 
@@ -13,7 +11,11 @@ interface RechargeSpeedPopupProps {
   onUpgrade: () => void;
 }
 
-const RechargeSpeedPopup: React.FC<RechargeSpeedPopupProps> = ({ onClose, isOpen, onUpgrade }) => {
+const RechargeSpeedPopup: React.FC<RechargeSpeedPopupProps> = ({
+  onClose,
+  isOpen,
+  onUpgrade,
+}) => {
   const { gameState } = useGame();
   const currentLevel = gameState.upgrades?.rechargeLevel || 1;
   const maxLevel = 3;
@@ -51,12 +53,17 @@ const RechargeSpeedPopup: React.FC<RechargeSpeedPopupProps> = ({ onClose, isOpen
                 className="text-gray-400 hover:text-white"
                 aria-label="Close"
               >
-                <Image src={Close.src} alt="Close" width={32} height={32} />
+                <Image
+                  src="/assets/Close.png"
+                  alt="Close"
+                  width={32}
+                  height={32}
+                />
               </button>
             </div>
             <div className="flex flex-col items-center space-y-8 py-4">
               <Image
-                src={RechargeSpeedIcon}
+                src="/assets/energyrechargeratepopupicon.png"
                 alt="Recharge Speed"
                 width={140}
                 height={140}
@@ -76,7 +83,7 @@ const RechargeSpeedPopup: React.FC<RechargeSpeedPopupProps> = ({ onClose, isOpen
                 <>
                   <div className="flex items-center justify-center space-x-2">
                     <Image
-                      src={SparkyIcon}
+                      src="/assets/SparkyIcon.png"
                       alt="Spark"
                       width={24}
                       height={24}

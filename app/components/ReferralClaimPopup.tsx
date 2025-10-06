@@ -6,9 +6,7 @@ import { useGame } from "../context/GameContext";
 import { gameToast } from "../utility/customToast";
 import { supabase } from "../lib/supabase";
 import { getBotUrl, getBotUsername } from "../lib/telegram";
-import SparkIcon from "../../public/assets/spin/sparkicon.png";
-import Referalpopupimage from "../../public/assets/Referral/referalpopupimage.png";
-import Close from "../../public/assets/Close.png";
+// Remove image imports - we'll use src paths instead
 import { useRouter } from "next/navigation";
 
 interface ReferralClaimPopupProps {
@@ -577,13 +575,18 @@ const ReferralClaimPopup = ({ userId, onClose }: ReferralClaimPopupProps) => {
                 onClick={onClose}
                 className="text-gray-400 hover:text-white"
               >
-                <Image src={Close.src} alt="Close" width={32} height={32} />
+                <Image
+                  src="/assets/Close.png"
+                  alt="Close"
+                  width={32}
+                  height={32}
+                />
               </button>
             </div>
 
             <div className="flex flex-col items-center w-full space-y-6">
               <Image
-                src={Referalpopupimage}
+                src="/assets/Referral/referalpopupimage.png"
                 alt="Referral"
                 width={160}
                 height={160}
@@ -609,7 +612,7 @@ const ReferralClaimPopup = ({ userId, onClose }: ReferralClaimPopupProps) => {
                   {/* Reward amount */}
                   <div className="flex items-center justify-center gap-2 py-2">
                     <Image
-                      src={SparkIcon}
+                      src="/assets/spin/sparkicon.png"
                       alt="Spark"
                       width={32}
                       height={32}
@@ -652,7 +655,7 @@ const ReferralClaimPopup = ({ userId, onClose }: ReferralClaimPopupProps) => {
                       {/* Reward info aligned right */}
                       <div className="flex items-center gap-2">
                         <Image
-                          src={SparkIcon}
+                          src="/assets/spin/sparkicon.png"
                           alt="Spark"
                           width={16}
                           height={16}
