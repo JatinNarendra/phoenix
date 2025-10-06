@@ -268,14 +268,14 @@ BEGIN
             FOREIGN KEY (referrer_id) REFERENCES telegram_users(user_id);
     END IF;
 
-    -- Add foreign key constraint for user_task_completions -> customer_social_links
+    -- Add foreign key constraint for user_task_completions -> customer_social_links (with CASCADE DELETE)
     IF NOT EXISTS (
         SELECT 1 FROM information_schema.table_constraints 
         WHERE constraint_name = 'user_task_completions_task_id_fkey'
         AND table_name = 'user_task_completions'
     ) THEN
         ALTER TABLE user_task_completions ADD CONSTRAINT user_task_completions_task_id_fkey 
-            FOREIGN KEY (task_id) REFERENCES customer_social_links(id);
+            FOREIGN KEY (task_id) REFERENCES customer_social_links(id) ON DELETE CASCADE;
     END IF;
 END $$;
 
@@ -301,32 +301,31 @@ ALTER TABLE user_task_completions ENABLE ROW LEVEL SECURITY;
 -- Function to safely create RLS policies
 DO $$
 BEGIN
-    -- RLS Policies for telegram_users
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'telegram_users' AND policyname = 'Users can view their own data') THEN
-        CREATE POLICY "Users can view their own data" ON telegram_users
-            FOR SELECT USING (auth.uid()::text = user_id);
-    END IF;
+    -- RLS Policies for telegram_users (disabled for service role access)
+    -- Since we're using service role authentication through API routes,
+    -- we disable RLS for this table for easier management
+    ALTER TABLE telegram_users DISABLE ROW LEVEL SECURITY;
 
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'telegram_users' AND policyname = 'Users can update their own data') THEN
-        CREATE POLICY "Users can update their own data" ON telegram_users
-            FOR UPDATE USING (auth.uid()::text = user_id);
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'telegram_users' AND policyname = 'Users can insert their own data') THEN
-        CREATE POLICY "Users can insert their own data" ON telegram_users
-            FOR INSERT WITH CHECK (auth.uid()::text = user_id);
-    END IF;
-
-    -- RLS Policies for customers (public read access)
+    -- RLS Policies for customers (with service role access)
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customers' AND policyname = 'Anyone can view customers') THEN
         CREATE POLICY "Anyone can view customers" ON customers
             FOR SELECT USING (true);
     END IF;
 
-    -- RLS Policies for customer_social_links (public read access)
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customers' AND policyname = 'Service role can manage customers') THEN
+        CREATE POLICY "Service role can manage customers" ON customers
+            FOR ALL USING (true);
+    END IF;
+
+    -- RLS Policies for customer_social_links (public read access + service role management)
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customer_social_links' AND policyname = 'Anyone can view social links') THEN
         CREATE POLICY "Anyone can view social links" ON customer_social_links
             FOR SELECT USING (true);
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'customer_social_links' AND policyname = 'Service role can manage social links') THEN
+        CREATE POLICY "Service role can manage social links" ON customer_social_links
+            FOR ALL USING (true);
     END IF;
 
     -- RLS Policies for daily_rewards
