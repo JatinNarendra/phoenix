@@ -4,14 +4,7 @@ import Image from "next/image";
 import { levelConfig } from "../utility/stageConfig";
 import { useWebApp } from "../hooks/useWebApp";
 import { useRouter } from "next/navigation";
-import sparkicon from "../../public/assets/SparkyIcon.png";
-import TopYourLevelIcon from "../../public/assets/topyourlevelicon.png";
-import BundleIcon from "../../public/assets/sparkbundelicon.png";
-import SparkEvolutionIcon from "../../public/assets/sparkevolutionicon.png";
-import telegramIcon from "../../public/assets/telegramicon.png";
-import xIcon from "../../public/assets/xicon.png";
-import discordIcon from "../../public/assets/discordicon.png";
-import websiteIcon from "../../public/assets/websiteicon.png";
+// Remove image imports - we'll use src paths instead
 import { useGame } from "../context/GameContext";
 
 const LevelHowItWorksPage = () => {
@@ -73,7 +66,7 @@ const LevelHowItWorksPage = () => {
       <div className="relative w-full aspect-[2/1] overflow-hidden mt-6">
         <div className="absolute inset-0">
           <Image
-            src={TopYourLevelIcon}
+            src="/assets/topyourlevelicon.png"
             alt="Top Your Level"
             fill
             style={{ objectFit: "contain" }}
@@ -97,7 +90,7 @@ const LevelHowItWorksPage = () => {
         {/* Sparky Bonus Rewards Section */}
         <div className="py-6">
           <div className="flex items-center gap-3 mb-4">
-            <Image src={BundleIcon} alt="Sparky Bonus" width={24} height={24} />
+            <Image src="/assets/sparkbundelicon.png" alt="Sparky Bonus" width={24} height={24} />
             <h2 className="text-lg font-bold">Sparky Bonus Rewards</h2>
           </div>
           <p className="text-sm text-gray-500 font-bold mb-6">
@@ -129,7 +122,7 @@ const LevelHowItWorksPage = () => {
                     <div className="flex flex-col items-end">
                       <div className="flex items-center gap-2 mt-1">
                         <Image
-                          src={sparkicon}
+                          src="/assets/SparkyIcon.png"
                           alt="Spark"
                           width={14}
                           height={14}
@@ -155,7 +148,7 @@ const LevelHowItWorksPage = () => {
         <div className="py-6">
           <div className="flex items-center gap-3 mb-2">
             <Image
-              src={SparkEvolutionIcon}
+              src="/assets/sparkevolutionicon.png"
               alt="Sparky Evolution"
               width={24}
               height={24}
@@ -202,7 +195,7 @@ const LevelHowItWorksPage = () => {
                     <div className="flex flex-col items-end">
                       <div className="flex items-center gap-2 mt-1">
                         <Image
-                          src={sparkicon}
+                          src="/assets/SparkyIcon.png"
                           alt="Spark"
                           width={14}
                           height={14}
@@ -229,7 +222,7 @@ const LevelHowItWorksPage = () => {
                 window.open("https://t.me/SparkyTapGame", "_blank")
               }
             >
-              <Image src={telegramIcon} alt="Telegram" width={24} height={24} />
+              <Image src="/assets/telegramicon.png" alt="Telegram" width={24} height={24} />
               <span>Telegram</span>
             </button>
             <button
@@ -238,7 +231,7 @@ const LevelHowItWorksPage = () => {
                 window.open("https://x.com/TheSparkyVerse", "_blank")
               }
             >
-              <Image src={xIcon} alt="X (Twitter)" width={24} height={24} />
+              <Image src="/assets/xicon.png" alt="X (Twitter)" width={24} height={24} />
               <span>X (Twitter)</span>
             </button>
             <button
@@ -247,14 +240,14 @@ const LevelHowItWorksPage = () => {
                 window.open("https://discord.gg/vXfzRqBSPH", "_blank")
               }
             >
-              <Image src={discordIcon} alt="Discord" width={24} height={24} />
+              <Image src="/assets/discordicon.png" alt="Discord" width={24} height={24} />
               <span>Discord</span>
             </button>
             <button
               className="flex items-center justify-center gap-2 bg-[#1F1212] rounded-[10px] p-4 hover:bg-[#2A1818]"
               onClick={() => window.open("https://sparky.zone", "_blank")}
             >
-              <Image src={websiteIcon} alt="Website" width={24} height={24} />
+              <Image src="/assets/websiteicon.png" alt="Website" width={24} height={24} />
               <span>Website</span>
             </button>
           </div>

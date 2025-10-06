@@ -4,13 +4,7 @@ import Image from "next/image";
 import { useGame } from "../context/GameContext";
 import { levelConfig } from "../utility/stageConfig";
 import { motion } from "framer-motion";
-import QuestionDiamond from "../../public/assets/BrownDiamondInfo.png";
-import TaskCompletedDiamond from "../../public/assets/TaskCompletedDiamond.png";
-import sparkicon from "../../public/assets/SparkyIcon.png";
-import LockedYellow from "../../public/assets/LockedYellow.png";
-import totalusersicon from "../../public/assets/totalusersicon.png";
-import yourplaceicon from "../../public/assets/yourplaceicon.png";
-import CampaignOpenTreasure from "../../public/assets/CampaignOpenTreasure.png";
+// Remove image imports - we'll use src paths instead
 import { supabase } from "@/lib/supabase";
 import { FaChevronRight } from "react-icons/fa";
 import { useWebApp } from "../hooks/useWebApp";
@@ -243,7 +237,7 @@ const LevelDetailsPage = () => {
               >
                 <span>How it works</span>
                 <Image
-                  src={QuestionDiamond}
+                  src="/assets/BrownDiamondInfo.png"
                   alt="How it works"
                   width={16}
                   height={16}
@@ -255,7 +249,7 @@ const LevelDetailsPage = () => {
               <div className="w-full relative backdrop-blur-md rounded-lg bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-4 text-left text-base text-white mb-4">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <Image src={sparkicon} alt="Spark" width={24} height={24} />
+                    <Image src="/assets/SparkyIcon.png" alt="Spark" width={24} height={24} />
                     <span>
                       {(() => {
                         // For level 1, show level 1 requirement
@@ -273,7 +267,7 @@ const LevelDetailsPage = () => {
                   </div>
                   {selectedLevel < currentLevel && (
                     <Image
-                      src={TaskCompletedDiamond}
+                      src="/assets/TaskCompletedDiamond.png"
                       alt="Task Completed"
                       width={24}
                       height={24}
@@ -345,7 +339,7 @@ const LevelDetailsPage = () => {
                     <div className="flex items-center gap-2 text-xs text-gray-400 font-bold">
                       <div className="flex items-center gap-1">
                         <Image
-                          src={sparkicon}
+                          src="/assets/SparkyIcon.png"
                           alt="Spark"
                           width={14}
                           height={14}
@@ -399,7 +393,7 @@ const LevelDetailsPage = () => {
                   <div className="flex items-center gap-3">
                     <div className="p-1">
                       <Image
-                        src={sparkicon}
+                        src="/assets/SparkyIcon.png"
                         alt="Spark"
                         width={32}
                         height={32}
@@ -418,7 +412,7 @@ const LevelDetailsPage = () => {
                 <div className="w-full relative backdrop-blur-md rounded-lg bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-4 text-left text-base text-white mb-4">
                   <div className="flex items-center gap-3">
                     <Image
-                      src={CampaignOpenTreasure}
+                      src="/assets/CampaignOpenTreasure.png"
                       alt="Bonus"
                       width={48}
                       height={48}
@@ -507,7 +501,7 @@ const LevelDetailsPage = () => {
                 >
                   <div className="mr-3">
                     <Image
-                      src={totalusersicon}
+                      src="/assets/totalusersicon.png"
                       alt="Total Users"
                       width={48}
                       height={48}
@@ -526,7 +520,7 @@ const LevelDetailsPage = () => {
                   <div className="relative backdrop-blur-md rounded-lg bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-4 flex items-center text-white">
                     <div className="mr-3">
                       <Image
-                        src={yourplaceicon}
+                        src="/assets/yourplaceicon.png"
                         alt="Your Place"
                         width={48}
                         height={48}
@@ -586,7 +580,7 @@ const LevelDetailsPage = () => {
                               </div>
                               <div className="text-sm text-gray-400 font-bold flex items-center gap-1">
                                 <Image
-                                  src={sparkicon}
+                                  src="/assets/SparkyIcon.png"
                                   alt="Spark"
                                   width={14}
                                   height={14}
@@ -642,7 +636,7 @@ const LevelDetailsPage = () => {
                     {level > currentLevel ? (
                       <div className="absolute bottom-[-4px] left-1/2 transform -translate-x-1/2 rounded-lg bg-[rgb(41,24,24)] border border-[rgba(255,255,255,0.1)] box-border h-[20px] w-[20px] flex items-center justify-center">
                         <Image
-                          src={LockedYellow}
+                          src="/assets/LockedYellow.png"
                           alt="Locked"
                           width={14}
                           height={14}
@@ -652,7 +646,7 @@ const LevelDetailsPage = () => {
                       level < currentLevel && (
                         <div className="absolute bottom-[-4px] left-1/2 transform -translate-x-1/2">
                           <Image
-                            src={TaskCompletedDiamond}
+                            src="/assets/TaskCompletedDiamond.png"
                             alt="Completed"
                             width={16}
                             height={16}
