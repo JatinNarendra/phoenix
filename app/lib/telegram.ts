@@ -787,8 +787,8 @@ export const handleStartCommand = async (
       return false;
     }
 
-    if (!supabase) {
-      console.error("Supabase client not available");
+    if (!supabaseAdmin) {
+      console.error("Supabase admin client not available");
       return false;
     }
 
@@ -816,7 +816,7 @@ export const handleStartCommand = async (
         await sendTelegramMessage(userId, "❌ You cannot refer yourself!");
       } else {
         // Check if this user has already been referred (to prevent duplicate rewards)
-        const { data: userData, error: userError } = await supabase
+        const { data: userData, error: userError } = await supabaseAdmin
           .from("telegram_users")
           .select("referred_by")
           .eq("user_id", userId.toString())
@@ -839,7 +839,7 @@ export const handleStartCommand = async (
           } else {
             console.log("✅ New referral - updating user record");
             // First update the referred_by field in telegram_users
-            const { error: updateError } = await supabase
+            const { error: updateError } = await supabaseAdmin
               .from("telegram_users")
               .update({
                 referred_by: referrerId,
@@ -858,7 +858,7 @@ export const handleStartCommand = async (
             );
 
             // Check if we have an existing record first to absolutely prevent duplicates
-            const { data: existingRecord } = await supabase
+            const { data: existingRecord } = await supabaseAdmin
               .from("user_referrals")
               .select("*")
               .eq("referee_id", userId.toString())
@@ -873,7 +873,7 @@ export const handleStartCommand = async (
               );
             } else {
               // Then create a record in the user_referrals table
-              const { error: referralError } = await supabase
+              const { error: referralError } = await supabaseAdmin
                 .from("user_referrals")
                 .insert({
                   referrer_id: referrerId,
@@ -951,12 +951,12 @@ export const saveGameProgress = async (
   gameState: TelegramGameState
 ): Promise<boolean> => {
   try {
-    if (!supabase) {
-      console.error("Supabase client not available");
+    if (!supabaseAdmin) {
+      console.error("Supabase admin client not available");
       return false;
     }
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("telegram_users")
       .update({
         game_state: gameState,
