@@ -3,12 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import NavbarBackground from "../../public/assets/NavbarBackground.png";
-import Booster from "../../public/assets/Booster.png";
-import Tap from "../../public/assets/Tap.png";
-import Referral from "../../public/assets/Referral.png";
-import SpinIcon from "../../public/assets/SpinIcon.png";
-import Earn from "../../public/assets/Earn.png";
+// Remove image imports - we'll use src paths instead
 import { supabase } from "@/lib/supabase";
 import { useUser } from "../hooks/useUser";
 
@@ -63,35 +58,35 @@ const NavBar = () => {
     {
       name: "Boosters",
       href: "/boosters",
-      icon: Booster,
+      icon: "/assets/Booster.png",
       iconWidth: 30,
       iconHeight: 28,
     },
     {
       name: "Earn",
       href: "/earn",
-      icon: Earn,
+      icon: "/assets/Earn.png",
       iconWidth: 30,
       iconHeight: 28,
     },
     {
       name: "Tap",
       href: "/",
-      icon: Tap,
+      icon: "/assets/Tap.png",
       iconWidth: 34,
       iconHeight: 32,
     },
     {
       name: "Spin",
       href: "/spin",
-      icon: SpinIcon,
+      icon: "/assets/SpinIcon.png",
       iconWidth: 28,
       iconHeight: 28,
     },
     {
       name: "Invite",
       href: "/referral",
-      icon: Referral,
+      icon: "/assets/Referral.png",
       iconWidth: 28,
       iconHeight: 28,
     },
