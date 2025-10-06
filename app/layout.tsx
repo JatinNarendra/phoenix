@@ -4,6 +4,7 @@ import { M_PLUS_Rounded_1c } from "next/font/google";
 import Script from "next/script";
 import ConditionalLayout from "./components/ConditionalLayout";
 import { UserInitializationDebugger } from "./components/UserInitializationDebugger";
+import { FrontendInitializationTest } from "./components/FrontendInitializationTest";
 import { Metadata } from "next";
 
 const mplus = M_PLUS_Rounded_1c({
@@ -111,6 +112,7 @@ export default function RootLayout({
       >
         <ConditionalLayout>{children}</ConditionalLayout>
         <UserInitializationDebugger />
+        <FrontendInitializationTest />
       </body>
     </html>
   );
