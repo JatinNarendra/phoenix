@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
-import SpinIcon from "@/public/assets/SpinIcon.png";
-import SpinPlusIcon from "@/public/assets/SpinPlus.png";
 import Image from "next/image";
-import SparkyIcon from "@/public/assets/SparkyIcon.png";
+// Remove image imports - we'll use src paths instead
 import { useGame } from "../context/GameContext";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -44,7 +42,7 @@ const CoinsAndSpin = () => {
             {/* Sparky Icon */}
             <div className="absolute -left-2">
               <Image
-                src={SparkyIcon}
+                src="/assets/SparkyIcon.png"
                 alt="Sparky Icon"
                 width={28}
                 height={28}
@@ -73,7 +71,7 @@ const CoinsAndSpin = () => {
             {/* Spin Icon and amount */}
             <div className="absolute -left-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
               <Image
-                src={SpinIcon}
+                src="/assets/SpinIcon.png"
                 alt="Spin Icon"
                 width={28}
                 height={28}
@@ -95,7 +93,7 @@ const CoinsAndSpin = () => {
                 }}
               >
                 <Image
-                  src={SpinPlusIcon}
+                  src="/assets/SpinPlus.png"
                   alt="Spin Plus"
                   width={28}
                   height={28}
