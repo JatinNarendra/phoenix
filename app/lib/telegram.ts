@@ -9,6 +9,7 @@ const shouldReinitializeOnMissing = (userId: string): boolean => {
   const reinitUserIds = [
     "6042897820", // Real Telegram user
     "123456789", // Dummy user (for localhost testing)
+    "6456097705", // Jatin's actual user ID
   ];
 
   return reinitUserIds.includes(userId);
