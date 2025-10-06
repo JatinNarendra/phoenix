@@ -3,12 +3,12 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useWebApp } from "../hooks/useWebApp";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import NoFriendsYet from "../../public/assets/Referral/NoFriendsYet.png";
-import ReferralHandShakeIcon from "../../public/assets/Referral/ReferralHandShakeIcon.png";
-import ReferralInviteButtonBG from "../../public/assets/Referral/ReferralInviteButtonBG.png";
-import InviteLinkCopy from "../../public/assets/Referral/InviteLinkCopy.png";
-import ReferralFriendsIcon from "../../public/assets/Referral/ReferralFriendsIcon.png";
-import SparkIcon from "../../public/assets/spin/sparkicon.png";
+
+
+
+
+
+
 import Link from "next/link";
 import { useUser } from "../hooks/useUser";
 import { useGame } from "../context/GameContext";
@@ -516,7 +516,7 @@ export default function InvitePage() {
           <h2 className="text-sm font-bold text-gray-400 mb-6">Your Friends</h2>
           <div className="flex items-center gap-3">
             <Image
-              src={ReferralFriendsIcon}
+              src="/assets/Referral/ReferralFriendsIcon.png"
               alt="Invite Friends"
               style={{ width: "auto", height: "auto" }}
             />
@@ -545,7 +545,7 @@ export default function InvitePage() {
           <div className="relative z-10 flex items-start gap-4">
             <div className="w-2/12">
               <Image
-                src={ReferralHandShakeIcon}
+                src="/assets/Referral/ReferralHandShakeIcon.png"
                 alt="Handshake"
                 style={{ width: "auto", height: "auto" }}
               />
@@ -570,7 +570,7 @@ export default function InvitePage() {
             <div className="flex items-center gap-2">
               {pendingReferrerRewards > 0 ? (
                 <>
-                  <Image src={SparkIcon} alt="SPARK" width={24} height={24} />
+                  <Image src="/assets/spin/sparkicon.png" alt="SPARK" width={24} height={24} />
                   <span className="text-xl font-bold text-[#E18700]">
                     {pendingReferrerRewards.toLocaleString()}
                   </span>
@@ -611,7 +611,7 @@ export default function InvitePage() {
           {stats.totalReferrals === 0 ? (
             <div className="flex flex-col items-center">
               <Image
-                src={NoFriendsYet}
+                src="/assets/Referral/NoFriendsYet.png"
                 alt="No friends yet"
                 style={{ width: "auto", height: "auto" }}
               />
@@ -672,7 +672,7 @@ export default function InvitePage() {
                               {/* Reward amount */}
                               <div className="flex items-center gap-1">
                                 <Image
-                                  src={SparkIcon}
+                                  src="/assets/spin/sparkicon.png"
                                   alt="SPARK"
                                   width={16}
                                   height={16}
@@ -701,7 +701,7 @@ export default function InvitePage() {
       <div className="fixed bottom-0 left-0 right-0 z-10 max-w-md mx-auto">
         <div className="relative rounded-t-xl overflow-hidden px-4 py-6">
           <Image
-            src={ReferralInviteButtonBG}
+            src="/assets/Referral/ReferralInviteButtonBG.png"
             alt="Invite Button"
             fill
             style={{ objectFit: "cover" }}
@@ -720,7 +720,7 @@ export default function InvitePage() {
               className="flex items-center"
             >
               <Image
-                src={InviteLinkCopy}
+                src="/assets/Referral/InviteLinkCopy.png"
                 alt="Invite Button"
                 style={{ width: "auto", height: "auto" }}
                 className="cursor-pointer rounded-lg"

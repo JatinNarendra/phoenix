@@ -5,12 +5,12 @@ import { useGame } from "../context/GameContext";
 import { useProgression } from "../context/ProgressionContext";
 
 // Images
-import PhoenixIcon from "../../public/assets/spin/charactertokenpheonix.png";
+
 // Remove image imports - we'll use src paths instead
-import SparkIcon from "../../public/assets/spin/sparkicon.png";
-import CharacterTokenSpin from "../../public/assets/spin/charactertokenspin.png";
-import CharacterTokenTurbo from "../../public/assets/TurboIcon.png";
-import CharacterTokenRecharge from "../../public/assets/RechargeIcon.png";
+
+
+
+
 
 interface CharacterProgressionBarProps {
   sparkEarned?: number;
@@ -223,7 +223,7 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
 
   const getRewardIcon = () => {
     const currentStepReward = getCurrentStep();
-    if (!currentStepReward) return SparkIcon;
+    if (!currentStepReward) return "/assets/spin/sparkicon.png";
 
     // If current step is completed, get the next step's reward
     if (
@@ -238,28 +238,28 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
       const nextStep = progressionType?.steps[currentStep + 1];
       if (nextStep?.reward) {
         if (nextStep.reward.spark) {
-          return SparkIcon;
+          return "/assets/spin/sparkicon.png";
         } else if (nextStep.reward.spins) {
-          return CharacterTokenSpin;
+          return "/assets/spin/charactertokenspin.png";
         } else if (nextStep.reward.turbo) {
-          return CharacterTokenTurbo;
+          return "/assets/TurboIcon.png";
         } else if (nextStep.reward.recharge) {
-          return CharacterTokenRecharge;
+          return "/assets/RechargeIcon.png";
         }
       }
     }
 
     // Default to current step's reward
     if (currentStepReward.reward?.spark) {
-      return SparkIcon;
+      return "/assets/spin/sparkicon.png";
     } else if (currentStepReward.reward?.spins) {
-      return CharacterTokenSpin;
+      return "/assets/spin/charactertokenspin.png";
     } else if (currentStepReward.reward?.turbo) {
-      return CharacterTokenTurbo;
+      return "/assets/TurboIcon.png";
     } else if (currentStepReward.reward?.recharge) {
-      return CharacterTokenRecharge;
+      return "/assets/RechargeIcon.png";
     }
-    return SparkIcon;
+    return "/assets/spin/sparkicon.png";
   };
 
   const getRewardValue = () => {
@@ -325,7 +325,7 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
             <div className="flex items-center">
               <div className="w-5 h-5 relative mr-1">
                 <Image
-                  src={SparkIcon}
+                  src="/assets/spin/sparkicon.png"
                   alt="Coins"
                   width={20}
                   height={20}
@@ -370,7 +370,7 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
           {/* Spark Character icon (left side) */}
           <div className="absolute left-[-8px] top-[2px]">
             <Image
-              src={PhoenixIcon}
+              src="/assets/spin/charactertokenpheonix.png"
               alt="Spark Character"
               width={32}
               height={32}

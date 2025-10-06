@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
-import InviteFriends from "../../public/assets/Referral/InviteFriends.png";
-import NoFriendsYet from "../../public/assets/Referral/NoFriendsYet.png";
-import ReferralHandShakeIcon from "../../public/assets/Referral/ReferralHandShakeIcon.png";
-import ReferralInviteButtonBG from "../../public/assets/Referral/ReferralInviteButtonBG.png";
-import InviteLinkCopy from "../../public/assets/Referral/InviteLinkCopy.png";
-import ReferralMainBG from "../../public/assets/Referral/ReferralMainBG.png";
-import ReferralFriendsIcon from "../../public/assets/Referral/ReferralFriendsIcon.png";
-import SparkIcon from "../../public/assets/spin/sparkicon.png";
+
+
+
+
+
+
+
+
 import Link from 'next/link';
   getReferralStats, 
   generateReferralLink, 

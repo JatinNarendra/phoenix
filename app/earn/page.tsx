@@ -19,13 +19,13 @@ import {
 
 import { getPlatformName } from "../lib/platformUtils";
 import SpecialTaskPopup from "./components/TaskPopup";
-import TaskCompletedDiamond from "../../public/assets/TaskCompletedDiamond.png";
+
 import WelcomeToEarnPopup from "./components/welcometoearnpopup";
 import { useEarnPageVisit } from "../hooks/useEarnPageVisit";
 import { useUser } from "@/app/hooks/useUser";
-import TreasureBox from "../../public/assets/TreasureBox.png";
+
 import DailyRewardTimer from "./components/DailyRewardTimer";
-import CampaignIconBackground from "../../public/assets/Earn/campaignicongb.png";
+
 
 const platformIcons = {
   TELEGRAM_CHANNEL: "/assets/TaskTelegramIcon.png",
@@ -457,7 +457,7 @@ export default function EarnPage() {
                       {task.completed && (
                         <div className="flex-shrink-0 ml-2">
                           <Image
-                            src={TaskCompletedDiamond}
+                            src="/assets/TaskCompletedDiamond.png"
                             alt="Task Completed"
                             width={20}
                             height={20}
@@ -513,7 +513,7 @@ export default function EarnPage() {
                         <div className="relative w-12 h-12 flex items-center justify-center">
                           {/* Background image behind the logo */}
                           <Image
-                            src={CampaignIconBackground}
+                            src="/assets/Earn/campaignicongb.png"
                             alt="Logo Background"
                             fill
                             className="absolute inset-0 rounded-full object-cover z-0"
@@ -559,7 +559,7 @@ export default function EarnPage() {
                           </div>
                         </div>
                         <Image
-                          src={TreasureBox}
+                          src="/assets/TreasureBox.png"
                           alt="TreasureBox"
                           width={24}
                           height={24}

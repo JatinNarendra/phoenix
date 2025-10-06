@@ -18,7 +18,7 @@ import { gameToast } from "@/app/utility/customToast";
 
 
 
-import WarningIcon from "../../../public/assets/Earn/WarningIcon.png";
+
 import PenaltyWarningPopup from "./penaltywarningpopup";
 import { supabase } from "@/lib/supabase";
 import { markTaskAsCompleted } from "@/app/lib/taskCompletionUtils";
@@ -830,7 +830,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({
                   {/* Warning Message Row */}
                   <div className="flex items-center gap-2 p-2">
                     <Image
-                      src={WarningIcon}
+                      src="/assets/Earn/WarningIcon.png"
                       alt="Warning"
                       width={20}
                       height={20}
