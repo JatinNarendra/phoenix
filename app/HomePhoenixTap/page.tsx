@@ -19,7 +19,7 @@ import { getEnergyConfig } from "../utility/energyConfig";
 import { useRouter } from "next/navigation";
 import { useWebApp } from "../hooks/useWebApp";
 import { safeWebAppBackButton, safeWebApp } from "../lib/platformUtils";
-import DailyRewardCalender from "/public/assets/DailyRewardCalender.png";
+import DailyRewardCalender from "../../public/assets/DailyRewardCalender.png";
 import { useGameFeatures } from "../context/GameFeaturesContext";
 import AutoTapPopup from "../components/AutoTapPopup";
 import { showLimitedToast } from "../utility/toastManager";
