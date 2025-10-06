@@ -2,8 +2,12 @@
 import React from "react";
 import Image from "next/image";
 import { useGame } from "../context/GameContext";
-import { useRouter } from "next/navigation";
-import { gameToast } from "../utility/customToast";
+import { useRouter } from 'next/navigation';
+import Close from "../../public/assets/Close.png";
+import SparkyIcon from "../../public/assets/SparkyIcon.png";
+import TurboAttackIcon from "../../public/assets/turboattackpopupicon.png";
+import RechargeBoostIcon from "../../public/assets/rechargeboost.png";
+import { gameToast } from '../utility/customToast';
 import { getEnergyConfig } from "../utility/energyConfig";
 import CustomYellowButton from "@/app/ui/CustomYellowButton";
 
@@ -29,58 +33,44 @@ interface BoostsPopupProps {
   onUpgrade?: (upgrade: Upgrade) => void;
 }
 
-const BoostsPopup: React.FC<BoostsPopupProps> = ({
-  onClose,
-  isOpen,
-  boostType,
-  upgradeData,
-  onUpgrade,
-}) => {
+const BoostsPopup: React.FC<BoostsPopupProps> = ({ onClose, isOpen, boostType, upgradeData, onUpgrade }) => {
   const router = useRouter();
-  const {
-    gameState,
+  const { 
+    gameState, 
     criticalStateUpdate,
     setBoosterEndTime,
     setTurboActive,
     setRechargeActive,
     setTurboTimeLeft,
     setRechargeTimeLeft,
-    setGameState,
+    setGameState
   } = useGame();
 
   const boostConfig = {
     turbo: {
       title: "Turbo Attack",
-      description:
-        "Enter Turbo Mode and 10X your coin \n collection. You can only enable it for \n 10 seconds",
-      icon: "/assets/turboattackpopupicon.png",
-      duration: 10,
+      description: "Enter Turbo Mode and 10X your coin \n collection. You can only enable it for \n 10 seconds",
+      icon: TurboAttackIcon,
+      duration: 10
     },
     recharge: {
       title: "Recharge Boost",
-      description:
-        "The Recharge Elixir fully restores your \n energy. You can use it a maximum of 3 \n times per day",
-      icon: "/assets/rechargeboost.png",
-      duration: 0,
+      description: "The Recharge Elixir fully restores your \n energy. You can use it a maximum of 3 \n times per day",
+      icon: RechargeBoostIcon,
+      duration: 0
     },
   };
 
   const handleClaimBoost = async () => {
     try {
       const currentTime = Date.now();
-      const rewardedKey =
-        boostType === "turbo" ? "rewardedTurbo" : "rewardedRecharge";
-      const inGameKey =
-        boostType === "turbo" ? "inGameTurbo" : "inGameRecharge";
-
-      const totalUses =
-        (gameState.boosts?.[inGameKey] || 0) +
-        (gameState.boosts?.[rewardedKey] || 0);
-
+      const rewardedKey = boostType === "turbo" ? "rewardedTurbo" : "rewardedRecharge";
+      const inGameKey = boostType === "turbo" ? "inGameTurbo" : "inGameRecharge";
+      
+      const totalUses = (gameState.boosts?.[inGameKey] || 0) + (gameState.boosts?.[rewardedKey] || 0);
+      
       if (totalUses === 0) {
-        gameToast.error(
-          "No boosters available! Get more boosters to continue."
-        );
+        gameToast.error("No boosters available! Get more boosters to continue.");
         onClose();
         return;
       }
@@ -91,62 +81,57 @@ const BoostsPopup: React.FC<BoostsPopupProps> = ({
       // Update booster uses in state immediately for UI feedback
       const updatedBoosts = {
         ...gameState.boosts,
-        [rewardedKey]: useFromRewardedPool
+        [rewardedKey]: useFromRewardedPool 
           ? Math.max(0, (gameState.boosts?.[rewardedKey] || 0) - 1)
           : gameState.boosts?.[rewardedKey] || 0,
         [inGameKey]: !useFromRewardedPool
           ? Math.max(0, (gameState.boosts?.[inGameKey] || 0) - 1)
           : gameState.boosts?.[inGameKey] || 0,
-        turboActive:
-          boostType === "turbo" ? true : gameState.boosts?.turboActive,
-        rechargeActive:
-          boostType === "recharge" ? true : gameState.boosts?.rechargeActive,
+        turboActive: boostType === "turbo" ? true : gameState.boosts?.turboActive,
+        rechargeActive: boostType === "recharge" ? true : gameState.boosts?.rechargeActive
       };
 
       // Update local state first for immediate UI feedback
-      setGameState((prev) => ({
+      setGameState(prev => ({
         ...prev,
-        boosts: updatedBoosts,
+        boosts: updatedBoosts
       }));
 
       // Then update database with the updated boosts
       await criticalStateUpdate({
-        boosts: updatedBoosts,
+        boosts: updatedBoosts
       });
 
       if (boostType === "turbo") {
         // Set turbo active after the database update
         setTurboActive(true);
-        setBoosterEndTime(
-          "turbo",
-          currentTime + boostConfig.turbo.duration * 1000
-        );
+        setBoosterEndTime("turbo", currentTime + boostConfig.turbo.duration * 1000);
         setTurboTimeLeft(boostConfig.turbo.duration);
-
+        
         // Force sync the turbo state change for UI update
         window.dispatchEvent(new Event("turboStateChange"));
-
+        
         // Show toast for turbo activation
         gameToast.success(`${boostConfig[boostType].title} activated!`);
       } else {
         // Set recharge active after the database update
         setRechargeActive(true);
-
+        
         // Get current energy level and config
         const energyLevel = Math.min(40, gameState.upgrades?.energyLevel || 1);
         const energyConfig = getEnergyConfig(energyLevel);
-
+        
         // Immediately set energy to max capacity
-        setGameState((prev) => ({
+        setGameState(prev => ({
           ...prev,
           currentRecharge: energyConfig.maxRecharge,
-          boosts: updatedBoosts,
+          boosts: updatedBoosts
         }));
-
+        
         localStorage.setItem("rechargeBoosterActive", "true");
         localStorage.setItem("rechargeJustActivated", "true");
         setRechargeTimeLeft(boostConfig.recharge.duration);
-
+        
         // Force sync the recharge state change for UI update
         window.dispatchEvent(new Event("rechargeStateChange"));
       }
@@ -154,11 +139,11 @@ const BoostsPopup: React.FC<BoostsPopupProps> = ({
       // Ensure state is synchronized before closing and navigating
       setTimeout(() => {
         onClose();
-        router.push("/"); // Navigate to home page after activation
+        router.push('/'); // Navigate to home page after activation
       }, 100); // Small delay to ensure state updates are processed
     } catch (error) {
-      console.error("Error activating booster:", error);
-      gameToast.error("Failed to activate booster");
+      console.error('Error activating booster:', error);
+      gameToast.error('Failed to activate booster');
     }
   };
 
@@ -179,9 +164,7 @@ const BoostsPopup: React.FC<BoostsPopupProps> = ({
               <h2 className="text-2xl font-bold text-[#E18700]">
                 {upgradeData.title}
               </h2>
-              <div className="text-gray-400 text-md">
-                {upgradeData.description}
-              </div>
+              <div className="text-gray-400 text-md">{upgradeData.description}</div>
               <CustomYellowButton
                 className="w-fit"
                 onClick={() => onUpgrade?.(upgradeData)}
@@ -212,12 +195,7 @@ const BoostsPopup: React.FC<BoostsPopupProps> = ({
                 onClick={onClose}
                 className="text-gray-400 hover:text-white"
               >
-                <Image
-                  src="/assets/Close.png"
-                  alt="Close"
-                  width={32}
-                  height={32}
-                />
+                <Image src={Close.src} alt="Close" width={32} height={32} />
               </button>
             </div>
 
@@ -240,7 +218,7 @@ const BoostsPopup: React.FC<BoostsPopupProps> = ({
 
               <div className="flex items-center justify-center space-x-2">
                 <Image
-                  src="/assets/SparkyIcon.png"
+                  src={SparkyIcon}
                   alt="Spark"
                   width={24}
                   height={24}
@@ -265,4 +243,4 @@ const BoostsPopup: React.FC<BoostsPopupProps> = ({
   );
 };
 
-export default BoostsPopup;
+export default BoostsPopup; 

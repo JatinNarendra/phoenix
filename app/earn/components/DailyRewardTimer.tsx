@@ -1,17 +1,16 @@
-"use client";
-import { useEffect, useState, useCallback } from "react";
+'use client'
+import { useEffect, useState, useCallback } from 'react';
 import Image from "next/image";
-// Remove image imports - we'll use src paths instead
-import { useRouter } from "next/navigation";
-import { useGameFeatures } from "@/app/context/GameFeaturesContext";
-import { useGame } from "@/app/context/GameContext";
+import DailyRewardIcon from "@/public/assets/Earn/DailyRewardIcon.png";
+import { useRouter } from 'next/navigation';
+import { useGameFeatures } from '@/app/context/GameFeaturesContext';
+import { useGame } from '@/app/context/GameContext';
+import HourGlassIcon from "@/public/assets/Earn/HourGlassIcon.png"
 import { FaChevronRight } from "react-icons/fa";
 
 const DailyRewardTimer = () => {
   const router = useRouter();
-  const {
-    dailyRewards: { isRewardAvailable, timeUntilNext, checkRewardAvailability },
-  } = useGameFeatures();
+  const { dailyRewards: { isRewardAvailable, timeUntilNext, checkRewardAvailability } } = useGameFeatures();
   const { gameState } = useGame();
   const [isLoading, setIsLoading] = useState(true);
   const [hoursUntilUtc, setHoursUntilUtc] = useState<number>(0);
@@ -20,44 +19,35 @@ const DailyRewardTimer = () => {
   // Check if reward was collected today
   const wasCollectedToday = useCallback(() => {
     const lastCollected = gameState.dailyRewards?.lastCollected;
-
-    if (!lastCollected || lastCollected === "1970-01-01T00:00:00.000Z")
-      return false;
-
+    
+    if (!lastCollected || lastCollected === "1970-01-01T00:00:00.000Z") return false;
+    
     const now = new Date();
     const lastCollectedDate = new Date(lastCollected);
-
-    return (
-      lastCollectedDate.getUTCFullYear() === now.getUTCFullYear() &&
-      lastCollectedDate.getUTCMonth() === now.getUTCMonth() &&
-      lastCollectedDate.getUTCDate() === now.getUTCDate()
-    );
+    
+    return lastCollectedDate.getUTCFullYear() === now.getUTCFullYear() &&
+           lastCollectedDate.getUTCMonth() === now.getUTCMonth() &&
+           lastCollectedDate.getUTCDate() === now.getUTCDate();
   }, [gameState.dailyRewards?.lastCollected]);
 
   // Calculate time until UTC midnight if user already collected today
   const calculateTimeUntilUtcMidnight = useCallback(() => {
     if (!gameState.dailyRewards?.lastCollected) return;
-
+    
     const now = new Date();
     const lastCollectedDate = new Date(gameState.dailyRewards.lastCollected);
-
+    
     // Get UTC day boundaries
-    const lastCollectedUtcDay = new Date(
-      Date.UTC(
-        lastCollectedDate.getUTCFullYear(),
-        lastCollectedDate.getUTCMonth(),
-        lastCollectedDate.getUTCDate()
-      )
-    ).getTime();
-
+    const lastCollectedUtcDay = new Date(Date.UTC(
+      lastCollectedDate.getUTCFullYear(),
+      lastCollectedDate.getUTCMonth(),
+      lastCollectedDate.getUTCDate()
+    )).getTime();
+    
     const nextUtcDay = new Date(lastCollectedUtcDay + 24 * 60 * 60 * 1000);
-    const hoursUntilNextUtcDay = Math.floor(
-      (nextUtcDay.getTime() - now.getTime()) / (60 * 60 * 1000)
-    );
-    const minutesUntilNextUtcDay = Math.floor(
-      ((nextUtcDay.getTime() - now.getTime()) % (60 * 60 * 1000)) / (60 * 1000)
-    );
-
+    const hoursUntilNextUtcDay = Math.floor((nextUtcDay.getTime() - now.getTime()) / (60 * 60 * 1000));
+    const minutesUntilNextUtcDay = Math.floor(((nextUtcDay.getTime() - now.getTime()) % (60 * 60 * 1000)) / (60 * 1000));
+    
     setHoursUntilUtc(hoursUntilNextUtcDay);
     setMinutesUntilUtc(minutesUntilNextUtcDay);
   }, [gameState.dailyRewards?.lastCollected]);
@@ -65,45 +55,39 @@ const DailyRewardTimer = () => {
   useEffect(() => {
     // Check reward availability when component mounts
     checkRewardAvailability();
-
+    
     // Calculate time until UTC midnight if already collected
     if (wasCollectedToday()) {
       calculateTimeUntilUtcMidnight();
     }
-
+    
     setIsLoading(false);
-
+    
     // Set up timer to update the UTC countdown every minute
     const timer = setInterval(() => {
       if (wasCollectedToday()) {
         calculateTimeUntilUtcMidnight();
       }
     }, 60000);
-
+    
     return () => clearInterval(timer);
-  }, [
-    checkRewardAvailability,
-    wasCollectedToday,
-    calculateTimeUntilUtcMidnight,
-  ]);
+  }, [checkRewardAvailability, wasCollectedToday, calculateTimeUntilUtcMidnight]);
 
   const handleClick = () => {
-    router.push("/earn/daily-rewards");
+    router.push('/earn/daily-rewards');
   };
 
   if (isLoading) {
-    return (
-      <div className="w-full h-[140px] bg-[rgba(41,24,24,0.7)] backdrop-blur-[14px] rounded-[10px] animate-pulse" />
-    );
+    return <div className="w-full h-[140px] bg-[rgba(41,24,24,0.7)] backdrop-blur-[14px] rounded-[10px] animate-pulse" />;
   }
 
   // Check if today's reward has been collected
   const hasCollectedToday = wasCollectedToday();
-
+  
   // If reward is available AND hasn't been collected today, show "Your Daily Reward Awaits!" with claim button
   if (isRewardAvailable && !hasCollectedToday) {
     return (
-      <div
+      <div 
         className="flex items-center justify-between w-full p-4 bg-[rgba(41,24,24,0.7)] backdrop-blur-[14px] rounded-[10px] cursor-pointer"
         onClick={handleClick}
       >
@@ -120,7 +104,7 @@ const DailyRewardTimer = () => {
           </div>
         </div>
         <Image
-          src="/assets/Earn/DailyRewardIcon.png"
+          src={DailyRewardIcon}
           alt="Daily Reward"
           width={92}
           height={100}
@@ -131,31 +115,25 @@ const DailyRewardTimer = () => {
 
   // If reward is not available or has been collected today, show the countdown timer with hourglass
   // Use UTC time if already collected today, otherwise use timeUntilNext
-  const hours = hasCollectedToday
-    ? hoursUntilUtc
-    : typeof timeUntilNext === "object"
-    ? parseInt(timeUntilNext.hours)
-    : 0;
-  const minutes = hasCollectedToday
-    ? minutesUntilUtc
-    : typeof timeUntilNext === "object"
-    ? parseInt(timeUntilNext.minutes)
-    : 0;
+  const hours = hasCollectedToday ? hoursUntilUtc : (typeof timeUntilNext === 'object' ? parseInt(timeUntilNext.hours) : 0);
+  const minutes = hasCollectedToday ? minutesUntilUtc : (typeof timeUntilNext === 'object' ? parseInt(timeUntilNext.minutes) : 0);
 
   return (
-    <div
+    <div 
       className="flex items-center justify-between w-full p-4 bg-[rgba(41,24,24,0.7)] backdrop-blur-[14px] rounded-[10px] border border-[rgba(255,255,255,0.1)] cursor-pointer"
       onClick={handleClick}
     >
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <Image
-            src="/assets/Earn/HourGlassIcon.png"
+            src={HourGlassIcon}
             alt="Hourglass"
             width={32}
             height={32}
           />
-          <span className="text-white text-lg font-bold">Next reward in</span>
+          <span className="text-white text-lg font-bold">
+            Next reward in
+          </span>
         </div>
         <div className="text-white text-2xl font-bold">
           {hours}h {minutes}m
@@ -165,7 +143,7 @@ const DailyRewardTimer = () => {
         </span>
       </div>
       <Image
-        src="/assets/Earn/DailyRewardIcon.png"
+        src={DailyRewardIcon}
         alt="Daily Reward"
         width={92}
         height={100}
@@ -174,4 +152,4 @@ const DailyRewardTimer = () => {
   );
 };
 
-export default DailyRewardTimer;
+export default DailyRewardTimer; 

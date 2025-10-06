@@ -2,8 +2,17 @@
 
 import React, { useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-// Remove image imports - we'll use src paths instead
-import Image from "next/image";
+import HowItWorksSocialsBG from '@/public/assets/howitworks/how-it-works-socials-bg.png'
+import HowItWorksInviteLinkBG from '@/public/assets/howitworks/how-it-works-invite-link-bg.png'
+import DiscordIcon from '@/public/assets/howitworks/discord-icon.png'
+import TelegramIcon from '@/public/assets/howitworks/telegram-icon.png'
+import XIcon from '@/public/assets/howitworks/x-icon.png'
+import WebsiteIcon from "@/public/assets/websiteicon.png";
+import HowItWorksBG from '@/public/assets/Referral/ReferralMainBG.png'
+import HandshakeIcon from '@/public/assets/Referral/ReferralHandShakeIcon.png'
+import InviteLinkCopy from '@/public/assets/Referral/InviteLinkCopy.png'
+import InviteFriends from '@/public/assets/Referral/InviteFriends.png'
+import Image from 'next/image'
 import { useWebApp } from "@/app/hooks/useWebApp";
 import { useUser } from "@/app/hooks/useUser";
 import { useGame } from "@/app/context/GameContext";
@@ -20,12 +29,12 @@ const HowItWorksPage = () => {
   useEffect(() => {
     if (user.id && !gameState.referral?.inviteLink) {
       const link = generateDirectMiniAppReferralLink(user.id.toString());
-      persistState((prevState) => ({
+      persistState(prevState => ({
         ...prevState,
         referral: {
           ...(prevState.referral || { referredFriends: 0, totalRewards: 0 }),
-          inviteLink: link,
-        },
+          inviteLink: link
+        }
       }));
     }
   }, [user.id, gameState.referral?.inviteLink, persistState]);
@@ -34,12 +43,12 @@ const HowItWorksPage = () => {
   const handleCopyLink = useCallback(async () => {
     // Use the direct mini app link for better compatibility
     const linkToCopy = generateDirectMiniAppReferralLink(user.id.toString());
-
+    
     if (linkToCopy) {
       try {
         await navigator.clipboard.writeText(linkToCopy);
         gameToast.success("Link copied to clipboard");
-
+        
         // Optional haptic feedback if in Telegram
         if (WebApp?.HapticFeedback) {
           WebApp.HapticFeedback.impactOccurred("light");
@@ -56,27 +65,23 @@ const HowItWorksPage = () => {
     // Use the direct mini app link for better compatibility
     const linkToShare = generateDirectMiniAppReferralLink(user.id.toString());
     const messageText = `Join me in Phoenix Game and get bonus rewards instantly! 🎮 Just click the link to open the game and claim your bonus! \n\n${linkToShare}`;
-
+    
     if (linkToShare) {
       if (typeof window !== "undefined" && navigator.share) {
         // Use Web Share API if available
-        navigator
-          .share({
-            title: "Join Phoenix Game",
-            text: messageText,
-            url: linkToShare,
-          })
-          .catch((err) => console.error("Share error:", err));
+        navigator.share({
+          title: "Join Phoenix Game",
+          text: messageText,
+          url: linkToShare
+        }).catch(err => console.error("Share error:", err));
       } else if (WebApp) {
         // Fallback to Telegram specific sharing
-        const a = document.createElement("a");
-        a.href = `https://t.me/share/url?url=${encodeURIComponent(
-          linkToShare
-        )}&text=${encodeURIComponent(messageText)}`;
-        a.setAttribute("target", "_blank");
+        const a = document.createElement('a');
+        a.href = `https://t.me/share/url?url=${encodeURIComponent(linkToShare)}&text=${encodeURIComponent(messageText)}`;
+        a.setAttribute('target', '_blank');
         a.click();
       }
-
+      
       // Optional haptic feedback
       if (WebApp?.HapticFeedback) {
         WebApp.HapticFeedback.impactOccurred("medium");
@@ -88,13 +93,13 @@ const HowItWorksPage = () => {
     if (WebApp) {
       WebApp.BackButton.show();
       WebApp.enableClosingConfirmation();
-
+      
       const handleBack = () => {
-        router.push("/referral");
+        router.push('/referral');
       };
 
       WebApp.BackButton.onClick(handleBack);
-
+      
       return () => {
         WebApp.BackButton.offClick(handleBack);
       };
@@ -105,12 +110,12 @@ const HowItWorksPage = () => {
     <main className="min-h-[100dvh] max-w-md mx-auto p-4 font-bold font-['Rounded_Mplus_1c_Bold']">
       <div className="container mx-auto pt-8 relative">
         <Image
-          src="/assets/Referral/ReferralMainBG.png"
+          src={HowItWorksBG}
           alt="How It Works Background"
           style={{ width: "auto", height: "auto" }}
           className="rounded-lg"
         />
-
+        
         <div className="relative left-4 right-4 text-center mt-4">
           <span className="text-white text-3xl font-bold block">
             Invite To Get Bonus
@@ -121,17 +126,14 @@ const HowItWorksPage = () => {
           </p>
         </div>
       </div>
-
-      <div
-        className="mt-8 bg-cover bg-center p-4 rounded-lg"
-        style={{
-          backgroundImage: `url(/assets/howitworks/how-it-works-invite-link-bg.png)`,
-        }}
+      
+      <div className="mt-8 bg-cover bg-center p-4 rounded-lg"
+        style={{ backgroundImage: `url(${HowItWorksInviteLinkBG.src})` }}
       >
         <div className="flex flex-col items-center gap-4">
           <div className="flex items-center gap-4">
             <Image
-              src="/assets/Referral/ReferralHandShakeIcon.png"
+              src={HandshakeIcon}
               alt="Handshake Icon"
               style={{ width: "auto", height: "auto" }}
               className="rounded-lg"
@@ -149,7 +151,7 @@ const HowItWorksPage = () => {
               onClick={handleShareViaApp}
             >
               <Image
-                src="/assets/Referral/InviteFriends.png"
+                src={InviteFriends}
                 alt="Invite Link"
                 style={{ width: "auto", height: "auto" }}
                 className="rounded-lg"
@@ -157,7 +159,7 @@ const HowItWorksPage = () => {
             </button>
             <button onClick={handleCopyLink}>
               <Image
-                src="/assets/Referral/InviteLinkCopy.png"
+                src={InviteLinkCopy}
                 alt="Invite Button"
                 style={{ width: "auto", height: "auto" }}
                 className="cursor-pointer rounded-lg"
@@ -170,26 +172,10 @@ const HowItWorksPage = () => {
       {/* Socials Grid */}
       <div className="grid grid-cols-2 gap-4 mt-8">
         {[
-          {
-            icon: "/assets/howitworks/telegram-icon.png",
-            name: "Telegram",
-            url: "https://t.me/SparkyTapGame",
-          },
-          {
-            icon: "/assets/howitworks/x-icon.png",
-            name: "X",
-            url: "https://x.com/TheSparkyVerse",
-          },
-          {
-            icon: "/assets/howitworks/discord-icon.png",
-            name: "Discord",
-            url: "https://discord.gg/phoenixgame",
-          },
-          {
-            icon: "/assets/websiteicon.png",
-            name: "Website",
-            url: "https://sparky.zone/",
-          },
+          { icon: TelegramIcon, name: "Telegram", url: "https://t.me/devphoenixbot" },
+          { icon: XIcon, name: "X", url: "https://x.com/TheSparkyVerse" },
+          { icon: DiscordIcon, name: "Discord", url: "https://discord.gg/phoenixgame" },
+          { icon: WebsiteIcon, name: "Website", url: "https://sparky.zone/" },
         ].map((platform, index) => (
           <a
             key={index}
@@ -197,9 +183,7 @@ const HowItWorksPage = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-cover bg-center p-6 flex items-center gap-4"
-            style={{
-              backgroundImage: `url(/assets/howitworks/how-it-works-socials-bg.png)`,
-            }}
+            style={{ backgroundImage: `url(${HowItWorksSocialsBG.src})` }}
           >
             <Image
               src={platform.icon}
@@ -212,6 +196,6 @@ const HowItWorksPage = () => {
       </div>
     </main>
   );
-};
+}
 
-export default HowItWorksPage;
+export default HowItWorksPage

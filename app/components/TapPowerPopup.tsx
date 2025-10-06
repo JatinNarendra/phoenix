@@ -2,7 +2,9 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { FaSpinner } from "react-icons/fa";
-// Remove image imports - we'll use src paths instead
+import Close from "../../public/assets/Close.png";
+import SparkyIcon from "../../public/assets/SparkyIcon.png";
+import TapPowerIcon from "../../public/assets/tappower.png";
 import { useGame } from "../context/GameContext";
 import { gameToast } from "../utility/customToast";
 import { tapPowerConfig } from "../utility/tapPowerConfig";
@@ -125,13 +127,13 @@ const TapPowerPopup: React.FC<TapPowerPopupProps> = ({ onClose, isOpen, onUpgrad
                 className="text-gray-400 hover:text-white"
                 aria-label="Close"
               >
-                <Image src="/assets/Close.png" alt="Close" width={32} height={32} />
+                <Image src={Close.src} alt="Close" width={32} height={32} />
               </button>
             </div>
 
             <div className="flex flex-col items-center space-y-4 py-2">
               <Image
-                src="/assets/tappower.png"
+                src={TapPowerIcon}
                 alt="Tap Power"
                 width={160}
                 height={160}
@@ -150,7 +152,7 @@ const TapPowerPopup: React.FC<TapPowerPopupProps> = ({ onClose, isOpen, onUpgrad
 
               <div className="flex items-center justify-center space-x-2">
                 <Image
-                  src="/assets/SparkyIcon.png"
+                  src={SparkyIcon}
                   alt="Spark"
                   width={24}
                   height={24}

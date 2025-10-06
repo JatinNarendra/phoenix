@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
-// Remove image imports - we'll use src paths instead
+import WelcomeToEarnIcon from "@/public/assets/Earn/WelcomeToEarnIcon.png";
+import Close from "@/public/assets/Close.png";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@/app/hooks/useUser";
 
@@ -59,7 +60,7 @@ const WelcomeToEarnPopup: React.FC<WelcomeToEarnPopupProps> = ({
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white z-10"
         >
-          <Image src="/assets/Close.png" alt="Close" width={32} height={32} />
+          <Image src={Close.src} alt="Close" width={32} height={32} />
         </button>
 
         {/* Main popup container */}
@@ -69,7 +70,7 @@ const WelcomeToEarnPopup: React.FC<WelcomeToEarnPopupProps> = ({
               <div className="w-full flex flex-col items-center gap-4">
                 <div className="mb-4">
                   <Image
-                    src="/assets/Earn/WelcomeToEarnIcon.png"
+                    src={WelcomeToEarnIcon.src}
                     alt="Welcome to Earn"
                     width={180}
                     height={132}

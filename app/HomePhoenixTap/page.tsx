@@ -8,14 +8,18 @@ import { gameToast } from "../utility/customToast";
 import Image from "next/image";
 import Link from "next/link";
 import CoinsAndSpin from "../components/CoinsAndSpin";
-// Remove image imports - we'll use src paths instead
+import SpinSquareBackground from "@/public/assets/SpinSquareBackground.png";
+import WinSpinIcon from "@/public/assets/WinSpinIcon.png";
+import AutoTapBotIcon from "@/public/assets/AutoTapBotIcon.png";
+import EnergyCapacityIcon from "@/public/assets/EnergyCapacityIcon.png";
+import FlameLevelIcon from "@/public/assets/FlameLevelIcon.png";
 import { levelConfig } from "../utility/stageConfig";
 import { getRechargeSpeedConfig } from "../utility/rechargeSpeedConfig";
 import { getEnergyConfig } from "../utility/energyConfig";
 import { useRouter } from "next/navigation";
 import { useWebApp } from "../hooks/useWebApp";
 import { safeWebAppBackButton, safeWebApp } from "../lib/platformUtils";
-// Remove image imports - we'll use src paths instead
+import DailyRewardCalender from "@/public/assets/DailyRewardCalender.png";
 import { useGameFeatures } from "../context/GameFeaturesContext";
 import AutoTapPopup from "../components/AutoTapPopup";
 import { showLimitedToast } from "../utility/toastManager";
@@ -939,7 +943,7 @@ const PhoenixTapArea: React.FC = () => {
               }`}
             >
               <Image
-                src="/assets/SpinSquareBackground.png"
+                src={SpinSquareBackground}
                 alt="Spin Background"
                 width={64}
                 height={64}
@@ -952,7 +956,7 @@ const PhoenixTapArea: React.FC = () => {
                 }}
               />
               <Image
-                src="/assets/WinSpinIcon.png"
+                src={WinSpinIcon}
                 alt="Win Spin Icon"
                 width={38}
                 height={38}
@@ -1043,7 +1047,7 @@ const PhoenixTapArea: React.FC = () => {
             onClick={() => router.push("/earn/daily-rewards")}
           >
             <Image
-              src="/assets/DailyRewardCalender.png"
+              src={DailyRewardCalender}
               alt="Daily Reward Calendar"
               width={32}
               height={32}
@@ -1089,7 +1093,7 @@ const PhoenixTapArea: React.FC = () => {
               onClick={handleAutoTapIconClick}
             >
               <Image
-                src="/assets/AutoTapBotIcon.png"
+                src={AutoTapBotIcon}
                 alt="Auto Tap Icon"
                 width={32}
                 height={32}
@@ -1260,7 +1264,7 @@ const PhoenixTapArea: React.FC = () => {
             <div>
               <div className="relative w-4 h-4">
                 <Image
-                  src="/assets/FlameLevelIcon.png"
+                  src={FlameLevelIcon}
                   alt="Energy Icon"
                   fill
                   sizes="(max-width: 768px) 50vw, 16rem"
@@ -1311,7 +1315,7 @@ const PhoenixTapArea: React.FC = () => {
           <div className="flex items-center gap-2 text-xs text-gray-400">
             <div>
               <Image
-                src="/assets/EnergyCapacityIcon.png"
+                src={EnergyCapacityIcon}
                 alt="Energy Capacity Icon"
                 width={16}
                 height={16}

@@ -1,7 +1,11 @@
-import React from "react";
-import Image from "next/image";
-// Remove image imports - we'll use src paths instead
-import CustomYellowButton from "@/app/ui/CustomYellowButton";
+import React from 'react';
+import Image from 'next/image';
+import CampaignRewardClicktoOpen from "@/public/assets/CampaignRewardClicktoOpen.png";
+import CampaignRewardOpened from "@/public/assets/CampaignRewardOpened.png";
+import Close from "@/public/assets/Close.png";
+import SparkyIcon from "@/public/assets/SparkyIcon.png";
+import SpinIcon from "@/public/assets/SpinIcon.png";
+import CustomYellowButton from '@/app/ui/CustomYellowButton';
 
 interface CampaignRewardPopupProps {
   isOpen: boolean;
@@ -45,8 +49,8 @@ const CampaignRewardPopup: React.FC<CampaignRewardPopupProps> = ({
           style={{
             backgroundImage: `url(${
               isOpened
-                ? "/assets/CampaignRewardOpened.png"
-                : "/assets/CampaignRewardClicktoOpen.png"
+                ? CampaignRewardOpened.src
+                : CampaignRewardClicktoOpen.src
             })`,
             backgroundSize: "contain",
           }}
@@ -56,7 +60,7 @@ const CampaignRewardPopup: React.FC<CampaignRewardPopupProps> = ({
             onClick={onClose}
             className="absolute top-6 right-6 text-gray-400 hover:text-white z-10"
           >
-            <Image src="/assets/Close.png" alt="Close" width={32} height={32} />
+            <Image src={Close} alt="Close" width={32} height={32} />
           </button>
 
           <div className="relative h-full flex flex-col p-12 justify-end space-y-6">
@@ -69,7 +73,7 @@ const CampaignRewardPopup: React.FC<CampaignRewardPopupProps> = ({
                   <div className="flex items-center gap-6 mb-6">
                     <div className="flex items-center gap-2">
                       <Image
-                        src="/assets/SparkyIcon.png"
+                        src={SparkyIcon}
                         alt="Sparky"
                         width={32}
                         height={32}
@@ -80,7 +84,7 @@ const CampaignRewardPopup: React.FC<CampaignRewardPopupProps> = ({
                     </div>
                     <div className="flex items-center gap-2">
                       <Image
-                        src="/assets/SpinIcon.png"
+                        src={SpinIcon}
                         alt="Spin"
                         width={32}
                         height={32}
@@ -101,7 +105,7 @@ const CampaignRewardPopup: React.FC<CampaignRewardPopupProps> = ({
                     onClick={onClose}
                     className="w-[155px] transition-all duration-200 hover:scale-[1.02] hover:opacity-90"
                   >
-                    Claim
+                   Claim
                   </CustomYellowButton>
                 </>
               )}

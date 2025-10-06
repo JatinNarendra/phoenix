@@ -1,9 +1,11 @@
 import type { NextPage } from 'next';
 import Image from "next/image";
-// Remove image imports - we'll use src paths instead
+import ClawHoldingSpark from "../../../public/assets/Earn/ClawHoldingSpark.png";
+import Close from "@/public/assets/Close.png";
 import { gameToast } from "@/app/utility/customToast";
 import { useState } from 'react';
 import { GameState } from '@/app/types/gameTypes';
+import SparkIcon from '@/public/assets/SparkyIcon.png';
 import CustomYellowButton from '@/app/ui/CustomYellowButton';
 
 interface DailyRewardsClaimProps {
@@ -201,7 +203,7 @@ const DailyRewardsClaim: NextPage<DailyRewardsClaimProps> = ({
             className="absolute top-6 right-6 z-10 text-gray-400 hover:text-white"
             disabled={isLoading || parentIsLoading}
           >
-            <Image src="/assets/Close.png" alt="Close" width={32} height={32} />
+            <Image src={Close.src} alt="Close" width={32} height={32} />
           </button>
 
           {/* Main Content */}
@@ -209,7 +211,7 @@ const DailyRewardsClaim: NextPage<DailyRewardsClaimProps> = ({
             {/* Claw Image */}
             <div className="relative mb-2 mt-8">
               <Image
-                src="/assets/Earn/ClawHoldingSpark.png"
+                src={ClawHoldingSpark}
                 alt="Claw holding Sparky"
                 className="object-contain"
                 width={160}
@@ -220,7 +222,7 @@ const DailyRewardsClaim: NextPage<DailyRewardsClaimProps> = ({
 
             {/* Reward Amount */}
             <div className="flex items-center justify-center gap-3">
-              <Image src="/assets/SparkyIcon.png" alt="SparkIcon" width={36} height={36} />
+              <Image src={SparkIcon} alt="SparkIcon" width={36} height={36} />
               <p className="text-4xl font-bold text-white">
                 {totalReward.toLocaleString()}
               </p>

@@ -1,7 +1,9 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-// Remove image imports - we'll use src paths instead
+import Close from "../../public/assets/Close.png";
+import SparkyIcon from "../../public/assets/SparkyIcon.png";
+import RechargeSpeedIcon from "../../public/assets/energyrechargeratepopupicon.png";
 import { useGame } from "../context/GameContext";
 import CustomYellowButton from "@/app/ui/CustomYellowButton";
 
@@ -11,11 +13,7 @@ interface RechargeSpeedPopupProps {
   onUpgrade: () => void;
 }
 
-const RechargeSpeedPopup: React.FC<RechargeSpeedPopupProps> = ({
-  onClose,
-  isOpen,
-  onUpgrade,
-}) => {
+const RechargeSpeedPopup: React.FC<RechargeSpeedPopupProps> = ({ onClose, isOpen, onUpgrade }) => {
   const { gameState } = useGame();
   const currentLevel = gameState.upgrades?.rechargeLevel || 1;
   const maxLevel = 3;
@@ -53,17 +51,12 @@ const RechargeSpeedPopup: React.FC<RechargeSpeedPopupProps> = ({
                 className="text-gray-400 hover:text-white"
                 aria-label="Close"
               >
-                <Image
-                  src="/assets/Close.png"
-                  alt="Close"
-                  width={32}
-                  height={32}
-                />
+                <Image src={Close.src} alt="Close" width={32} height={32} />
               </button>
             </div>
             <div className="flex flex-col items-center space-y-8 py-4">
               <Image
-                src="/assets/energyrechargeratepopupicon.png"
+                src={RechargeSpeedIcon}
                 alt="Recharge Speed"
                 width={140}
                 height={140}
@@ -83,7 +76,7 @@ const RechargeSpeedPopup: React.FC<RechargeSpeedPopupProps> = ({
                 <>
                   <div className="flex items-center justify-center space-x-2">
                     <Image
-                      src="/assets/SparkyIcon.png"
+                      src={SparkyIcon}
                       alt="Spark"
                       width={24}
                       height={24}

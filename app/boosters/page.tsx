@@ -17,7 +17,12 @@ import {
 import { calculateAutoTapReward } from "../utility/gameUtils";
 import Image from "next/image";
 
-// Remove image imports - we'll use src paths instead
+import BoosterBackground from "../../public/images/BooseterBackground.png";
+import UpgradesBackground from "../../public/assets/UpgradesBackground.png";
+import SparkyIcon from "../../public/assets/SparkyIcon.png";
+import TurboIcon from "../../public/assets/TurboIcon.png";
+import RechargeIcon from "../../public/assets/RechargeIcon.png";
+import LockedYellow from "../../public/assets/LockedYellow.png";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useWebApp } from "../hooks/useWebApp";
 
@@ -25,12 +30,15 @@ import { useGameFeatures } from "../context/GameFeaturesContext";
 import { supabase } from "@/lib/supabase";
 import BoostsPopup from "../components/BoostsPopup";
 import AutoTapPopup from "../components/AutoTapPopup";
+import AutoTapBotIcon from "@/public/assets/AutoTapBotIcon.png";
 import TapPowerPopup from "../components/TapPowerPopup";
 import EnergyCapacityPopup from "../components/EnergyCapacityPopup";
 import RechargeSpeedPopup from "../components/RechargeSpeedPopup";
-// Remove image imports - we'll use src paths instead
+import TapPowerIcon from "@/public/assets/TapPowerIcon.png";
+import EnergyCapacityIcon from "@/public/assets/EnergyCapacityIcon.png";
+import RechargingSpeedIcon from "@/public/assets/RechargingSpeedIcon.png";
 import { gameToast } from "../utility/customToast";
-// Remove image imports - we'll use src paths instead
+import TaskCompletedDiamond from "../../public/assets/TaskCompletedDiamond.png";
 import { tapPowerConfig } from "../utility/tapPowerConfig";
 import { energyConfig, getEnergyConfig } from "../utility/energyConfig";
 
@@ -380,7 +388,7 @@ export default function BoostersPage() {
         id: "turbo",
         title: "Turbo",
         description: "",
-        icon: <Image src="/assets/TurboIcon.png" alt="Turbo" width={46} height={46} />,
+        icon: <Image src={TurboIcon} alt="Turbo" width={46} height={46} />,
         inGameUses: gameState.boosts?.inGameTurbo,
         rewardedUses: gameState.boosts?.rewardedTurbo,
         maxInGameUses: maxTurboUses,
@@ -392,7 +400,7 @@ export default function BoostersPage() {
         title: "Recharge",
         description: "",
         icon: (
-          <Image src="/assets/RechargeIcon.png" alt="Recharge" width={46} height={46} />
+          <Image src={RechargeIcon} alt="Recharge" width={46} height={46} />
         ),
         inGameUses: gameState.boosts?.inGameRecharge,
         rewardedUses: gameState.boosts?.rewardedRecharge,
@@ -856,7 +864,7 @@ export default function BoostersPage() {
             {!gameState.application_state?.isAutotapPurchased ? (
               <div className="flex items-center space-x-2 text-[#909090]">
                 <Image
-                  src="/assets/SparkyIcon.png"
+                  src={SparkyIcon}
                   alt="PHIP"
                   width={14}
                   height={14}
@@ -869,7 +877,7 @@ export default function BoostersPage() {
                 {autoTapActive && autoTapTimer?.remainingSec !== undefined ? (
                   <div className="flex items-center justify-center space-x-2 text-[#909090]">
                     <Image
-                      src="/assets/SparkyIcon.png"
+                      src={SparkyIcon}
                       alt="PHIP"
                       width={14}
                       height={14}
@@ -883,7 +891,7 @@ export default function BoostersPage() {
                 ) : (
                   <div className="flex items-center justify-center space-x-2 text-[#909090]">
                     <Image
-                      src="/assets/SparkyIcon.png"
+                      src={SparkyIcon}
                       alt="PHIP"
                       width={14}
                       height={14}
@@ -910,7 +918,7 @@ export default function BoostersPage() {
         ),
         icon: (
           <Image
-            src="/assets/AutoTapBotIcon.png"
+            src={AutoTapBotIcon}
             alt="Auto Tap"
             width={34}
             height={34}
@@ -940,7 +948,7 @@ export default function BoostersPage() {
         description: (
           <span className="flex items-center space-x-2 text-[#909090]">
             <Image
-              src="/assets/SparkyIcon.png"
+              src={SparkyIcon}
               alt="PHIP"
               width={14}
               height={14}
@@ -955,7 +963,7 @@ export default function BoostersPage() {
         ),
         icon: (
           <Image
-            src="/assets/TapPowerIcon.png"
+            src={TapPowerIcon}
             alt="Tap Power"
             width={34}
             height={34}
@@ -974,7 +982,7 @@ export default function BoostersPage() {
         description: (
           <span className="flex items-center space-x-2 text-[#909090]">
             <Image
-              src="/assets/SparkyIcon.png"
+              src={SparkyIcon}
               alt="PHIP"
               width={14}
               height={14}
@@ -991,7 +999,7 @@ export default function BoostersPage() {
         ),
         icon: (
           <Image
-            src="/assets/EnergyCapacityIcon.png"
+            src={EnergyCapacityIcon}
             alt="Energy Capacity"
             width={34}
             height={34}
@@ -1014,7 +1022,7 @@ export default function BoostersPage() {
             ) : (
               <>
                 <Image
-                  src="/assets/SparkyIcon.png"
+                  src={SparkyIcon}
                   alt="PHIP"
                   width={14}
                   height={14}
@@ -1029,7 +1037,7 @@ export default function BoostersPage() {
         ),
         icon: (
           <Image
-            src="/assets/RechargingSpeedIcon.png"
+            src={RechargingSpeedIcon}
             alt="Recharge Speed"
             width={34}
             height={34}
@@ -1070,7 +1078,7 @@ export default function BoostersPage() {
         style={{ top: "-90px" }}
       >
         <Image
-          src="/images/BooseterBackground.png"
+          src={BoosterBackground}
           alt="Booster Background"
           style={{ objectFit: "cover" }}
           quality={100}
@@ -1084,7 +1092,7 @@ export default function BoostersPage() {
           <h2 className="text-sm font-bold text-[#909090]">Your Balance</h2>
           <div className="flex items-center space-x-2">
             <Image
-              src="/assets/SparkyIcon.png"
+              src={SparkyIcon}
               alt="PHIP"
               width={48}
               height={48}
@@ -1141,7 +1149,7 @@ export default function BoostersPage() {
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
               <Image
-                src="/assets/UpgradesBackground.png"
+                src={UpgradesBackground}
                 alt="Upgrades Background"
                 fill
                 style={{ objectFit: "cover" }}
@@ -1250,7 +1258,7 @@ export default function BoostersPage() {
                         !autoTapActive &&
                         gameState.coins < AUTO_TAP_UNLOCK_COST ? (
                           <Image
-                            src="/assets/LockedYellow.png"
+                            src={LockedYellow}
                             alt="Locked"
                             width={24}
                             height={24}
@@ -1262,7 +1270,7 @@ export default function BoostersPage() {
                       ) : upgrade.id === "recharge-upgrade" ? (
                         (gameState.upgrades?.rechargeLevel || 0) >= 3 ? (
                           <Image
-                            src="/assets/TaskCompletedDiamond.png"
+                            src={TaskCompletedDiamond}
                             alt="Completed"
                             width={24}
                             height={24}
@@ -1270,7 +1278,7 @@ export default function BoostersPage() {
                           />
                         ) : gameState.coins < AUTO_TAP_UNLOCK_COST ? (
                           <Image
-                            src="/assets/LockedYellow.png"
+                            src={LockedYellow}
                             alt="Locked"
                             width={24}
                             height={24}
@@ -1284,7 +1292,7 @@ export default function BoostersPage() {
                         tapPowerConfig[gameState.upgrades?.tapLevel || 1]
                           .upgradeCost ? (
                           <Image
-                            src="/assets/LockedYellow.png"
+                            src={LockedYellow}
                             alt="Locked"
                             width={24}
                             height={24}
@@ -1299,7 +1307,7 @@ export default function BoostersPage() {
                           (gameState.upgrades?.energyLevel || 1) + 1
                         ]?.upgradePrice || 0) ? (
                           <Image
-                            src="/assets/LockedYellow.png"
+                            src={LockedYellow}
                             alt="Locked"
                             width={24}
                             height={24}

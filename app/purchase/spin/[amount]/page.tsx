@@ -8,7 +8,13 @@ import Image from "next/image";
 import CoinsAndSpin from "@/app/components/CoinsAndSpin";
 import { gameToast } from "@/app/utility/customToast";
 import { SPIN_PURCHASE_OPTIONS } from "@/app/utility/spinConfig";
-// Remove image imports - we'll use src paths instead
+import telegramstar from "@/public/assets/spinpurchase/telegramstar.png";
+import redspins from "@/public/assets/spinpurchase/redspins.png";
+import goldenspins from "@/public/assets/spinpurchase/goldenspins.png";
+import greenspins from "@/public/assets/spinpurchase/greenspins.png";
+import skybluespins from "@/public/assets/spinpurchase/skybluespins.png";
+import purplespins from "@/public/assets/spinpurchase/purplespins.png";
+import yellowspins from "@/public/assets/spinpurchase/yellowspins.png";
 import { StaticImageData } from "next/image";
 
 // Define the type for spin purchase option
@@ -23,16 +29,16 @@ interface SpinPurchaseOption {
 
 // Create a mapping of spin icons
 const getSpinIcon = (iconName: string) => {
-  const iconMap: { [key: string]: string } = {
-    yellow: "/assets/spinpurchase/yellowspins.png",
-    purple: "/assets/spinpurchase/purplespins.png",
-    skyblue: "/assets/spinpurchase/skybluespins.png",
-    green: "/assets/spinpurchase/greenspins.png",
-    golden: "/assets/spinpurchase/goldenspins.png",
-    red: "/assets/spinpurchase/redspins.png",
+  const iconMap: { [key: string]: StaticImageData } = {
+    yellow: yellowspins,
+    purple: purplespins,
+    skyblue: skybluespins,
+    green: greenspins,
+    golden: goldenspins,
+    red: redspins,
   };
 
-  return iconMap[iconName] || "/assets/spinpurchase/yellowspins.png"; // Fallback to yellow if icon not found
+  return iconMap[iconName] || yellowspins; // Fallback to yellow if icon not found
 };
 
 export default function SpinPurchasePage() {
@@ -195,10 +201,7 @@ export default function SpinPurchasePage() {
         if (status === "paid") {
           // Calculate total spins including bonus
           const bonusSpins = purchaseOption.bonus
-            ? Math.floor(
-                (parseInt(purchaseOption.bonus.replace(/\D/g, "")) / 100) *
-                  purchaseOption.spins
-              )
+            ? Math.floor((parseInt(purchaseOption.bonus.replace(/\D/g, "")) / 100) * purchaseOption.spins)
             : 0;
           const totalSpins = purchaseOption.spins + bonusSpins;
 
@@ -208,9 +211,7 @@ export default function SpinPurchasePage() {
           // Show success toast with detailed information
           gameToast.reward(
             <div className="text-center">
-              <div className="text-lg font-bold text-green-400 mb-1">
-                🎉 Payment Successful!
-              </div>
+              <div className="text-lg font-bold text-green-400 mb-1">🎉 Payment Successful!</div>
               <div className="text-sm text-gray-300">
                 {totalSpins.toLocaleString()} spins added to your account
               </div>
@@ -231,9 +232,7 @@ export default function SpinPurchasePage() {
           // Show cancellation toast
           gameToast.info(
             <div className="text-center">
-              <div className="text-lg font-bold text-yellow-400 mb-1">
-                ⏸️ Payment Cancelled
-              </div>
+              <div className="text-lg font-bold text-yellow-400 mb-1">⏸️ Payment Cancelled</div>
               <div className="text-sm text-gray-300">
                 No charges were made to your account
               </div>
@@ -244,9 +243,7 @@ export default function SpinPurchasePage() {
           // Show detailed failure toast
           gameToast.error(
             <div className="text-center">
-              <div className="text-lg font-bold text-red-400 mb-1">
-                ❌ Payment Failed
-              </div>
+              <div className="text-lg font-bold text-red-400 mb-1">❌ Payment Failed</div>
               <div className="text-sm text-gray-300 mb-1">
                 Unable to process your payment
               </div>
@@ -260,9 +257,7 @@ export default function SpinPurchasePage() {
           // Handle any other unknown status
           gameToast.error(
             <div className="text-center">
-              <div className="text-lg font-bold text-red-400 mb-1">
-                ⚠️ Unknown Status
-              </div>
+              <div className="text-lg font-bold text-red-400 mb-1">⚠️ Unknown Status</div>
               <div className="text-sm text-gray-300">
                 Payment status: {status}
               </div>
@@ -277,13 +272,11 @@ export default function SpinPurchasePage() {
     } catch (error) {
       setIsLoading(false);
       console.error("Payment error:", error);
-
+      
       // Show detailed error toast
       gameToast.error(
         <div className="text-center">
-          <div className="text-lg font-bold text-red-400 mb-1">
-            🚫 Payment Error
-          </div>
+          <div className="text-lg font-bold text-red-400 mb-1">🚫 Payment Error</div>
           <div className="text-sm text-gray-300 mb-1">
             Unable to process your payment request
           </div>
@@ -345,7 +338,7 @@ export default function SpinPurchasePage() {
             <div className="text-white text-lg">Cost:</div>
             <div className="flex items-center">
               <Image
-                src="/assets/spinpurchase/telegramstar.png"
+                src={telegramstar}
                 alt="Telegram Star"
                 width={28}
                 height={28}

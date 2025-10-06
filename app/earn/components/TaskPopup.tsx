@@ -1,24 +1,24 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { PlatformType, SpecialTask, CampaignTask } from "@/app/types/Customer";
-
-
-
-
+import TaskTelegramIcon from "../../../public/assets/TaskTelegramIcon.png";
+import TaskXIcon from "../../../public/assets/TaskXIcon.png";
+import TaskYoutubeIcon from "../../../public/assets/TaskYoutubeIcon.png";
+import TaskDiscordIcon from "../../../public/assets/discordicon.png";
 import { useGame } from "@/app/context/GameContext";
 import { useUser } from "@/app/hooks/useUser";
 import { gameToast } from "@/app/utility/customToast";
-
-
-
-
-
-
-
-
-
-
-
+import CheckMarkIcon from "../../../public/assets/Earn/CheckMarkIcon.png";
+import VerifyGreenDiamondIcon from "../../../public/assets/Earn/VerifyGreenDiamondIcon.png";
+import CheckTheTask from "../../../public/assets/Earn/CheckTheTask.png";
+import Close from "../../../public/assets/Close.png";
+import SparkyIcon from "../../../public/assets/SparkyIcon.png";
+import SpinIcon from "../../../public/assets/SpinIcon.png";
+import bi_telegram from "../../../public/assets/Earn/bi_telegram.png";
+import bi_twitter from "../../../public/assets/Earn/bi_twitter.png";
+import bi_youtube from "../../../public/assets/Earn/bi_youtube.png";
+import bi_discord from "../../../public/assets/discordicon.png";
+import WarningIcon from "../../../public/assets/Earn/WarningIcon.png";
 import PenaltyWarningPopup from "./penaltywarningpopup";
 import { supabase } from "@/lib/supabase";
 import { markTaskAsCompleted } from "@/app/lib/taskCompletionUtils";
@@ -53,13 +53,13 @@ const formatTaskTitle = (platform: PlatformType, customerName?: string) => {
 };
 
 const platformIcons = {
-  TELEGRAM_CHANNEL: "/assets/Earn/bi_telegram.png",
-  TELEGRAM_GROUP: "/assets/Earn/bi_telegram.png",
-  X: "/assets/Earn/bi_twitter.png",
-  X_RETWEET: "/assets/Earn/bi_twitter.png",
-  YOUTUBE_VIEWS: "/assets/Earn/bi_youtube.png",
-  YOUTUBE_SUBSCRIBERS: "/assets/Earn/bi_youtube.png",
-  DISCORD: "/assets/discordicon.png",
+  TELEGRAM_CHANNEL: bi_telegram,
+  TELEGRAM_GROUP: bi_telegram,
+  X: bi_twitter,
+  X_RETWEET: bi_twitter,
+  YOUTUBE_VIEWS: bi_youtube,
+  YOUTUBE_SUBSCRIBERS: bi_youtube,
+  DISCORD: bi_discord,
 };
 
 const platformLabels = {
@@ -74,20 +74,20 @@ const platformLabels = {
 
 export const socialIcons: Record<PlatformType, React.ReactNode> = {
   TELEGRAM_CHANNEL: (
-    <Image src="/assets/TaskTelegramIcon.png" alt="Telegram" width={90} height={90} />
+    <Image src={TaskTelegramIcon} alt="Telegram" width={90} height={90} />
   ),
-  X: <Image src="/assets/TaskXIcon.png" alt="X" width={90} height={90} />,
-  X_RETWEET: <Image src="/assets/TaskXIcon.png" alt="X Retweet" width={90} height={90} />,
+  X: <Image src={TaskXIcon} alt="X" width={90} height={90} />,
+  X_RETWEET: <Image src={TaskXIcon} alt="X Retweet" width={90} height={90} />,
   YOUTUBE_VIEWS: (
-    <Image src="/assets/TaskYoutubeIcon.png" alt="YouTube" width={90} height={90} />
+    <Image src={TaskYoutubeIcon} alt="YouTube" width={90} height={90} />
   ),
   TELEGRAM_GROUP: (
-    <Image src="/assets/TaskTelegramIcon.png" alt="Telegram" width={90} height={90} />
+    <Image src={TaskTelegramIcon} alt="Telegram" width={90} height={90} />
   ),
   YOUTUBE_SUBSCRIBERS: (
-    <Image src="/assets/TaskYoutubeIcon.png" alt="YouTube" width={90} height={90} />
+    <Image src={TaskYoutubeIcon} alt="YouTube" width={90} height={90} />
   ),
-  DISCORD: <Image src="/assets/discordicon.png" alt="Discord" width={90} height={90} />,
+  DISCORD: <Image src={TaskDiscordIcon} alt="Discord" width={90} height={90} />,
 };
 
 const TaskPopup: React.FC<TaskPopupProps> = ({
@@ -596,7 +596,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({
                     onClick={onClose}
                     className="text-gray-400 hover:text-white"
                   >
-                    <Image src="/assets/Close.png" alt="Close" width={32} height={32} />
+                    <Image src={Close} alt="Close" width={32} height={32} />
                   </button>
                 </div>
 
@@ -609,7 +609,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({
                   <div className="flex justify-center gap-3 w-full mb-6">
                     <div className="inline-flex items-center justify-center px-3 bg-black rounded-[8px] border border-[#E29029]/30 h-[38px] min-w-[60px]">
                       <Image
-                        src="/assets/SparkyIcon.png"
+                        src={SparkyIcon}
                         alt="Sparky"
                         width={18}
                         height={18}
@@ -622,7 +622,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({
                     </div>
                     <div className="inline-flex items-center justify-center px-3 bg-black rounded-[8px] border border-[#E29029]/30 h-[38px] min-w-[60px]">
                       <Image
-                        src="/assets/SpinIcon.png"
+                        src={SpinIcon}
                         alt="Spin"
                         width={18}
                         height={18}
@@ -683,7 +683,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({
                               <div className="flex items-center gap-4">
                                 <div className="flex-shrink-0">
                                   <Image
-                                    src="/assets/Earn/CheckMarkIcon.png"
+                                    src={CheckMarkIcon}
                                     alt="Check Mark"
                                     width={24}
                                     height={24}
@@ -707,7 +707,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({
                                 >
                                   <div className="flex-shrink-0">
                                     <Image
-                                      src="/assets/Earn/VerifyGreenDiamondIcon.png"
+                                      src={VerifyGreenDiamondIcon}
                                       alt="Verify Green Diamond"
                                       width={24}
                                       height={24}
@@ -734,7 +734,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({
                                     <div className="flex items-center gap-3">
                                       <div className="flex-shrink-0">
                                         <Image
-                                          src="/assets/Earn/VerifyGreenDiamondIcon.png"
+                                          src={VerifyGreenDiamondIcon}
                                           alt="Verify Green Diamond"
                                           width={24}
                                           height={24}
@@ -810,7 +810,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({
                                 type="button"
                               >
                                 <Image
-                                  src="/assets/Earn/CheckTheTask.png"
+                                  src={CheckTheTask}
                                   alt="Check The Task"
                                   width={280}
                                   height={40}
@@ -830,7 +830,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({
                   {/* Warning Message Row */}
                   <div className="flex items-center gap-2 p-2">
                     <Image
-                      src="/assets/Earn/WarningIcon.png"
+                      src={WarningIcon}
                       alt="Warning"
                       width={20}
                       height={20}

@@ -5,7 +5,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useWebApp } from "../hooks/useWebApp";
 import CoinsAndSpin from "../components/CoinsAndSpin";
-// Remove image imports - we'll use src paths instead
+import telegramstar from "@/public/assets/spinpurchase/telegramstar.png";
+import redspins from "@/public/assets/spinpurchase/redspins.png";
+import goldenspins from "@/public/assets/spinpurchase/goldenspins.png";
+import greenspins from "@/public/assets/spinpurchase/greenspins.png";
+import skybluespins from "@/public/assets/spinpurchase/skybluespins.png";
+import purplespins from "@/public/assets/spinpurchase/purplespins.png";
+import yellowspins from "@/public/assets/spinpurchase/yellowspins.png";
 import { StaticImageData } from "next/image";
 import { useGame } from "../context/GameContext";
 import { gameToast } from "../utility/customToast";
@@ -16,16 +22,16 @@ import { SpinCard } from "../types/gameTypes";
 // Using SpinCard type from gameTypes.ts
 
 const getSpinIcon = (value: string) => {
-  const iconMap: { [key: string]: string } = {
-    yellow: "/assets/spinpurchase/yellowspins.png",
-    purple: "/assets/spinpurchase/purplespins.png",
-    skyblue: "/assets/spinpurchase/skybluespins.png",
-    green: "/assets/spinpurchase/greenspins.png",
-    golden: "/assets/spinpurchase/goldenspins.png",
-    red: "/assets/spinpurchase/redspins.png",
+  const iconMap: { [key: string]: StaticImageData } = {
+    yellow: yellowspins,
+    purple: purplespins,
+    skyblue: skybluespins,
+    green: greenspins,
+    golden: goldenspins,
+    red: redspins,
   };
 
-  return iconMap[value] || "/assets/spinpurchase/yellowspins.png";
+  return iconMap[value] || null;
 };
 
 export default function SpinPurchase() {
@@ -134,7 +140,7 @@ export default function SpinPurchase() {
                 {/* Price */}
                 <div className="absolute bottom-0 left-0 right-0 h-[25%] backdrop-blur-[14px] rounded-b-[10px] border-t border-white/10 flex items-center justify-center gap-2 bg-[#3a1c09]">
                   <Image
-                    src="/assets/spinpurchase/telegramstar.png"
+                    src={telegramstar}
                     alt="Telegram Star"
                     width={24}
                     height={24}

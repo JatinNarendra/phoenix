@@ -4,9 +4,9 @@ import { levelConfig } from "../utility/stageConfig";
 import { useWebApp } from "../hooks/useWebApp";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-
-
-
+import sparkicon from "../../public/assets/SparkyIcon.png";
+import CampaignOpenTreasure from "../../public/assets/CampaignOpenTreasure.png";
+import TaskCompletedDiamond from "../../public/assets/TaskCompletedDiamond.png";
 import { FaChevronRight } from "react-icons/fa";
 import { useGame } from "../context/GameContext";
 
@@ -95,7 +95,7 @@ const LevelDescriptionPage = () => {
                   src={
                     level > currentLevel
                       ? "/assets/LockedYellow.png"
-                      : "/assets/TaskCompletedDiamond.png"
+                      : TaskCompletedDiamond
                   }
                   alt="Level Status"
                   width={16}
@@ -116,7 +116,7 @@ const LevelDescriptionPage = () => {
           {/* Spark Requirements */}
           <div className="space-y-4 mb-6">
             <div className="flex items-center gap-3 bg-[rgba(41,24,24,0.7)] rounded-[10px] p-4 border border-[rgba(255,255,255,0.1)] mt-72">
-              <Image src="/assets/SparkyIcon.png" alt="Spark" width={36} height={36} />
+              <Image src={sparkicon} alt="Spark" width={36} height={36} />
               <div className="flex-1">
                 <span className="text-lg font-bold">
                   {levelConfig[level].sparkRequired.toLocaleString()} SPARK to
@@ -127,7 +127,7 @@ const LevelDescriptionPage = () => {
 
             <div className="flex items-center gap-3 bg-[rgba(41,24,24,0.7)] rounded-[10px] p-3 border border-[rgba(255,255,255,0.1)]">
               <Image
-                src="/assets/CampaignOpenTreasure.png"
+                src={CampaignOpenTreasure}
                 alt="Bonus"
                 width={48}
                 height={48}

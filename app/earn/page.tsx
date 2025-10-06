@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { useWebApp } from "../hooks/useWebApp";
 import CoinsAndSpin from "../components/CoinsAndSpin";
 import Image from "next/image";
-
-
-
-
+import TaskTelegram from "../../public/assets/TaskTelegramIcon.png";
+import TaskYoutube from "../../public/assets/TaskYoutubeIcon.png";
+import TaskX from "../../public/assets/TaskXIcon.png";
+import SparkyIcon from "../../public/assets/SparkyIcon.png";
 import { supabase } from "@/lib/supabase";
 import {
   PlatformType,
@@ -16,25 +16,25 @@ import {
   SpecialTask,
   CampaignTask,
 } from "@/app/types/Customer";
-
+import SpinIcon from "../../public/assets/SpinIcon.png";
 import { getPlatformName } from "../lib/platformUtils";
 import SpecialTaskPopup from "./components/TaskPopup";
-
+import TaskCompletedDiamond from "../../public/assets/TaskCompletedDiamond.png";
 import WelcomeToEarnPopup from "./components/welcometoearnpopup";
 import { useEarnPageVisit } from "../hooks/useEarnPageVisit";
 import { useUser } from "@/app/hooks/useUser";
-
+import TreasureBox from "../../public/assets/TreasureBox.png";
 import DailyRewardTimer from "./components/DailyRewardTimer";
-
+import CampaignIconBackground from "../../public/assets/Earn/campaignicongb.png";
 
 const platformIcons = {
-  TELEGRAM_CHANNEL: "/assets/TaskTelegramIcon.png",
-  TELEGRAM_GROUP: "/assets/TaskTelegramIcon.png",
-  X: "/assets/TaskXIcon.png",
-  YOUTUBE_VIEWS: "/assets/TaskYoutubeIcon.png",
-  YOUTUBE_SUBSCRIBERS: "/assets/TaskYoutubeIcon.png",
-  YOUTUBE: "/assets/TaskYoutubeIcon.png",
-  TELEGRAM: "/assets/TaskTelegramIcon.png",
+  TELEGRAM_CHANNEL: TaskTelegram.src,
+  TELEGRAM_GROUP: TaskTelegram.src,
+  X: TaskX.src,
+  YOUTUBE_VIEWS: TaskYoutube.src,
+  YOUTUBE_SUBSCRIBERS: TaskYoutube.src,
+  YOUTUBE: TaskYoutube.src,
+  TELEGRAM: TaskTelegram.src,
 };
 
 const getGradientForPlatform = (platform: PlatformType): string => {
@@ -434,7 +434,7 @@ export default function EarnPage() {
                         </h3>
                         <div className="flex items-center gap-2 mt-2 text-sm">
                           <Image
-                            src="/assets/SparkyIcon.png"
+                            src={SparkyIcon}
                             alt="Sparky"
                             width={20}
                             height={20}
@@ -443,7 +443,7 @@ export default function EarnPage() {
                             {task.coins.toLocaleString()}
                           </span>
                           <Image
-                            src="/assets/SpinIcon.png"
+                            src={SpinIcon}
                             alt="Spins"
                             width={20}
                             height={20}
@@ -457,7 +457,7 @@ export default function EarnPage() {
                       {task.completed && (
                         <div className="flex-shrink-0 ml-2">
                           <Image
-                            src="/assets/TaskCompletedDiamond.png"
+                            src={TaskCompletedDiamond}
                             alt="Task Completed"
                             width={20}
                             height={20}
@@ -513,7 +513,7 @@ export default function EarnPage() {
                         <div className="relative w-12 h-12 flex items-center justify-center">
                           {/* Background image behind the logo */}
                           <Image
-                            src="/assets/Earn/campaignicongb.png"
+                            src={CampaignIconBackground}
                             alt="Logo Background"
                             fill
                             className="absolute inset-0 rounded-full object-cover z-0"
@@ -559,7 +559,7 @@ export default function EarnPage() {
                           </div>
                         </div>
                         <Image
-                          src="/assets/TreasureBox.png"
+                          src={TreasureBox}
                           alt="TreasureBox"
                           width={24}
                           height={24}
@@ -570,7 +570,7 @@ export default function EarnPage() {
                       <div className="flex items-center gap-2.5 mt-2">
                         <div className="flex items-center gap-1">
                           <Image
-                            src="/assets/SparkyIcon.png"
+                            src={SparkyIcon}
                             alt="Sparky"
                             width={16}
                             height={16}
@@ -582,7 +582,7 @@ export default function EarnPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Image
-                            src="/assets/SpinIcon.png"
+                            src={SpinIcon}
                             alt="Spins"
                             width={16}
                             height={16}

@@ -15,7 +15,7 @@ import { useGame } from "@/app/context/GameContext";
 import { useWebApp } from "@/app/hooks/useWebApp";
 import { useRouter } from "next/navigation";
 import TaskPopup, { socialIcons } from "@/app/earn/components/TaskPopup";
-
+import TaskCompletedDiamond from "../../../public/assets/Earn/TaskCompletedDiamond.png";
 import Image from "next/image";
 
 interface SocialTask {
@@ -178,7 +178,7 @@ const SocialTasksPage = () => {
                 {task.completed && (
                   <div className="absolute -top-2 -right-2 z-10">
                     <Image
-                      src="/assets/Earn/TaskCompletedDiamond.png"
+                      src={TaskCompletedDiamond}
                       alt="Completed"
                       width={32}
                       height={32}

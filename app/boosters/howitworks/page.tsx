@@ -4,7 +4,14 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from 'next/image'
 import { useWebApp } from "@/app/hooks/useWebApp";
-// Remove image imports - we'll use src paths instead
+import boosttappower from "@/public/assets/boosttappower.png";
+import playendlessly from '@/public/assets/playendlessly.png'
+import winwithfriends from '@/public/assets/winwithfriends.png'
+import boostwithreward from '@/public/assets/boostwithreward.png'
+import xicon from '@/public/assets/xicon.png'
+import telegramicon from '@/public/assets/telegramicon.png'
+import discordicon from '@/public/assets/discordicon.png'
+import websiteicon from "@/public/assets/websiteicon.png";
 
 const HowItWorksPage = () => {
   const router = useRouter();
@@ -35,7 +42,7 @@ const HowItWorksPage = () => {
       <div className="container mx-auto pt-10 text-center space-y-4 h-full">
         <div className="relative w-full max-w-[200px] mx-auto mb-4">
           <Image
-            src="/assets/boostwithreward.png"
+            src={boostwithreward}
             alt="Boost With Rewards"
             width={200}
             height={200}
@@ -60,7 +67,7 @@ const HowItWorksPage = () => {
         <div className=" p-4 rounded-lg">
           <div className="flex items-center gap-4">
             <Image
-              src="/assets/boosttappower.png"
+              src={boosttappower}
               alt="Boost Tap Power"
               width={48}
               height={48}
@@ -80,7 +87,7 @@ const HowItWorksPage = () => {
         <div className="p-4 rounded-lg">
           <div className="flex items-center gap-4">
             <Image
-              src="/assets/playendlessly.png"
+              src={playendlessly}
               alt="Play Endlessly"
               width={48}
               height={48}
@@ -101,7 +108,7 @@ const HowItWorksPage = () => {
         <div className=" p-4 rounded-lg">
           <div className="flex items-center gap-4">
             <Image
-              src="/assets/winwithfriends.png"
+              src={winwithfriends}
               alt="Win With Friends"
               width={48}
               height={48}
@@ -122,13 +129,13 @@ const HowItWorksPage = () => {
       {/* Social Links */}
       <div className="mt-8 grid grid-cols-2 gap-4">
         <a
-          href="https://t.me/SparkyTapGame"
+          href="https://t.me/devphoenixbot"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-6 rounded-lg"
         >
           <Image
-            src="/assets/telegramicon.png"
+            src={telegramicon}
             alt="Telegram"
             width={32}
             height={32}
@@ -144,7 +151,7 @@ const HowItWorksPage = () => {
           className="flex items-center bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-6 rounded-lg"
         > 
           <Image
-            src="/assets/xicon.png"
+            src={xicon}
             alt="X (Twitter)"
             width={32}
             height={32}
@@ -160,7 +167,7 @@ const HowItWorksPage = () => {
           className="flex items-center bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-6 rounded-lg"
         >
           <Image
-            src="/assets/discordicon.png"
+            src={discordicon}
             alt="Discord"
             width={32}
             height={32}
@@ -176,7 +183,7 @@ const HowItWorksPage = () => {
           className="flex items-center bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-6 rounded-lg"
         >
           <Image
-            src="/assets/websiteicon.png"
+            src={websiteicon}
             alt="Website"
             width={30}
             height={28}

@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import Image from "next/image";
-// Remove image imports - we'll use src paths instead
+import DailyRewardsCongratulations from "../../../public/assets/Earn/DailyRewardsCongratulations.png";
+import Close from "@/public/assets/Close.png";
 import CustomYellowButton from '@/app/ui/CustomYellowButton';
 
 interface DailyRewardsSuccessProps {
@@ -24,7 +25,7 @@ const DailyRewardsSuccess: NextPage<DailyRewardsSuccessProps> = ({ coins, onClos
             onClick={onClose}
             className="absolute top-4 right-4 z-10 text-gray-400 hover:text-white"
           >
-            <Image src="/assets/Close.png" alt="Close" width={32} height={32} />
+            <Image src={Close.src} alt="Close" width={32} height={32} />
           </button>
 
           {/* Main Content */}
@@ -32,7 +33,7 @@ const DailyRewardsSuccess: NextPage<DailyRewardsSuccessProps> = ({ coins, onClos
             {/* Congratulations Image */}
             <div className="relative">
               <Image
-                src="/assets/Earn/DailyRewardsCongratulations.png"
+                src={DailyRewardsCongratulations}
                 alt="Congratulations"
                 width={200}
                 height={100}

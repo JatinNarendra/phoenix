@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { useProgression } from "../context/ProgressionContext";
-// Remove image imports - we'll use src paths instead
+import SpinBackground from "../../public/assets/SpinBackground.png";
 import { useGame } from "../context/GameContext";
 import "./spin.css";
 import { useRouter } from "next/navigation";
@@ -2678,7 +2678,7 @@ GameState spins: ${gameState.spins}
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-black">
       <div className="absolute inset-0 z-0">
         <Image
-          src="/assets/SpinBackground.png"
+          src={SpinBackground}
           alt="Spin Background"
           fill
           sizes="100vw"
@@ -2695,7 +2695,7 @@ GameState spins: ${gameState.spins}
           <div
             className="relative px-8 py-4 w-full h-full flex flex-col items-center"
             style={{
-              backgroundImage: `url(/assets/SpinBackground.png)`,
+              backgroundImage: `url(${SpinBackground.src})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}

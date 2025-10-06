@@ -1,7 +1,9 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-// Remove image imports - we'll use src paths instead
+import Close from "../../public/assets/Close.png";
+import SparkyIcon from "../../public/assets/SparkyIcon.png";
+import EnergyCapacityIcon from "../../public/assets/energycapacity.png";
 import { useGame } from "../context/GameContext";
 import { energyConfig } from "../utility/energyConfig";
 import CustomYellowButton from "@/app/ui/CustomYellowButton";
@@ -12,11 +14,7 @@ interface EnergyCapacityPopupProps {
   onUpgrade: () => void;
 }
 
-const EnergyCapacityPopup: React.FC<EnergyCapacityPopupProps> = ({
-  onClose,
-  isOpen,
-  onUpgrade,
-}) => {
+const EnergyCapacityPopup: React.FC<EnergyCapacityPopupProps> = ({ onClose, isOpen, onUpgrade }) => {
   const { gameState } = useGame();
   const currentLevel = gameState.upgrades?.energyLevel || 1;
   const nextLevelConfig = energyConfig[currentLevel + 1];
@@ -38,18 +36,13 @@ const EnergyCapacityPopup: React.FC<EnergyCapacityPopupProps> = ({
                 onClick={onClose}
                 className="text-gray-400 hover:text-white"
               >
-                <Image
-                  src="/assets/Close.png"
-                  alt="Close"
-                  width={32}
-                  height={32}
-                />
+                <Image src={Close.src} alt="Close" width={32} height={32} />
               </button>
             </div>
 
             <div className="flex flex-col items-center space-y-6">
               <Image
-                src="/assets/energycapacity.png"
+                src={EnergyCapacityIcon}
                 alt="Energy Capacity"
                 width={120}
                 height={120}
@@ -67,7 +60,7 @@ const EnergyCapacityPopup: React.FC<EnergyCapacityPopupProps> = ({
 
               <div className="flex items-center justify-center space-x-2">
                 <Image
-                  src="/assets/SparkyIcon.png"
+                  src={SparkyIcon}
                   alt="Spark"
                   width={24}
                   height={24}
@@ -76,6 +69,7 @@ const EnergyCapacityPopup: React.FC<EnergyCapacityPopupProps> = ({
                 <span className="text-2xl font-bold text-white">
                   {nextLevelConfig?.upgradePrice.toLocaleString()}
                 </span>
+                
               </div>
 
               <div className="pt-4 flex justify-center w-full">

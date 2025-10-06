@@ -5,12 +5,12 @@ import { useGame } from "../context/GameContext";
 import { useProgression } from "../context/ProgressionContext";
 
 // Images
-
-// Remove image imports - we'll use src paths instead
-
-
-
-
+import PhoenixIcon from "../../public/assets/spin/charactertokenpheonix.png";
+import BrownQuestionMarkDiamond from "../../public/assets/spin/brownquestionmarkdiamond.png";
+import SparkIcon from "../../public/assets/spin/sparkicon.png";
+import CharacterTokenSpin from "../../public/assets/spin/charactertokenspin.png";
+import CharacterTokenTurbo from "../../public/assets/TurboIcon.png";
+import CharacterTokenRecharge from "../../public/assets/RechargeIcon.png";
 
 interface CharacterProgressionBarProps {
   sparkEarned?: number;
@@ -32,66 +32,52 @@ interface ProgressState {
   lastUpdate: number;
 }
 
-type ProgressAction =
-  | {
-      type: "UPDATE_PROGRESS";
-      payload: { tokens: number; step: number; requiredTokens: number };
-    }
-  | { type: "RESET"; payload: ProgressState };
+type ProgressAction = 
+  | { type: 'UPDATE_PROGRESS'; payload: { tokens: number; step: number; requiredTokens: number } }
+  | { type: 'RESET'; payload: ProgressState };
 
-const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
-  sparkEarned,
-  resetTotal,
-  totalRewards,
-  isSpinning,
-}) => {
+const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({ sparkEarned, resetTotal, totalRewards, isSpinning }) => {
   const { gameState } = useGame();
   const { getProgressionType } = useProgression();
   const router = useRouter();
-
+  
   // Store the current session spark earned value
   const [totalSparkEarned, setTotalSparkEarned] = useState<number>(0);
-
+  
   // Add animation state for progress bar
   const [animateProgress, setAnimateProgress] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [animateIcon, setAnimateIcon] = useState(false);
-
+  
   // Use reducer for progress state
-  const [progressState, dispatchProgress] = useReducer(
-    (state: ProgressState, action: ProgressAction): ProgressState => {
-      switch (action.type) {
-        case "UPDATE_PROGRESS":
-          // Only update if new tokens are higher or step changed
-          if (
-            action.payload.tokens > state.currentTokens ||
-            action.payload.step !== state.currentStep
-          ) {
-            return {
-              ...state,
-              currentTokens: action.payload.tokens,
-              currentStep: action.payload.step,
-              requiredTokens: action.payload.requiredTokens,
-              lastUpdate: Date.now(),
-            };
-          }
-          return state;
-        case "RESET":
+  const [progressState, dispatchProgress] = useReducer((state: ProgressState, action: ProgressAction): ProgressState => {
+    switch (action.type) {
+      case 'UPDATE_PROGRESS':
+        // Only update if new tokens are higher or step changed
+        if (action.payload.tokens > state.currentTokens || action.payload.step !== state.currentStep) {
           return {
-            ...action.payload,
-            lastUpdate: Date.now(),
+            ...state,
+            currentTokens: action.payload.tokens,
+            currentStep: action.payload.step,
+            requiredTokens: action.payload.requiredTokens,
+            lastUpdate: Date.now()
           };
-        default:
-          return state;
-      }
-    },
-    {
-      currentTokens: 0,
-      currentStep: 0,
-      requiredTokens: 0,
-      lastUpdate: 0,
+        }
+        return state;
+      case 'RESET':
+        return {
+          ...action.payload,
+          lastUpdate: Date.now()
+        };
+      default:
+        return state;
     }
-  );
+  }, {
+    currentTokens: 0,
+    currentStep: 0,
+    requiredTokens: 0,
+    lastUpdate: 0
+  });
 
   // Update totalSparkEarned when sparkEarned changes
   useEffect(() => {
@@ -105,186 +91,165 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
     if (resetTotal) {
       setTotalSparkEarned(0);
       dispatchProgress({
-        type: "RESET",
+        type: 'RESET',
         payload: {
           currentTokens: 0,
           currentStep: 0,
           requiredTokens: 0,
-          lastUpdate: Date.now(),
-        },
+          lastUpdate: Date.now()
+        }
       });
     }
   }, [resetTotal]);
 
   // Add a visual indication that a new reward was added
   const [isNewReward, setIsNewReward] = useState(false);
-
+  
   useEffect(() => {
     if (sparkEarned !== undefined && sparkEarned > 0) {
       // Trigger animation when new reward is added
       setIsNewReward(true);
-
+      
       // Reset animation after a short delay
       const timer = setTimeout(() => {
         setIsNewReward(false);
       }, 300);
-
+      
       return () => clearTimeout(timer);
     }
   }, [sparkEarned]);
-
+  
   // Add effect to detect changes in character progression
   useEffect(() => {
     if (!gameState.characterProgression) return;
-
-    const { currentTokens, currentStep, requiredTokens } =
-      gameState.characterProgression;
+    
+    const { currentTokens, currentStep, requiredTokens } = gameState.characterProgression;
     const now = Date.now();
-
+    
     // Prevent rapid updates (debounce)
     if (now - progressState.lastUpdate < 100) {
       return;
     }
-
+    
     // Always update the state from gameState.characterProgression
     dispatchProgress({
-      type: "UPDATE_PROGRESS",
+      type: 'UPDATE_PROGRESS',
       payload: {
         tokens: currentTokens,
         step: currentStep,
-        requiredTokens,
-      },
+        requiredTokens
+      }
     });
-
+    
     // Trigger animation
     setAnimateProgress(true);
     setAnimateIcon(true);
-
+    
     // Reset animation after delay
     const timer = setTimeout(() => {
       setAnimateProgress(false);
       setAnimateIcon(false);
     }, 1000);
-
+    
     return () => clearTimeout(timer);
-  }, [gameState.characterProgression, progressState.lastUpdate]);
-
+  }, [
+    gameState.characterProgression,
+    progressState.lastUpdate,
+  ]);
+  
   // Add effect to update icon when step changes
   useEffect(() => {
     const characterProgression = gameState.characterProgression;
     if (!characterProgression) return;
-
+    
     setAnimateIcon(true);
     const timer = setTimeout(() => {
       setAnimateIcon(false);
     }, 800);
-
+    
     return () => clearTimeout(timer);
-  }, [
-    gameState.characterProgression?.currentStep,
-    gameState.characterProgression,
-  ]);
+  }, [gameState.characterProgression?.currentStep, gameState.characterProgression]);
 
   // Reset max progress when step changes
   useEffect(() => {
     if (gameState.characterProgression) {
       // Step change detected, no need to log
     }
-  }, [
-    gameState.characterProgression?.currentStep,
-    gameState.characterProgression,
-  ]);
-
+  }, [gameState.characterProgression?.currentStep, gameState.characterProgression]);
+  
   // Early return if no progression data
   if (!gameState.characterProgression) {
     return null;
   }
-
+  
   const { tokenType } = gameState.characterProgression;
   const { currentTokens, requiredTokens, currentStep } = progressState;
-
+  
   // Calculate progress percentage
-  const progressPercentage = Math.min(
-    100,
-    (currentTokens / requiredTokens) * 100
-  );
-
+  const progressPercentage = Math.min(100, (currentTokens / requiredTokens) * 100);
+  
   const getCurrentStep = () => {
     const progressionType = getProgressionType(tokenType);
-    if (
-      !progressionType?.steps ||
-      currentStep >= progressionType.steps.length ||
-      currentStep < 0
-    ) {
+    if (!progressionType?.steps || currentStep >= progressionType.steps.length || currentStep < 0) {
       return null;
     }
     return progressionType.steps[currentStep];
   };
-
+  
   const getRewardIcon = () => {
     const currentStepReward = getCurrentStep();
-    if (!currentStepReward) return "/assets/spin/sparkicon.png";
+    if (!currentStepReward) return SparkIcon;
 
     // If current step is completed, get the next step's reward
-    if (
-      gameState.characterProgression?.currentTokens !== undefined &&
-      gameState.characterProgression?.requiredTokens !== undefined &&
-      gameState.characterProgression.currentTokens >=
-        gameState.characterProgression.requiredTokens
-    ) {
-      const progressionType = getProgressionType(
-        gameState.characterProgression.tokenType
-      );
+    if (gameState.characterProgression?.currentTokens !== undefined && 
+        gameState.characterProgression?.requiredTokens !== undefined &&
+        gameState.characterProgression.currentTokens >= gameState.characterProgression.requiredTokens) {
+      const progressionType = getProgressionType(gameState.characterProgression.tokenType);
       const nextStep = progressionType?.steps[currentStep + 1];
       if (nextStep?.reward) {
         if (nextStep.reward.spark) {
-          return "/assets/spin/sparkicon.png";
+          return SparkIcon;
         } else if (nextStep.reward.spins) {
-          return "/assets/spin/charactertokenspin.png";
+          return CharacterTokenSpin;
         } else if (nextStep.reward.turbo) {
-          return "/assets/TurboIcon.png";
+          return CharacterTokenTurbo;
         } else if (nextStep.reward.recharge) {
-          return "/assets/RechargeIcon.png";
+          return CharacterTokenRecharge;
         }
       }
     }
 
     // Default to current step's reward
     if (currentStepReward.reward?.spark) {
-      return "/assets/spin/sparkicon.png";
+      return SparkIcon;
     } else if (currentStepReward.reward?.spins) {
-      return "/assets/spin/charactertokenspin.png";
+      return CharacterTokenSpin;
     } else if (currentStepReward.reward?.turbo) {
-      return "/assets/TurboIcon.png";
+      return CharacterTokenTurbo;
     } else if (currentStepReward.reward?.recharge) {
-      return "/assets/RechargeIcon.png";
+      return CharacterTokenRecharge;
     }
-    return "/assets/spin/sparkicon.png";
+    return SparkIcon;
   };
-
+  
   const getRewardValue = () => {
     const currentStepReward = getCurrentStep();
     if (!currentStepReward?.reward) return "";
-
+    
     const formatLargeNumber = (num: number) => {
       if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + "M";
+        return (num / 1000000).toFixed(1) + 'M';
       } else if (num >= 1000) {
-        return (num / 1000).toFixed(1) + "K";
+        return (num / 1000).toFixed(1) + 'K';
       }
       return num.toString();
     };
-
+    
     // If current step is completed, get the next step's reward
-    if (
-      gameState.characterProgression?.currentTokens !== undefined &&
-      gameState.characterProgression?.requiredTokens !== undefined &&
-      gameState.characterProgression.currentTokens >=
-        gameState.characterProgression.requiredTokens
-    ) {
-      const progressionType = getProgressionType(
-        gameState.characterProgression.tokenType
-      );
+    if (gameState.characterProgression?.currentTokens !== undefined && 
+        gameState.characterProgression?.requiredTokens !== undefined &&
+        gameState.characterProgression.currentTokens >= gameState.characterProgression.requiredTokens) {
+      const progressionType = getProgressionType(gameState.characterProgression.tokenType);
       const nextStep = progressionType?.steps[currentStep + 1];
       if (nextStep?.reward) {
         if (nextStep.reward.spark) {
@@ -311,21 +276,18 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
     }
     return "";
   };
-
+  
   return (
     <div className="w-fit mx-auto relative backdrop-blur-[21px] rounded-[12px] bg-black/60 border border-[#E2902966] h-[96px] flex flex-col items-center justify-center p-[0px_14px] text-left text-white font-['Rounded_Mplus_1c']">
       <div className="w-[240px] relative h-[65px]">
+       
         {/* Spark Earned - Only show current spin session rewards */}
         {!isSpinning && (
-          <div
-            className={`absolute top-0 left-[calc(50%-63px)] text-[20px] leading-[140%] font-black tracking-[-0.02em] text-center ${
-              isNewReward ? "scale-110 text-[#FFA501]" : ""
-            } transition-all duration-300`}
-          >
+          <div className={`absolute top-0 left-[calc(50%-63px)] text-[20px] leading-[140%] font-black tracking-[-0.02em] text-center ${isNewReward ? 'scale-110 text-[#FFA501]' : ''} transition-all duration-300`}>
             <div className="flex items-center">
               <div className="w-5 h-5 relative mr-1">
                 <Image
-                  src="/assets/spin/sparkicon.png"
+                  src={SparkIcon}
                   alt="Coins"
                   width={20}
                   height={20}
@@ -333,8 +295,7 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
                 />
               </div>
               <span className="text-white">
-                {totalRewards?.coins?.toLocaleString() ||
-                  totalSparkEarned.toLocaleString()}
+                {totalRewards?.coins?.toLocaleString() || totalSparkEarned.toLocaleString()}
               </span>
             </div>
           </div>
@@ -346,18 +307,15 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
           <div className="absolute top-[11px] left-[calc(50%-110px)] w-[200px] h-[20px]">
             {/* Character progress background */}
             <div className="absolute -top-[1px] -left-[1px] w-[calc(100%+2px)] h-[22px] rounded-[40px] bg-[#301402] border border-[#FFA501] border-opacity-40 box-border flex flex-col items-start justify-start" />
-
+            
             {/* Character progress fill */}
-            <div
-              className={`absolute top-0 left-0 h-[20px] bg-[#FFA501] rounded-[40px] ${
-                animateProgress ? "transition-all duration-1000 ease-out" : ""
-              }`}
-              style={{
+            <div 
+              className={`absolute top-0 left-0 h-[20px] bg-[#FFA501] rounded-[40px] ${animateProgress ? 'transition-all duration-1000 ease-out' : ''}`}
+              style={{ 
                 width: `${Math.min(progressPercentage, 100) * 2}px`,
-                borderRadius:
-                  progressPercentage < 100 ? "40px 0 0 40px" : "40px",
-                transform: "translateZ(0)", // Force hardware acceleration
-                willChange: "width", // Optimize for width animations
+                borderRadius: progressPercentage < 100 ? '40px 0 0 40px' : '40px',
+                transform: 'translateZ(0)', // Force hardware acceleration
+                willChange: 'width' // Optimize for width animations
               }}
             />
 
@@ -370,7 +328,7 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
           {/* Spark Character icon (left side) */}
           <div className="absolute left-[-8px] top-[2px]">
             <Image
-              src="/assets/spin/charactertokenpheonix.png"
+              src={PhoenixIcon}
               alt="Spark Character"
               width={32}
               height={32}
@@ -397,12 +355,9 @@ const CharacterProgressionBar: React.FC<CharacterProgressionBarProps> = ({
 
         {/* Question mark group */}
         <div className="absolute top-[52px] left-[226px] text-[15px]">
-          <div
-            className="absolute w-[20px] h-[20px] -top-[2px]"
-            onClick={() => router.push("/spin/how-it-works")}
-          >
-            <Image
-              src="/assets/spin/brownquestionmarkdiamond.png"
+          <div className="absolute w-[20px] h-[20px] -top-[2px]" onClick={() => router.push('/spin/how-it-works')}>
+            <Image  
+              src={BrownQuestionMarkDiamond}
               alt="Question Mark Background"
               width={25}
               height={29}

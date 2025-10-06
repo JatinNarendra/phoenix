@@ -3,7 +3,14 @@ import Image from "next/image";
 import { useUser } from "@/app/hooks/useUser";
 import { gameToast } from "@/app/utility/customToast";
 import { PlatformType } from "@/app/types/Customer";
-// Remove image imports - we'll use src paths instead
+import SparkyIcon from "@/public/assets/SparkyIcon.png";
+import SpinIcon from "@/public/assets/SpinIcon.png";
+import Close from "@/public/assets/Close.png";
+import TaskYoutubeIcon from "../../../public/assets/TaskYoutubeIcon.png";
+import TaskTelegramIcon from "../../../public/assets/TaskTelegramIcon.png";
+import TaskXIcon from "../../../public/assets/TaskXIcon.png";
+import TaskDiscordIcon from "../../../public/assets/discordicon.png";
+import TaskCompletedDiamond from "../../../public/assets/TaskCompletedDiamond.png";
 import { supabase } from "@/lib/supabase";
 
 interface TaskCompletedProps {
@@ -18,13 +25,13 @@ interface TaskCompletedProps {
 }
 
 const platformIcons = {
-  TELEGRAM_CHANNEL: "/assets/TaskTelegramIcon.png",
-  TELEGRAM_GROUP: "/assets/TaskTelegramIcon.png",
-  X: "/assets/TaskXIcon.png",
-  X_RETWEET: "/assets/TaskXIcon.png",
-  YOUTUBE_VIEWS: "/assets/TaskYoutubeIcon.png",
-  YOUTUBE_SUBSCRIBERS: "/assets/TaskYoutubeIcon.png",
-  DISCORD: "/assets/discordicon.png",
+  TELEGRAM_CHANNEL: TaskTelegramIcon,
+  TELEGRAM_GROUP: TaskTelegramIcon,
+  X: TaskXIcon,
+  X_RETWEET: TaskXIcon,
+  YOUTUBE_VIEWS: TaskYoutubeIcon,
+  YOUTUBE_SUBSCRIBERS: TaskYoutubeIcon,
+  DISCORD: TaskDiscordIcon,
 };
 
 const platformLabels = {
@@ -134,12 +141,7 @@ const TaskCompletedPopup: React.FC<TaskCompletedProps> = ({
                 onClick={handleCloseWithAnimation}
                 className="text-gray-400 hover:text-white"
               >
-                <Image
-                  src="/assets/Close.png"
-                  alt="Close"
-                  width={32}
-                  height={32}
-                />
+                <Image src={Close} alt="Close" width={32} height={32} />
               </button>
             </div>
 
@@ -160,7 +162,7 @@ const TaskCompletedPopup: React.FC<TaskCompletedProps> = ({
                   <div className="relative backdrop-blur-[14px] bg-black rounded-[12px] border border-[#E29029]/30 flex items-center justify-center px-4 py-3">
                     <div className="flex items-center gap-2 ">
                       <Image
-                        src="/assets/SparkyIcon.png"
+                        src={SparkyIcon}
                         alt="Sparky"
                         width={18}
                         height={18}
@@ -176,12 +178,7 @@ const TaskCompletedPopup: React.FC<TaskCompletedProps> = ({
                 <div className="relative w-auto">
                   <div className="relative backdrop-blur-[14px] bg-black rounded-[12px] border border-[#E29029]/30 flex items-center justify-center px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <Image
-                        src="/assets/SpinIcon.png"
-                        alt="Spin"
-                        width={18}
-                        height={18}
-                      />
+                      <Image src={SpinIcon} alt="Spin" width={18} height={18} />
                       <span className="text-[#E18700] text-[14px] font-medium">
                         +{spinValue}
                       </span>
@@ -205,7 +202,7 @@ const TaskCompletedPopup: React.FC<TaskCompletedProps> = ({
                 {/* Success Message */}
                 <div className="flex items-center gap-2 px-2 mt-4">
                   <Image
-                    src="/assets/TaskCompletedDiamond.png"
+                    src={TaskCompletedDiamond}
                     alt="Success"
                     width={24}
                     height={24}
