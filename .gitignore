@@ -54,3 +54,6 @@ supabase/.temp/
 *.bak
 *.backup
 .env*.local
+public/*.png
+public/*.jpg
+public/*.jpeg
