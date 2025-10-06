@@ -5,7 +5,12 @@ import { useUser } from "@/app/hooks/useUser";
 import { useWebApp } from "@/app/hooks/useWebApp";
 
 export const UserInitializationDebugger = () => {
-  const { instance: WebApp, isReady } = useWebApp();
+  // Only show in development and client-side
+  if (typeof window === "undefined" || process.env.NODE_ENV !== "development") {
+    return null;
+  }
+
+  const { instance: WebApp, isReady } = useWebApp(true);
   const user = useUser();
   const [logs, setLogs] = useState<string[]>([]);
 
@@ -33,11 +38,6 @@ export const UserInitializationDebugger = () => {
     addLog(`User ID: ${user.id}`);
     addLog(`User Initialized: ${user.isInitialized?.() || false}`);
   }, [WebApp, isReady, user]);
-
-  // Only show in development
-  if (process.env.NODE_ENV !== "development") {
-    return null;
-  }
 
   return (
     <div
