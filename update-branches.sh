@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Script to update staging and prod branches from dev
+# Script to update staging, prod, and live branches from dev
 # Assumes:
 # - You are on the dev branch with no uncommitted changes.
 # - Remote is named 'origin'.
-# - Branches: dev, staging, prod.
+# - Branches: dev, staging, prod, live.
 # Run this script from your repo root: ./update-branches.sh
 
 # Function to prompt for confirmation
@@ -59,9 +59,22 @@ fi
 confirm "Push updated prod to origin?"
 git push origin prod
 
+# Step 3: Update live from dev
+confirm "Proceed to update live?"
+git checkout live
+git pull origin live
+confirm "Merge dev into live?"
+git merge dev --allow-unrelated-histories
+if [ $? -ne 0 ]; then
+    echo "Merge conflict detected. Resolve manually, then rerun or continue manually."
+    exit 1
+fi
+confirm "Push updated live to origin?"
+git push origin live
+
 # Return to dev
 git checkout dev
 
 echo ""
 echo "Update complete! Verify on remote."
-echo "All branches should now be synchronized."
+echo "All branches (dev, staging, prod, live) should now be synchronized."
