@@ -1,0 +1,2585 @@
+{
+  "timestamp": "2025-09-12T04:55:26.195Z",
+  "database": {
+    "url": "https://xmsyjijnribmnfundfto.supabase.co",
+    "project_id": "xmsyjijnribmnfundfto"
+  },
+  "tables": {
+    "telegram_users": {
+      "table": "telegram_users",
+      "data": [
+        {
+          "user_id": "7872656056",
+          "username": "Oxliliput",
+          "first_name": "Liliput",
+          "last_name": null,
+          "language_code": "en",
+          "photo_url": "https://t.me/i/userpic/320/DGkTOECi0y1tUwxVSD_45GyVnHffvsKJg5EiNGa9eHsgd5g6w3F2QUwvvMMuEJAc.svg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 0,
+            "spins": 50,
+            "stage": 1,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 0,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 0,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "7872656056",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 1,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 1,
+            "spinLimit": 5,
+            "spinTimer": 0,
+            "isSpinning": false,
+            "lastUpdate": 1754934524912,
+            "totalCoins": 0,
+            "totalSpins": 0,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-08-11T17:48:44.101Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 0,
+              "user_id": "7872656056",
+              "maxStreak": 0,
+              "collectedDays": {},
+              "currentStreak": 0,
+              "lastCollected": "1970-01-01T00:00:00.000Z"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 1500,
+            "spinProgression": {
+              "reward": {
+                "type": "turbo",
+                "value": 3
+              },
+              "currentStep": 0,
+              "currentType": 20,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 4,
+              "collectedTokens": 0,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 500,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "characterProgression": {
+              "tokenType": 21,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1755129600000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-08-11T17:48:43.781+00:00",
+          "last_active": "2025-08-11T17:49:32.173+00:00",
+          "created_at": "2025-08-11T17:48:43.781+00:00",
+          "updated_at": "2025-08-11T17:49:32.316139+00:00",
+          "referred_by": "7073813239",
+          "pending_referral_claim": true,
+          "last_updated": "2025-08-11T17:48:44.330787+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        },
+        {
+          "user_id": "123456789",
+          "username": "testuser",
+          "first_name": "Test",
+          "last_name": "User",
+          "language_code": "en",
+          "photo_url": "https://example.com/photo.jpg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 5000,
+            "level": 5,
+            "spins": 109,
+            "stage": 5,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 0,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 0,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "123456789",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 1,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 1,
+            "spinLimit": 5,
+            "spinTimer": 1757623799293,
+            "isSpinning": false,
+            "lastUpdate": 1757626151672,
+            "totalCoins": 0,
+            "totalSpins": 1,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-09-11T16:40:01.165Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 0,
+              "user_id": "123456789",
+              "maxStreak": 0,
+              "collectedDays": {},
+              "currentStreak": 0,
+              "lastCollected": "1970-01-01T00:00:00.000Z"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 1500,
+            "spinProgression": {
+              "reward": {
+                "type": "turbo",
+                "value": 3
+              },
+              "currentStep": 0,
+              "currentType": 8,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 4,
+              "collectedTokens": 0,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 0,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "characterProgression": {
+              "tokenType": 9,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1757721600000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-09-11T16:40:00.392+00:00",
+          "last_active": "2025-09-11T21:30:21.653+00:00",
+          "created_at": "2025-09-11T16:40:00.392+00:00",
+          "updated_at": "2025-09-11T21:30:21.679916+00:00",
+          "referred_by": null,
+          "pending_referral_claim": false,
+          "last_updated": "2025-09-11T16:40:01.478292+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        },
+        {
+          "user_id": "557493950",
+          "username": "Neo_world88",
+          "first_name": "Neo",
+          "last_name": null,
+          "language_code": "en",
+          "photo_url": "https://t.me/i/userpic/320/kJxrLgfbSLGtUgta-p0Nj_K-ryY9dzxon_noirn-FrA.svg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 476265,
+            "level": 10,
+            "spins": 4977,
+            "stage": 10,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 0,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 2,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "557493950",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "referral": {
+              "inviteLink": "tg://resolve?domain=phoeonixgamebot&appname=phoeonixgamebot&startapp=r_557493950",
+              "totalRewards": 0,
+              "deepLinkInvite": "tg://resolve?domain=phoeonixgamebot&appname=phoeonixgamebot&startapp=r_557493950",
+              "referredFriends": 0
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 1,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 1,
+            "spinLimit": 5,
+            "spinTimer": 0,
+            "isSpinning": false,
+            "lastUpdate": 1754300119745,
+            "totalCoins": 0,
+            "totalSpins": 33,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-08-04T09:34:39.306Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 1,
+              "user_id": "557493950",
+              "maxStreak": 1,
+              "collectedDays": {
+                "1": {
+                  "coins": 5000,
+                  "collectedAt": "2025-08-04T09:34:56.348Z"
+                }
+              },
+              "currentStreak": 1,
+              "lastCollected": "2025-08-04T09:34:56.348Z"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "lastActiveTime": 1752073403880,
+            "pendingLevelUp": false,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 1500,
+            "spinProgression": {
+              "reward": {
+                "type": "sparkcoins",
+                "value": 100000
+              },
+              "currentStep": 1,
+              "currentType": 9,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 6,
+              "collectedTokens": 1,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 0,
+            "_lastForceUpdate": 1754300096852,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "lastRechargeUpdate": 1754300111237,
+            "characterProgression": {
+              "tokenType": 18,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1754352000000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-07-07T06:27:08.94+00:00",
+          "last_active": "2025-08-04T12:15:49.779+00:00",
+          "created_at": "2025-07-07T06:27:08.94+00:00",
+          "updated_at": "2025-08-04T12:15:50.274355+00:00",
+          "referred_by": null,
+          "pending_referral_claim": false,
+          "last_updated": "2025-07-07T06:27:10.113729+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        },
+        {
+          "user_id": "6042897820",
+          "username": "JatinGhetiya",
+          "first_name": "Jatin",
+          "last_name": "Ghetiya",
+          "language_code": "en",
+          "photo_url": "https://t.me/i/userpic/320/KiHKu45F0-GNj0RbtYKokRZ26gnYfyDvOTl8MkNqAoS3teuI4YwHn-aVRWIsofyf.svg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 0,
+            "level": 1,
+            "spins": 50,
+            "stage": 1,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 0,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 0,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "6042897820",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 1,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 1,
+            "spinLimit": 5,
+            "spinTimer": 0,
+            "isSpinning": false,
+            "lastUpdate": 1757629809922,
+            "totalCoins": 0,
+            "totalSpins": 0,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-09-11T22:30:08.962Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 0,
+              "user_id": "6042897820",
+              "maxStreak": 0,
+              "collectedDays": {},
+              "currentStreak": 0,
+              "lastCollected": "1970-01-01T00:00:00.000Z"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 1500,
+            "spinProgression": {
+              "reward": {
+                "type": "turbo",
+                "value": 3
+              },
+              "currentStep": 0,
+              "currentType": 8,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 4,
+              "collectedTokens": 0,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 0,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "characterProgression": {
+              "tokenType": 9,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1757721600000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-09-11T22:30:08.518+00:00",
+          "last_active": "2025-09-11T22:31:25.503+00:00",
+          "created_at": "2025-09-11T22:30:08.518+00:00",
+          "updated_at": "2025-09-11T22:31:26.407504+00:00",
+          "referred_by": null,
+          "pending_referral_claim": false,
+          "last_updated": "2025-09-11T22:30:10.065076+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        },
+        {
+          "user_id": "7073813239",
+          "username": "Jus_Clarke",
+          "first_name": "Jus",
+          "last_name": "Clarke",
+          "language_code": "en",
+          "photo_url": "https://t.me/i/userpic/320/6V3mnN8B6MW5XhsptAY8lJ50qDO4_9A4n_IY9L4XTIoGMkxtpuiJa8tjOx1CVxOv.svg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 290184,
+            "level": 9,
+            "spins": 50,
+            "stage": 10,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 23,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 26,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "7073813239",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "referral": {
+              "inviteLink": "tg://resolve?domain=phoeonixgamebot&appname=phoeonixgamebot&startapp=r_7073813239",
+              "totalRewards": 50000,
+              "deepLinkInvite": "tg://resolve?domain=phoeonixgamebot&appname=phoeonixgamebot&startapp=r_7073813239",
+              "referredFriends": 1
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 12,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 1,
+            "spinLimit": 5,
+            "spinTimer": 1754508745560,
+            "isSpinning": false,
+            "lastUpdate": 1754939482148,
+            "totalCoins": 50000,
+            "totalSpins": 177,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-08-11T17:47:41.741Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 1,
+              "user_id": "7073813239",
+              "maxStreak": 2,
+              "collectedDays": {
+                "1": {
+                  "coins": 5000,
+                  "collectedAt": "2025-07-14T03:08:49.826+00:00"
+                },
+                "2": {
+                  "coins": 8000,
+                  "collectedAt": "2025-06-25T06:24:51.245+00:00"
+                }
+              },
+              "currentStreak": 1,
+              "lastCollected": "2025-07-14T03:08:49.826+00:00"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "lastActiveTime": 1754939621748,
+            "pendingLevelUp": false,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 135,
+            "spinProgression": {
+              "reward": {
+                "type": "sparkcoins",
+                "value": 100000
+              },
+              "currentStep": 1,
+              "currentType": 10,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 6,
+              "collectedTokens": 0,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 500,
+            "_lastForceUpdate": 1753259925657,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "lastRechargeUpdate": 1754941353510,
+            "characterProgression": {
+              "tokenType": 21,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1755129600000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-05-26T10:29:19.762+00:00",
+          "last_active": "2025-08-11T19:42:36.791+00:00",
+          "created_at": "2025-05-26T10:29:19.762+00:00",
+          "updated_at": "2025-08-11T19:42:37.084525+00:00",
+          "referred_by": null,
+          "pending_referral_claim": false,
+          "last_updated": "2025-08-11T17:48:05.757+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        },
+        {
+          "user_id": "626124481",
+          "username": "neox08",
+          "first_name": "Neox",
+          "last_name": null,
+          "language_code": "en",
+          "photo_url": "https://t.me/i/userpic/320/vK_pZn9wogGP_i0Fd4RYD0SyZGuaqu9wfiNUXsikPRk.svg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 0,
+            "spins": 50,
+            "stage": 1,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 14,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 2,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "626124481",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 1,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 1,
+            "spinLimit": 5,
+            "spinTimer": 0,
+            "isSpinning": false,
+            "lastUpdate": 1754291450920,
+            "totalCoins": 0,
+            "totalSpins": 0,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-07-29T12:40:29.783Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 0,
+              "user_id": "626124481",
+              "maxStreak": 0,
+              "collectedDays": {},
+              "currentStreak": 0,
+              "lastCollected": "1970-01-01T00:00:00.000Z"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 1500,
+            "spinProgression": {
+              "reward": {
+                "type": "sparkcoins",
+                "value": 10000000
+              },
+              "currentStep": 11,
+              "currentType": 14,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 132,
+              "collectedTokens": 36,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 500,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "characterProgression": {
+              "tokenType": 18,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1754352000000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-07-24T16:06:37.663+00:00",
+          "last_active": "2025-08-04T07:11:08.115+00:00",
+          "created_at": "2025-07-24T16:06:37.663+00:00",
+          "updated_at": "2025-08-04T07:11:08.962531+00:00",
+          "referred_by": "557493950",
+          "pending_referral_claim": true,
+          "last_updated": "2025-07-24T16:06:40.955357+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        },
+        {
+          "user_id": "7805491129",
+          "username": "Maulinjani",
+          "first_name": "Maulin",
+          "last_name": "Jani",
+          "language_code": "en",
+          "photo_url": "https://t.me/i/userpic/320/xBiW34TVCwNxxDw05Soy8NNxubRDnp0jXtpfPkLjN4S-2gkZlIIccpWasuLjCfVg.svg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 343111,
+            "level": 10,
+            "spins": 50,
+            "stage": 10,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 10,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 2,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "7805491129",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 1,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 2,
+            "spinLimit": 5,
+            "spinTimer": 1753378743019,
+            "isSpinning": false,
+            "lastUpdate": 1753379507937,
+            "totalCoins": 0,
+            "totalSpins": 30,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-07-24T12:22:01.818Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 1,
+              "user_id": "7805491129",
+              "maxStreak": 1,
+              "collectedDays": {
+                "1": {
+                  "coins": 5000,
+                  "collectedAt": "2025-07-24T12:22:24.419Z"
+                }
+              },
+              "currentStreak": 1,
+              "lastCollected": "2025-07-24T12:22:24.419Z"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "lastActiveTime": 1753379109168,
+            "pendingLevelUp": false,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 1500,
+            "spinProgression": {
+              "reward": {
+                "type": "spins",
+                "value": 60
+              },
+              "currentStep": 5,
+              "currentType": 14,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 65,
+              "collectedTokens": 7,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 0,
+            "_lastForceUpdate": 1753359744927,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "lastRechargeUpdate": 1753359735365,
+            "characterProgression": {
+              "tokenType": 15,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1753574400000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-07-24T12:22:00.763+00:00",
+          "last_active": "2025-07-24T17:52:30.101+00:00",
+          "created_at": "2025-07-24T12:22:00.763+00:00",
+          "updated_at": "2025-07-24T17:52:31.263034+00:00",
+          "referred_by": null,
+          "pending_referral_claim": false,
+          "last_updated": "2025-07-24T12:22:02.014996+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        },
+        {
+          "user_id": "6456097705",
+          "username": "JatinNarendra",
+          "first_name": "Jatin",
+          "last_name": "Ghetiya",
+          "language_code": "en",
+          "photo_url": "https://t.me/i/userpic/320/OB-zaH2H94DSnQsGIQneT435swkqWcGvMQaUk6LKhulL4FGtbhNFXPnKK10by0zk.svg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 22540,
+            "level": 5,
+            "spins": 5259,
+            "stage": 6,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 3,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 2,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "6456097705",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 1,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 1,
+            "spinLimit": 5,
+            "spinTimer": 0,
+            "isSpinning": false,
+            "lastUpdate": 1757632931749,
+            "totalCoins": 0,
+            "totalSpins": 3,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-09-11T21:15:21.870Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 0,
+              "user_id": "6456097705",
+              "maxStreak": 0,
+              "collectedDays": {},
+              "currentStreak": 0,
+              "lastCollected": "1970-01-01T00:00:00.000Z"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 1500,
+            "spinProgression": {
+              "reward": {
+                "type": "turbo",
+                "value": 3
+              },
+              "currentStep": 0,
+              "currentType": 8,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 4,
+              "collectedTokens": 3,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 0,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "characterProgression": {
+              "tokenType": 9,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1757721600000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-07-15T05:31:47.199+00:00",
+          "last_active": "2025-09-11T23:24:04.507+00:00",
+          "created_at": "2025-07-15T05:31:47.199+00:00",
+          "updated_at": "2025-09-11T23:24:05.470546+00:00",
+          "referred_by": null,
+          "pending_referral_claim": false,
+          "last_updated": "2025-07-15T05:31:50.429675+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        },
+        {
+          "user_id": "5971667729",
+          "username": "Arthur_Sty",
+          "first_name": "Arthur",
+          "last_name": "Stanley",
+          "language_code": "en",
+          "photo_url": "https://t.me/i/userpic/320/5jRijtTHnp08HS0Q1lB7NQ9bmOKLbY_xcpALa-FSXMxnC9qyK3d8f4AeddbtrHbl.svg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 578228,
+            "level": 10,
+            "spins": 50,
+            "stage": 10,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 7,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 4,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "5971667729",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 1,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 5,
+            "spinLimit": 5,
+            "spinTimer": 1751959681998,
+            "isSpinning": false,
+            "lastUpdate": 1753359110080,
+            "totalCoins": 0,
+            "totalSpins": 56,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-07-08T07:23:05.826Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 1,
+              "user_id": "5971667729",
+              "maxStreak": 1,
+              "collectedDays": {
+                "1": {
+                  "coins": 5000,
+                  "collectedAt": "2025-07-24T12:11:58.756Z"
+                }
+              },
+              "currentStreak": 1,
+              "lastCollected": "2025-07-24T12:11:58.756Z"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "lastActiveTime": 1751970124454,
+            "pendingLevelUp": false,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 1500,
+            "spinProgression": {
+              "reward": {
+                "type": "spins",
+                "value": 60
+              },
+              "currentStep": 5,
+              "currentType": 8,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 63,
+              "collectedTokens": 0,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 0,
+            "_lastForceUpdate": 1753359117259,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "lastRechargeUpdate": 1751959532881,
+            "characterProgression": {
+              "tokenType": 15,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1753574400000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-07-07T06:27:27.402+00:00",
+          "last_active": "2025-07-24T12:12:21.002+00:00",
+          "created_at": "2025-07-07T06:27:27.402+00:00",
+          "updated_at": "2025-07-24T12:12:21.859951+00:00",
+          "referred_by": null,
+          "pending_referral_claim": false,
+          "last_updated": "2025-07-07T06:27:27.693627+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        },
+        {
+          "user_id": "557118190",
+          "username": "SxNick",
+          "first_name": "Nick",
+          "last_name": "Simon",
+          "language_code": "en",
+          "photo_url": "https://t.me/i/userpic/320/qcZj15LykI8vfm3tmTQhALJr9O1oxtsPY9s6lH7v4dU.svg",
+          "is_bot": false,
+          "stage": 1,
+          "game_state": {
+            "coins": 117950,
+            "level": 8,
+            "spins": 50,
+            "stage": 9,
+            "boosts": {
+              "autoTapUses": 3,
+              "inGameTurbo": 3,
+              "turboActive": false,
+              "maxTurboUses": 3,
+              "rewardedTurbo": 2,
+              "turboTimeLeft": 0,
+              "inGameRecharge": 3,
+              "rechargeActive": false,
+              "maxRechargeUses": 3,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rewardedRecharge": 0,
+              "rechargeRefillTime": 0
+            },
+            "timers": {
+              "turboTimeLeft": 0,
+              "turboRefillTime": 0,
+              "rechargeTimeLeft": 0,
+              "rechargeRefillTime": 0
+            },
+            "user_id": "557118190",
+            "progress": {
+              "daily": {
+                "streak": 0,
+                "lastDay": 0
+              },
+              "social": {
+                "x": [],
+                "youtube": [],
+                "telegram": []
+              }
+            },
+            "tapPower": 1,
+            "upgrades": {
+              "tapLevel": 1,
+              "spinLevel": 1,
+              "energyLevel": 1,
+              "rechargeLevel": 1
+            },
+            "spinGoals": [
+              {
+                "id": 1,
+                "icon": "3",
+                "reward": 5000,
+                "required": 10,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 2,
+                "icon": "4",
+                "reward": 7500,
+                "required": 15,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 3,
+                "icon": "8",
+                "reward": 10000,
+                "required": 35,
+                "collected": 0,
+                "completed": false
+              },
+              {
+                "id": 4,
+                "icon": "11",
+                "reward": 25000,
+                "required": 50,
+                "collected": 0,
+                "completed": false
+              }
+            ],
+            "spinLevel": 1,
+            "spinLimit": 5,
+            "spinTimer": 1751372309361,
+            "isSpinning": false,
+            "lastUpdate": 1754548613185,
+            "totalCoins": 0,
+            "totalSpins": 6,
+            "gameVersion": "1.0",
+            "socialTasks": {
+              "X": {
+                "completedTasks": []
+              },
+              "YOUTUBE_VIEWS": {
+                "completedTasks": []
+              },
+              "TELEGRAM_CHANNEL": {
+                "completedTasks": []
+              }
+            },
+            "autoTapCoins": 0,
+            "autoTapDaily": {
+              "lastReset": "2025-08-07T06:36:52.894Z",
+              "usesRemaining": 3
+            },
+            "autoTapSpark": 0,
+            "dailyRewards": {
+              "lastDay": 0,
+              "user_id": "557118190",
+              "maxStreak": 0,
+              "collectedDays": {},
+              "currentStreak": 0,
+              "lastCollected": "1970-01-01T00:00:00.000Z"
+            },
+            "RechargeLevel": 1,
+            "autoTapActive": false,
+            "autoTapClaimed": false,
+            "autoTapEndTime": 0,
+            "energyCapacity": 2500,
+            "lastActiveTime": 1754548882264,
+            "autoTapProgress": 0,
+            "autoTapTimeLeft": 0,
+            "currentRecharge": 1500,
+            "spinProgression": {
+              "reward": {
+                "type": "turbo",
+                "value": 3
+              },
+              "currentStep": 0,
+              "currentType": 18,
+              "earnedRewards": {
+                "spins": 0,
+                "turbo": 0,
+                "recharge": 0,
+                "sparkcoins": 0
+              },
+              "requiredTokens": 4,
+              "collectedTokens": 0,
+              "lastCompletedStep": null,
+              "lastCompletedType": null
+            },
+            "FlameCapacityTap": 0,
+            "autoTapStartTime": 0,
+            "minPhoenixEnergy": 0,
+            "application_state": {
+              "isAutotapActive": false,
+              "isAutotapPurchased": false,
+              "has_visited_earn_page": false
+            },
+            "autoTapTotalCoins": 0,
+            "characterProgress": {
+              "currentTokens": 0,
+              "requiredTokens": 10,
+              "currentCharacter": "3"
+            },
+            "characterProgression": {
+              "tokenType": 19,
+              "currentStep": 0,
+              "currentTokens": 0,
+              "requiredTokens": 4,
+              "nextRotationTime": 1754611200000
+            },
+            "phoenixEnergyProgress": 0
+          },
+          "last_login": "2025-07-01T07:17:46.228+00:00",
+          "last_active": "2025-08-07T07:26:19.558+00:00",
+          "created_at": "2025-07-01T07:17:46.228+00:00",
+          "updated_at": "2025-08-07T07:26:19.611279+00:00",
+          "referred_by": "7073813239",
+          "pending_referral_claim": true,
+          "last_updated": "2025-07-01T07:17:47.807983+00:00",
+          "force_refresh": false,
+          "force_refresh_reason": null,
+          "force_refresh_time": null
+        }
+      ],
+      "error": null
+    },
+    "customers": {
+      "table": "customers",
+      "data": [
+        {
+          "id": "49348629-a3aa-4585-8d78-d40456373f76",
+          "customer_name": "Sparky",
+          "logo_url": "https://xmsyjijnribmnfundfto.supabase.co/storage/v1/object/public/customer-logos/4263d985-1960-4fe2-9813-3628b5411187.jpg",
+          "slug": "sparky",
+          "email": null,
+          "social_tasks": {},
+          "created_at": "2025-04-21T09:14:22.062377+00:00",
+          "updated_at": "2025-04-21T09:14:51.087261+00:00",
+          "website_tasks": {
+            "links": [],
+            "clicks": 0,
+            "enabled": false
+          },
+          "campaign_name": "Sparky Special",
+          "campaign_sparks": 1000000,
+          "campaign_spins": 10,
+          "campaign_completed_by": [],
+          "campaign_details": null
+        },
+        {
+          "id": "906f0f24-a242-4375-89c5-5237c6eb4fd0",
+          "customer_name": "DOP3",
+          "logo_url": "https://xmsyjijnribmnfundfto.supabase.co/storage/v1/object/public/customer-logos/84dba7fc-8057-4c13-bc60-4a3d98b827aa.jpg",
+          "slug": "dop-protocol",
+          "email": null,
+          "social_tasks": {},
+          "created_at": "2025-04-21T08:40:03.868402+00:00",
+          "updated_at": "2025-05-18T08:37:04.455581+00:00",
+          "website_tasks": {
+            "links": [],
+            "clicks": 0,
+            "enabled": false
+          },
+          "campaign_name": "Use DOP Protocol",
+          "campaign_sparks": 500000,
+          "campaign_spins": 10,
+          "campaign_completed_by": [],
+          "campaign_details": "DOP3 is a Web3-savvy telecom wholesaler exploring blockchain adoption. They're keen to run a campaign on our platform to boost visibility and adoption. Their focus is on real-time settlements and community engagement."
+        },
+        {
+          "id": "48f953ac-1400-4fd6-9621-c80fc7578ffe",
+          "customer_name": "Cookie3",
+          "logo_url": "https://xmsyjijnribmnfundfto.supabase.co/storage/v1/object/public/customer-logos/8cc7f053-cc76-4213-8ddc-0487eda4b5d4.jpg",
+          "slug": "cookie3",
+          "email": null,
+          "social_tasks": {},
+          "created_at": "2025-04-21T08:42:37.080109+00:00",
+          "updated_at": "2025-05-25T10:26:22.049237+00:00",
+          "website_tasks": {
+            "links": [],
+            "clicks": 0,
+            "enabled": false
+          },
+          "campaign_name": "Join Cookie3 Analytics",
+          "campaign_sparks": 300000,
+          "campaign_spins": 5,
+          "campaign_completed_by": [],
+          "campaign_details": "Cookie3 is a Web3 marketing analytics platform that helps projects understand and target on-chain audiences. They're looking to launch a campaign on our platform to showcase their AI-driven engagement tools. Cookie3 aims to boost adoption and visibility among data-driven crypto communities."
+        },
+        {
+          "id": "71550e28-82c2-4262-8573-0a6a6f8d3022",
+          "customer_name": "Ethena",
+          "logo_url": "https://xmsyjijnribmnfundfto.supabase.co/storage/v1/object/public/customer-logos/be212869-2a03-4039-a3a9-440395d52409.png",
+          "slug": "ethena",
+          "email": null,
+          "social_tasks": {},
+          "created_at": "2025-04-21T08:40:48.504887+00:00",
+          "updated_at": "2025-05-22T07:19:24.797091+00:00",
+          "website_tasks": {
+            "links": [],
+            "clicks": 0,
+            "enabled": false
+          },
+          "campaign_name": "Invest in Ethena",
+          "campaign_sparks": 500000,
+          "campaign_spins": 10,
+          "campaign_completed_by": [],
+          "campaign_details": "Ethena is a Web3-native project focused on decentralized finance and synthetic assets. The team is exploring campaign opportunities on our platform to grow user adoption and educate the community. Their goal is to drive awareness around stable yield strategies in the crypto space."
+        },
+        {
+          "id": "87128fb9-efd9-4040-8c27-ce89c7f88862",
+          "customer_name": "Supabase",
+          "logo_url": "https://xmsyjijnribmnfundfto.supabase.co/storage/v1/object/public/customer-logos/e781a83d-3c24-4609-9841-fe080e100473.png",
+          "slug": "supabase",
+          "email": null,
+          "social_tasks": {},
+          "created_at": "2025-09-11T19:42:17.485643+00:00",
+          "updated_at": "2025-09-11T19:42:17.485643+00:00",
+          "website_tasks": {
+            "links": [],
+            "clicks": 0,
+            "enabled": false
+          },
+          "campaign_name": null,
+          "campaign_sparks": 0,
+          "campaign_spins": 0,
+          "campaign_completed_by": [],
+          "campaign_details": null
+        }
+      ],
+      "error": null
+    },
+    "customer_social_links": {
+      "table": "customer_social_links",
+      "data": [
+        {
+          "id": "7242228f-c53e-4c88-8abe-f6a003344119",
+          "customer_id": "71550e28-82c2-4262-8573-0a6a6f8d3022",
+          "customer_name": "Ethena",
+          "link_url": "https://x.com/ethena_labs",
+          "is_primary": false,
+          "enabled": true,
+          "type": "X",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T08:52:04.752605+00:00",
+          "updated_at": "2025-05-17T21:55:52.416941+00:00",
+          "platform_data": {},
+          "platform": "X",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "557493950",
+            "6456097705",
+            "6042897820",
+            "123456789"
+          ],
+          "action": null
+        },
+        {
+          "id": "60c8af67-7100-4864-aa48-50519c7e20c8",
+          "customer_id": "48f953ac-1400-4fd6-9621-c80fc7578ffe",
+          "customer_name": "Cookie3",
+          "link_url": "https://x.com/cookie3_com",
+          "is_primary": false,
+          "enabled": true,
+          "type": "X",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T08:53:05.96365+00:00",
+          "updated_at": "2025-05-17T22:12:48.955964+00:00",
+          "platform_data": {},
+          "platform": "X",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "557493950",
+            "6456097705",
+            "6042897820",
+            "123456789"
+          ],
+          "action": null
+        },
+        {
+          "id": "c13c0849-b702-48a6-a01c-516393cb8e7d",
+          "customer_id": "906f0f24-a242-4375-89c5-5237c6eb4fd0",
+          "customer_name": "DOP3",
+          "link_url": "https://x.com/dop_org",
+          "is_primary": false,
+          "enabled": true,
+          "type": "X",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T08:49:05.344788+00:00",
+          "updated_at": "2025-05-18T13:22:05.150487+00:00",
+          "platform_data": {},
+          "platform": "X",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "6456097705",
+            "123456789",
+            "557493950"
+          ],
+          "action": null
+        },
+        {
+          "id": "40db8cb0-66bd-4df4-aaca-3122cc773036",
+          "customer_id": "49348629-a3aa-4585-8d78-d40456373f76",
+          "customer_name": "Sparky",
+          "link_url": "https://www.youtube.com/user/phoenix",
+          "is_primary": false,
+          "enabled": true,
+          "type": "YOUTUBE_SUBSCRIBERS",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T09:15:46.108215+00:00",
+          "updated_at": "2025-05-20T17:46:33.802791+00:00",
+          "platform_data": {},
+          "platform": "YOUTUBE_SUBSCRIBERS",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "557493950",
+            "6456097705",
+            "123456789",
+            "1606998556"
+          ],
+          "action": null
+        },
+        {
+          "id": "26b8a701-9475-4345-b149-6ece1d27313b",
+          "customer_id": "906f0f24-a242-4375-89c5-5237c6eb4fd0",
+          "customer_name": "DOP3",
+          "link_url": "https://www.youtube.com/@DataOwnershipProtocol",
+          "is_primary": false,
+          "enabled": true,
+          "type": "YOUTUBE_SUBSCRIBERS",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T08:47:57.688607+00:00",
+          "updated_at": "2025-05-17T17:30:58.365425+00:00",
+          "platform_data": {},
+          "platform": "YOUTUBE_SUBSCRIBERS",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "6456097705",
+            "557493950",
+            "123456789"
+          ],
+          "action": null
+        },
+        {
+          "id": "4863aa3a-b7d1-4c5e-ac94-ad94beff6118",
+          "customer_id": "906f0f24-a242-4375-89c5-5237c6eb4fd0",
+          "customer_name": "DOP3",
+          "link_url": "https://t.me/dop_community",
+          "is_primary": false,
+          "enabled": true,
+          "type": "TELEGRAM_GROUP",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T08:46:38.771966+00:00",
+          "updated_at": "2025-05-17T21:37:13.165364+00:00",
+          "platform_data": {},
+          "platform": "TELEGRAM_GROUP",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "6456097705",
+            "557493950",
+            "123456789"
+          ],
+          "action": null
+        },
+        {
+          "id": "c3b7e230-b4b8-4457-b152-ca01128ee1b3",
+          "customer_id": "906f0f24-a242-4375-89c5-5237c6eb4fd0",
+          "customer_name": "DOP3",
+          "link_url": "https://t.me/Dop_org",
+          "is_primary": false,
+          "enabled": true,
+          "type": "TELEGRAM_CHANNEL",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T08:45:51.199502+00:00",
+          "updated_at": "2025-05-17T21:41:28.787388+00:00",
+          "platform_data": {},
+          "platform": "TELEGRAM_CHANNEL",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "6456097705",
+            "557493950",
+            "123456789"
+          ],
+          "action": null
+        },
+        {
+          "id": "6e815f4b-c277-4546-831c-cffbca800a82",
+          "customer_id": "71550e28-82c2-4262-8573-0a6a6f8d3022",
+          "customer_name": "Ethena",
+          "link_url": "https://t.me/ethena_labs",
+          "is_primary": false,
+          "enabled": true,
+          "type": "TELEGRAM_GROUP",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T08:52:37.596562+00:00",
+          "updated_at": "2025-05-17T21:52:00.075879+00:00",
+          "platform_data": {},
+          "platform": "TELEGRAM_GROUP",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "557493950",
+            "6456097705",
+            "123456789"
+          ],
+          "action": null
+        },
+        {
+          "id": "dcf192e9-6484-45c7-8f5d-233c8f8c0de8",
+          "customer_id": "906f0f24-a242-4375-89c5-5237c6eb4fd0",
+          "customer_name": "DOP3",
+          "link_url": "https://www.youtube.com/watch?v=q2s_C-nwEEk",
+          "is_primary": false,
+          "enabled": true,
+          "type": "YOUTUBE_VIEWS",
+          "display_order": 0,
+          "rewards": {
+            "coins": 50000,
+            "spins": 50
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-05-11T20:20:28.698903+00:00",
+          "updated_at": "2025-05-17T21:44:44.775057+00:00",
+          "platform_data": {},
+          "platform": "YOUTUBE_VIEWS",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": []
+          },
+          "clicks": [
+            "6456097705",
+            "557493950",
+            "123456789"
+          ],
+          "action": null
+        },
+        {
+          "id": "b353b22b-2586-44cd-bb57-c040765c386a",
+          "customer_id": "49348629-a3aa-4585-8d78-d40456373f76",
+          "customer_name": "Sparky",
+          "link_url": "https://x.com/Phoenix_TraderX",
+          "is_primary": false,
+          "enabled": true,
+          "type": "X",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T09:15:10.31456+00:00",
+          "updated_at": "2025-06-24T05:09:01.986362+00:00",
+          "platform_data": {},
+          "platform": "X",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "557493950",
+            "6456097705",
+            "6042897820",
+            "7073813239"
+          ],
+          "action": null
+        },
+        {
+          "id": "a98b7c4d-9079-4121-96b6-2937c685e810",
+          "customer_id": "49348629-a3aa-4585-8d78-d40456373f76",
+          "customer_name": "Sparky",
+          "link_url": "https://t.me/phoenix",
+          "is_primary": false,
+          "enabled": true,
+          "type": "TELEGRAM_CHANNEL",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T09:15:23.038233+00:00",
+          "updated_at": "2025-05-14T10:40:42.256096+00:00",
+          "platform_data": {},
+          "platform": "TELEGRAM_CHANNEL",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "557493950",
+            "6456097705"
+          ],
+          "action": null
+        },
+        {
+          "id": "a42a21b7-0d3d-457c-a702-fbfba78c9590",
+          "customer_id": "49348629-a3aa-4585-8d78-d40456373f76",
+          "customer_name": "Sparky",
+          "link_url": "https://t.me/thephoenixguild",
+          "is_primary": false,
+          "enabled": true,
+          "type": "TELEGRAM_GROUP",
+          "display_order": 0,
+          "rewards": {
+            "coins": 500000,
+            "spins": 5
+          },
+          "task_requirements": {
+            "verification_type": "AUTOMATIC",
+            "required_duration_seconds": 0,
+            "required_engagement_count": 0
+          },
+          "created_at": "2025-04-21T09:15:33.362236+00:00",
+          "updated_at": "2025-05-14T10:41:39.281922+00:00",
+          "platform_data": {},
+          "platform": "TELEGRAM_GROUP",
+          "platform_name": null,
+          "total_completions": 0,
+          "migrated_to_new_structure": false,
+          "completion_status": {
+            "completed_at": null,
+            "completed_by": [],
+            "completed_count": 0,
+            "total_completions": 0,
+            "completed_users_count": 0
+          },
+          "clicks": [
+            "557493950",
+            "6456097705"
+          ],
+          "action": null
+        }
+      ],
+      "error": null
+    },
+    "user_task_completion": {
+      "table": "user_task_completion",
+      "data": [],
+      "error": "relation \"public.user_task_completion\" does not exist"
+    },
+    "daily_rewards": {
+      "table": "daily_rewards",
+      "data": [
+        {
+          "id": 211,
+          "user_id": "5971667729",
+          "day": 1,
+          "coins": 4500,
+          "collected_at": "2025-07-23T07:12:52.423+00:00",
+          "streak_bonus": 500,
+          "current_streak": 1,
+          "max_streak": 1,
+          "streak_started_at": null,
+          "last_streak_broken_at": null,
+          "reward_data": {}
+        },
+        {
+          "id": 207,
+          "user_id": "7073813239",
+          "day": 1,
+          "coins": 4500,
+          "collected_at": "2025-07-23T08:38:41.059+00:00",
+          "streak_bonus": 500,
+          "current_streak": 1,
+          "max_streak": 2,
+          "streak_started_at": null,
+          "last_streak_broken_at": null,
+          "reward_data": {}
+        },
+        {
+          "id": 214,
+          "user_id": "7805491129",
+          "day": 1,
+          "coins": 4500,
+          "collected_at": "2025-07-24T12:22:21.397+00:00",
+          "streak_bonus": 500,
+          "current_streak": 1,
+          "max_streak": 1,
+          "streak_started_at": null,
+          "last_streak_broken_at": null,
+          "reward_data": {}
+        },
+        {
+          "id": 213,
+          "user_id": "557493950",
+          "day": 1,
+          "coins": 4500,
+          "collected_at": "2025-08-04T09:34:54.092+00:00",
+          "streak_bonus": 500,
+          "current_streak": 1,
+          "max_streak": 1,
+          "streak_started_at": null,
+          "last_streak_broken_at": null,
+          "reward_data": {}
+        },
+        {
+          "id": 208,
+          "user_id": "7073813239",
+          "day": 2,
+          "coins": 7200,
+          "collected_at": "2025-06-25T06:24:51.245+00:00",
+          "streak_bonus": 800,
+          "current_streak": 2,
+          "max_streak": 2,
+          "streak_started_at": null,
+          "last_streak_broken_at": null,
+          "reward_data": {}
+        }
+      ],
+      "error": null
+    },
+    "payment_records": {
+      "table": "payment_records",
+      "data": [
+        {
+          "id": "5b2347ce-93a7-45f9-ab26-e3ceb468927a",
+          "user_id": "6456097705",
+          "payment_type": "telegram_stars",
+          "amount": 1,
+          "currency": "XTR",
+          "charge_id": "stxHekOIqmARd4ekr5BDGn8qcSBEJuUWZWTqfCMAT0yH0BLZlihnTfodDkVVR1FGlMzki_Zj3DXvV9mqJxvhzkrCArPTJHNXY66LI0jl7VwJDPq6zFHKzpwoVqJdIEoPCk7",
+          "payload": {
+            "type": "spin_purchase",
+            "bonus": 0,
+            "spins": 20,
+            "userId": 6456097705,
+            "packageId": "starter_20"
+          },
+          "status": "completed",
+          "created_at": "2025-09-11T23:22:14.79+00:00",
+          "updated_at": "2025-09-11T23:22:14.945984+00:00"
+        }
+      ],
+      "error": null
+    },
+    "user_referrals": {
+      "table": "user_referrals",
+      "data": [
+        {
+          "id": 429,
+          "referrer_id": "557493950",
+          "referee_id": "626124481",
+          "created_at": "2025-07-24T16:11:24.382531+00:00",
+          "reward_amount": 50000,
+          "reward_claimed": false,
+          "reward_claimed_at": null,
+          "referee_reward_claimed": true,
+          "referee_reward_amount": 50000,
+          "referee_reward_claimed_at": "2025-07-24T16:11:22.79+00:00"
+        },
+        {
+          "id": 428,
+          "referrer_id": "7073813239",
+          "referee_id": "557118190",
+          "created_at": "2025-07-01T07:17:58.065151+00:00",
+          "reward_amount": 50000,
+          "reward_claimed": true,
+          "reward_claimed_at": "2025-08-11T17:48:05.372+00:00",
+          "referee_reward_claimed": true,
+          "referee_reward_amount": 50000,
+          "referee_reward_claimed_at": "2025-07-01T07:17:57.542+00:00"
+        }
+      ],
+      "error": null
+    }
+  }
+}

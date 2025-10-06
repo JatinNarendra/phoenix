@@ -1,0 +1,441 @@
+/* Global styles to prevent context menu and selection */
+.spin-page {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.spin-button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+/* Grid-based slot window */
+.slot-window {
+  overflow: hidden;
+  position: relative;
+  height: 200px;
+  width: 70px;
+  /* Mask to create a visible area for the slots */
+  mask-image: linear-gradient(to bottom, 
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(to bottom, 
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+}
+
+/* The slot-strip contains the rows of slots */
+.slot-strip {
+  position: relative;
+  width: 100%;
+  height: auto;
+  will-change: transform;
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding-bottom: 140px; /* Ensure space for items below the winning row */
+}
+
+/* Temporary strip for animation */
+.temp-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  will-change: transform;
+  padding-bottom: 140px; /* Ensure space for items below the winning row */
+}
+
+
+
+
+/* Remove all effects from winning row and just make it a regular row */
+.winning-temp-row {
+  position: relative;
+  z-index: 5;
+}
+
+/* Make rows below the winning row clearly visible */
+.winning-temp-row ~ .slot-row {
+  opacity: 0.9;
+}
+
+/* Slot row contains individual symbols */
+.slot-row {
+  width: 70px;
+  height: 70px; /* Fixed height for each row */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+/* Remove special styling from middle row */
+.middle-row {
+  position: relative;
+  z-index: 5;
+}
+
+/* Each symbol styling - no background */
+.symbol {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  border-radius: 6px;
+}
+
+/* Add a container for the symbol content */
+.symbol-content {
+  width: 60%;
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Apply red glow directly to the image in winning slots */
+.winning-icon .symbol-content img {
+  filter: drop-shadow(0 0 10px rgba(255, 30, 30, 0.9));
+  animation: imageGlow 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes imageGlow {
+  from {
+    filter: drop-shadow(0 0 5px rgba(255, 30, 30, 0.8));
+  }
+  to {
+    filter: drop-shadow(0 0 15px rgba(255, 30, 30, 1));
+  }
+}
+
+/* Apply red glow directly to the image in final winning state */
+.winning-icon-perspective .symbol-content img {
+  filter: drop-shadow(0 0 10px rgba(255, 30, 30, 0.9));
+  animation: imagePulse 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes imagePulse {
+  from {
+    filter: drop-shadow(0 0 8px rgba(255, 30, 30, 0.8));
+  }
+  to {
+    filter: drop-shadow(0 0 20px rgba(255, 30, 30, 1));
+  }
+}
+
+/* Spin Page Styles */
+
+.slot-machine {
+  position: relative;
+  width: 76px;
+  height: 120px;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom,
+    transparent 0%,
+    black 15%,
+    black 85%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0%,
+    black 15%,
+    black 85%,
+    transparent 100%
+  );
+}
+
+
+.slot-reel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* Increased gap between items */
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  padding: 4px 0; /* Add padding to ensure first and last items have space */
+}
+
+/* Remove the margin-bottom since we're using gap */
+.slot-reel > div {
+  position: relative;
+  padding: 4px 0;
+  border-radius: 6px;
+}
+
+.slot-reel.spinning {
+  animation: spin 0.4s linear infinite; /* Slowed down from 0.15s to 0.4s */
+  filter: none; /* Ensure no blur is applied */
+}
+
+.slot-reel.spinning img {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  filter: none; /* Ensure no blur is applied to images */
+}
+
+@keyframes spin {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-216px); /* Adjusted for item height (36px) + gap (12px) × 4.5 items */
+  }
+}
+
+.slot-reel.stopping {
+  animation: none;
+  filter: none;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.slot-reel img {
+  pointer-events: none;
+  user-select: none;
+  filter: none; /* Ensure no blur is applied to images */
+}
+
+@keyframes scale-up-down {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.winning-symbol {
+  animation: scale-up-down 1s ease-in-out infinite;
+}
+
+/* Ensure images are rendered with high quality during animation */
+.slot-reel img {
+  image-rendering: high-quality;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  filter: none; /* Ensure no blur is applied */
+}
+
+/* Multi-spin specific animations */
+.slot-reel.multi-spinning {
+  animation: fast-spin 0.25s linear infinite; /* Slowed down from 0.08s to 0.25s */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  filter: none; /* Ensure no blur is applied */
+}
+
+@keyframes fast-spin {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-216px); /* Adjusted to match regular spin animation */
+  }
+}
+
+.slot-reel.multi-spinning img {
+  transform: translateZ(0);
+  filter: none; /* Ensure no blur is applied */
+}
+
+.slot-reel.multi-stopping {
+  animation: none;
+  filter: none;
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Custom animations for spin page */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes arrowAnimation {
+  0% { width: 0; opacity: 0; }
+  100% { width: 100%; opacity: 1; }
+}
+
+@keyframes arrowheadAnimation {
+  0% { opacity: 0; right: 10px; }
+  100% { opacity: 1; right: 0; }
+}
+
+.token-container {
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+  animation-delay: 0.1s;
+}
+
+.arrow-container {
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+  animation-delay: 0.3s;
+}
+
+.arrow-line {
+  width: 0;
+  animation: arrowAnimation 0.3s forwards;
+  animation-delay: 0.35s;
+}
+
+.arrow-head {
+  opacity: 0;
+  animation: arrowheadAnimation 0.3s forwards;
+  animation-delay: 0.45s;
+}
+
+.reward-container {
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+  animation-delay: 0.5s;
+}
+
+.completion-label {
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+  animation-delay: 0.7s;
+}
+
+/* Spin animation styles */
+@keyframes scale-up-down {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes zoom-in {
+  from { 
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.winning-symbol {
+  animation: scale-up-down 0.6s ease-in-out infinite;
+}
+
+.reward-container {
+  opacity: 0;
+}
+
+.reward-container.show {
+  animation: zoom-in 0.2s ease-out forwards;
+}
+
+/* Auto-spin button animations */
+.auto-spin-button {
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+/* Auto-spin progress indicator */
+.auto-spin-progress {
+  position: relative;
+  overflow: hidden;
+}
+
+.auto-spin-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Hold instruction animation */
+.hold-instruction {
+  animation: fade-in-out 3s infinite;
+}
+
+@keyframes fade-in-out {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Hold progress indicator */
+.hold-progress-container {
+  animation: scale-in 0.2s ease-out;
+}
+
+@keyframes scale-in {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Auto-spin active state */
+.auto-spin-active {
+  animation: glow-pulse 1.5s infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: none;
+  }
+}
