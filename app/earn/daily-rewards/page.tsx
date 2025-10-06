@@ -2,11 +2,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useGame } from "../../context/GameContext";
 import Image from "next/image";
-import SparkIcon from "@/public/assets/SparkyIcon.png";
-import TaskCompletedDiamond from "@/public/assets/TaskCompletedDiamond.png";
-import DailyRewardConfetti from "@/public/assets/DailyRewardConfetti.png";
-import TotalStreakIcon from "@/public/assets/Earn/totalstreakicon.png";
-import WingsImage from "@/public/assets/Earn/wings.png";
+// Remove image imports - we'll use src paths instead
 import { useRouter } from "next/navigation";
 import { useWebApp } from "@/app/hooks/useWebApp";
 import { useUser } from "@/app/hooks/useUser";
@@ -15,7 +11,7 @@ import DailyRewardsSuccess from "./DailyRewardsSuccess";
 import { getDailyRewardHistory } from "@/app/lib/dailyRewards";
 import Loader from "@/app/components/ui/Loader";
 import "./DailyRewards.css";
-import { useGameFeatures } from '@/app/context/GameFeaturesContext';
+import { useGameFeatures } from "@/app/context/GameFeaturesContext";
 import { gameToast } from "@/app/utility/customToast";
 
 interface ProgressionTask {
@@ -41,27 +37,43 @@ const DailyRewards = () => {
   const router = useRouter();
   const { instance: WebApp } = useWebApp(true);
   const { persistState, gameState } = useGame();
-  const { dailyRewards: { checkRewardAvailability } } = useGameFeatures();
+  const {
+    dailyRewards: { checkRewardAvailability },
+  } = useGameFeatures();
   const { id: userId } = useUser();
   const [showClaimPopup, setShowClaimPopup] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [selectedReward, setSelectedReward] = useState<{ day: number; coins: number } | null>(null);
+  const [selectedReward, setSelectedReward] = useState<{
+    day: number;
+    coins: number;
+  } | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [rewardStatus, setRewardStatus] = useState<{ missedDay: boolean }>({ missedDay: false });
+  const [rewardStatus, setRewardStatus] = useState<{ missedDay: boolean }>({
+    missedDay: false,
+  });
 
   // Get the last collected day and yellow highlight state
   const lastCollectedDay = gameState.dailyRewards?.lastDay || 0;
-  const shouldShowYellow = useCallback((day: number) => {
-    // Special case for first time users - highlight day 1
-    if ((gameState.dailyRewards?.lastDay === 0 || 
-         (gameState.dailyRewards && gameState.dailyRewards.lastDay <= 0) || 
-         !gameState.dailyRewards?.lastDay) && day === 1) {
-      return true;
-    }
-    // Regular case - highlight next day in sequence
-    return !Boolean(gameState.dailyRewards?.collectedDays?.[day]) && day === (lastCollectedDay > 0 ? lastCollectedDay + 1 : 1);
-  }, [gameState.dailyRewards, lastCollectedDay]);
+  const shouldShowYellow = useCallback(
+    (day: number) => {
+      // Special case for first time users - highlight day 1
+      if (
+        (gameState.dailyRewards?.lastDay === 0 ||
+          (gameState.dailyRewards && gameState.dailyRewards.lastDay <= 0) ||
+          !gameState.dailyRewards?.lastDay) &&
+        day === 1
+      ) {
+        return true;
+      }
+      // Regular case - highlight next day in sequence
+      return (
+        !Boolean(gameState.dailyRewards?.collectedDays?.[day]) &&
+        day === (lastCollectedDay > 0 ? lastCollectedDay + 1 : 1)
+      );
+    },
+    [gameState.dailyRewards, lastCollectedDay]
+  );
 
   useEffect(() => {
     if (WebApp) {
@@ -71,21 +83,21 @@ const DailyRewards = () => {
           e.preventDefault();
           return false;
         };
-        window.addEventListener('popstate', preventBack);
+        window.addEventListener("popstate", preventBack);
         return () => {
-          window.removeEventListener('popstate', preventBack);
+          window.removeEventListener("popstate", preventBack);
         };
       } else {
         WebApp.BackButton.show();
         WebApp.enableClosingConfirmation();
-        
+
         const handleBack = () => {
           setIsLoading(false);
-          router.push('/earn');
+          router.push("/earn");
         };
 
         WebApp.BackButton.onClick(handleBack);
-        
+
         return () => {
           WebApp.BackButton.offClick(handleBack);
           setIsLoading(false);
@@ -143,11 +155,12 @@ const DailyRewards = () => {
       // Update state with complete history or default state
       persistState((prev) => {
         // Check if user is new or has no daily rewards data
-        const isNewUser = !prev.dailyRewards || 
-                         prev.dailyRewards.lastDay === undefined || 
-                         prev.dailyRewards.lastDay === 0 ||
-                         !prev.dailyRewards.lastCollected || 
-                         prev.dailyRewards.lastCollected === "1970-01-01T00:00:00.000Z";
+        const isNewUser =
+          !prev.dailyRewards ||
+          prev.dailyRewards.lastDay === undefined ||
+          prev.dailyRewards.lastDay === 0 ||
+          !prev.dailyRewards.lastCollected ||
+          prev.dailyRewards.lastCollected === "1970-01-01T00:00:00.000Z";
 
         // If it's a new user or the data was reset, use the default new user state
         if (isNewUser) {
@@ -158,21 +171,22 @@ const DailyRewards = () => {
               currentStreak: 0,
               maxStreak: 0,
               lastDay: 0,
-              collectedDays: {}
-            }
+              collectedDays: {},
+            },
           };
         }
 
         // For existing users, update only if new data is more recent
-        const shouldUpdate = newState.lastCollected !== "1970-01-01T00:00:00.000Z" && 
-                           new Date(newState.lastCollected).getTime() > 
-                           new Date(prev.dailyRewards?.lastCollected || 0).getTime();
+        const shouldUpdate =
+          newState.lastCollected !== "1970-01-01T00:00:00.000Z" &&
+          new Date(newState.lastCollected).getTime() >
+            new Date(prev.dailyRewards?.lastCollected || 0).getTime();
 
         return shouldUpdate ? { ...prev, dailyRewards: newState } : prev;
       });
 
       // Force a refresh of the game state
-      window.dispatchEvent(new Event('forceGameRefresh'));
+      window.dispatchEvent(new Event("forceGameRefresh"));
       setIsInitialized(true);
     } catch (error) {
       console.error("Error initializing daily rewards:", error);
@@ -184,8 +198,8 @@ const DailyRewards = () => {
           currentStreak: 0,
           maxStreak: 0,
           lastDay: 0,
-          collectedDays: {}
-        }
+          collectedDays: {},
+        },
       }));
       setIsInitialized(true);
     }
@@ -201,13 +215,14 @@ const DailyRewards = () => {
   // Memoize the next day calculation
   const nextDayToCollect = useMemo(() => {
     const { missedDay } = rewardStatus;
-    const lastDay = typeof gameState.dailyRewards?.lastDay === 'string' 
-      ? 0  // If lastDay is a string (timestamp), treat as no days collected
-      : (gameState.dailyRewards?.lastDay || 0);
+    const lastDay =
+      typeof gameState.dailyRewards?.lastDay === "string"
+        ? 0 // If lastDay is a string (timestamp), treat as no days collected
+        : gameState.dailyRewards?.lastDay || 0;
 
     // If we missed a day, or have no progress, start at day 1
     if (missedDay || lastDay <= 0) return 1;
-    
+
     const nextDay = lastDay + 1;
     return nextDay;
   }, [rewardStatus, gameState.dailyRewards]);
@@ -215,81 +230,100 @@ const DailyRewards = () => {
   // Generate progression tasks with specific rewards
   const progressionTasks: ProgressionTask[] = useMemo(() => {
     const rewards = [
-      5000, 8000, 12000, 25000, 50000, 100000, 180000, 250000, 310000,
-      370000, 400000, 550000, 710000, 900000, 1000000, 1500000, 2100000,
-      2600000, 3000000, 3500000, 4200000, 4700000, 5000000, 5600000,
-      6100000, 6900000, 7400000, 8000000, 8500000, 9100000, 10000000
+      5000, 8000, 12000, 25000, 50000, 100000, 180000, 250000, 310000, 370000,
+      400000, 550000, 710000, 900000, 1000000, 1500000, 2100000, 2600000,
+      3000000, 3500000, 4200000, 4700000, 5000000, 5600000, 6100000, 6900000,
+      7400000, 8000000, 8500000, 9100000, 10000000,
     ];
-    
-    const tasks = Array.from(
-      { length: 31 },
-      (_, i) => {
-        const day = i + 1;
-        const isCollectedInDays = Boolean(gameState.dailyRewards?.collectedDays?.[day]);
-       
 
-        return {
-          day,
-          coins: rewards[i],
-          completed: isCollectedInDays
-        };
-      }
-    );
+    const tasks = Array.from({ length: 31 }, (_, i) => {
+      const day = i + 1;
+      const isCollectedInDays = Boolean(
+        gameState.dailyRewards?.collectedDays?.[day]
+      );
+
+      return {
+        day,
+        coins: rewards[i],
+        completed: isCollectedInDays,
+      };
+    });
     return tasks;
   }, [gameState.dailyRewards?.collectedDays]);
 
   // Effect to check reward availability
   useEffect(() => {
     const status = checkRewardAvailability();
-    
+
     // Enhanced logging with more detailed information
     const nextDay = nextDayToCollect;
-    const canCollectIn = (typeof status === 'object' && status.timeUntilNext) ? `${Math.floor(status.timeUntilNext / 3600)}:${Math.floor((status.timeUntilNext % 3600) / 60).toString().padStart(2, '0')}` : 'Now';
-    const todayCollected = (typeof status === 'object' && status.canCollect) ? 'No' : 'Yes'; // If canCollect is false, it means today was already collected
-    const isFirstDay = (gameState.dailyRewards?.lastDay === 0 || !gameState.dailyRewards?.lastDay) ? 'Yes' : 'No';
-    
+    const canCollectIn =
+      typeof status === "object" && status.timeUntilNext
+        ? `${Math.floor(status.timeUntilNext / 3600)}:${Math.floor(
+            (status.timeUntilNext % 3600) / 60
+          )
+            .toString()
+            .padStart(2, "0")}`
+        : "Now";
+    const todayCollected =
+      typeof status === "object" && status.canCollect ? "No" : "Yes"; // If canCollect is false, it means today was already collected
+    const isFirstDay =
+      gameState.dailyRewards?.lastDay === 0 || !gameState.dailyRewards?.lastDay
+        ? "Yes"
+        : "No";
+
     // Get the latest collected day with timestamp
     let lastDayCollected = "None";
     let lastDayCollectedTime = "";
-    if (gameState.dailyRewards?.lastDay && gameState.dailyRewards?.lastDay > 0) {
+    if (
+      gameState.dailyRewards?.lastDay &&
+      gameState.dailyRewards?.lastDay > 0
+    ) {
       lastDayCollected = gameState.dailyRewards.lastDay.toString();
       if (gameState.dailyRewards?.lastCollected) {
         const collectedDate = new Date(gameState.dailyRewards.lastCollected);
         lastDayCollectedTime = collectedDate.toISOString();
       }
     }
-    
-    console.log('Daily Rewards Status:', {
-      'Can collect Day': nextDay,
-      'Can collect next day in': canCollectIn,
-      'Today collected': todayCollected,
-      'Is first day of collection': isFirstDay,
-      'Best streak': gameState.dailyRewards?.maxStreak || 0,
-      'Current streak': gameState.dailyRewards?.currentStreak || 0,
-      'Missed day': typeof status === 'object' ? status.missedDay : false,
-      'Last day collected': lastDayCollected,
-      'Last collection time': lastDayCollectedTime
+
+    console.log("Daily Rewards Status:", {
+      "Can collect Day": nextDay,
+      "Can collect next day in": canCollectIn,
+      "Today collected": todayCollected,
+      "Is first day of collection": isFirstDay,
+      "Best streak": gameState.dailyRewards?.maxStreak || 0,
+      "Current streak": gameState.dailyRewards?.currentStreak || 0,
+      "Missed day": typeof status === "object" ? status.missedDay : false,
+      "Last day collected": lastDayCollected,
+      "Last collection time": lastDayCollectedTime,
     });
-    
-    setRewardStatus(typeof status === 'object' ? status : { missedDay: false });
-  }, [checkRewardAvailability, gameState.dailyRewards?.lastDay, gameState.dailyRewards?.maxStreak, gameState.dailyRewards?.currentStreak, nextDayToCollect, gameState.dailyRewards?.lastCollected]);
+
+    setRewardStatus(typeof status === "object" ? status : { missedDay: false });
+  }, [
+    checkRewardAvailability,
+    gameState.dailyRewards?.lastDay,
+    gameState.dailyRewards?.maxStreak,
+    gameState.dailyRewards?.currentStreak,
+    nextDayToCollect,
+    gameState.dailyRewards?.lastCollected,
+  ]);
 
   const handleClaimReward = async () => {
     if (!selectedReward || !userId) return;
-    
+
     try {
       // Set loading state to prevent UI interactions during processing
       setIsLoading(true);
-      
+
       // Get the current date for reward collection timestamp
       const collectionDate = new Date().toISOString();
       const { day, coins } = selectedReward;
-      
+
       // 1. Update local state - important to do this first for UI feedback
       persistState((prev) => {
         // For day numbers up to 15, current streak should directly match day number when collecting sequentially
         let newStreak;
-        
+
         if (day === 1) {
           // First day always has streak of 1
           newStreak = 1;
@@ -304,21 +338,21 @@ const DailyRewards = () => {
           // Reset to 1 if not consecutive
           newStreak = 1;
         }
-        
+
         // Calculate max streak - ensure it's at least equal to the current day for sequential collections
         let maxStreak = Math.max(newStreak, prev.dailyRewards?.maxStreak || 0);
-        
+
         // For sequential collections up to day 15, explicitly ensure max streak matches day number if higher
         if (day <= 15 && day === (prev.dailyRewards?.lastDay || 0) + 1) {
           maxStreak = Math.max(maxStreak, day);
         }
-        
+
         // Prepare the new collected day entry
         const newCollectedDay = {
           collectedAt: collectionDate,
-          coins: coins
+          coins: coins,
         };
-        
+
         // Update dailyRewards state with new values
         return {
           ...prev,
@@ -330,16 +364,16 @@ const DailyRewards = () => {
             lastDay: day,
             collectedDays: {
               ...(prev.dailyRewards?.collectedDays || {}),
-              [day]: newCollectedDay
-            }
-          }
+              [day]: newCollectedDay,
+            },
+          },
         };
       });
-      
+
       // Simulate database operation (replace with actual DB operation)
       // This would be your actual API call to record the collection in the database
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulated delay
-      
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulated delay
+
       // 2. Database operation to record the reward claim
       // Note: This would be your actual API call implementation
       /* 
@@ -356,30 +390,41 @@ const DailyRewards = () => {
         }),
       });
       */
-      
+
       // Force a refresh of the game state to ensure UI updates
-      window.dispatchEvent(new Event('forceGameRefresh'));
-      
+      window.dispatchEvent(new Event("forceGameRefresh"));
+
       // Update console log after collection
       const status = checkRewardAvailability();
       const nextDay = day + 1;
-      const canCollectIn = (typeof status === 'object' && status.timeUntilNext) ? `${Math.floor(status.timeUntilNext / 3600)}:${Math.floor((status.timeUntilNext % 3600) / 60).toString().padStart(2, '0')}` : 'Now';
+      const canCollectIn =
+        typeof status === "object" && status.timeUntilNext
+          ? `${Math.floor(status.timeUntilNext / 3600)}:${Math.floor(
+              (status.timeUntilNext % 3600) / 60
+            )
+              .toString()
+              .padStart(2, "0")}`
+          : "Now";
       // Now that we've collected, today is collected
-      const todayCollected = 'Yes';
-      const isFirstDay = (day === 1 && !Object.keys(gameState.dailyRewards?.collectedDays || {}).length) ? 'Yes' : 'No';
-      
-      console.log('Daily Rewards Status AFTER Collection:', {
-        'Can collect Day': nextDay,
-        'Can collect next day in': canCollectIn,
-        'Today collected': todayCollected,
-        'Is first day of collection': isFirstDay,
-        'Best streak': gameState.dailyRewards?.maxStreak || 0,
-        'Current streak': gameState.dailyRewards?.currentStreak || 0,
-        'Missed day': typeof status === 'object' ? status.missedDay : false,
-        'Last day collected': day.toString(),
-        'Last collection time': collectionDate
+      const todayCollected = "Yes";
+      const isFirstDay =
+        day === 1 &&
+        !Object.keys(gameState.dailyRewards?.collectedDays || {}).length
+          ? "Yes"
+          : "No";
+
+      console.log("Daily Rewards Status AFTER Collection:", {
+        "Can collect Day": nextDay,
+        "Can collect next day in": canCollectIn,
+        "Today collected": todayCollected,
+        "Is first day of collection": isFirstDay,
+        "Best streak": gameState.dailyRewards?.maxStreak || 0,
+        "Current streak": gameState.dailyRewards?.currentStreak || 0,
+        "Missed day": typeof status === "object" ? status.missedDay : false,
+        "Last day collected": day.toString(),
+        "Last collection time": collectionDate,
       });
-      
+
       // 3. Hide claim popup and show success popup only after everything is done
       setShowClaimPopup(false);
       setShowSuccessPopup(true);
@@ -407,7 +452,7 @@ const DailyRewards = () => {
     if (!isInitialized) return;
 
     const status = checkRewardAvailability();
-    const missedDay = typeof status === 'object' ? status.missedDay : false;
+    const missedDay = typeof status === "object" ? status.missedDay : false;
     if (missedDay && gameState.dailyRewards?.lastCollected) {
       const lastDay = gameState.dailyRewards?.lastDay || 0;
       const preservedStreak = lastDay >= 15 ? 15 : 0;
@@ -478,7 +523,7 @@ const DailyRewards = () => {
                     </div>
                     <div className="w-[40%] flex justify-end">
                       <Image
-                        src={TotalStreakIcon}
+                        src="/assets/Earn/totalstreakicon.png"
                         alt="Total Streak"
                         width={140}
                         height={80}
@@ -497,7 +542,7 @@ const DailyRewards = () => {
               <div className="flex flex-row items-center justify-center gap-[13px] mb-8">
                 <div className="relative h-[80px] w-[180px]">
                   <Image
-                    src={DailyRewardConfetti.src}
+                    src="/assets/DailyRewardConfetti.png"
                     alt=""
                     width={80}
                     height={74}
@@ -509,18 +554,20 @@ const DailyRewards = () => {
                       Current Streak
                     </div>
                     <b className="absolute top-[39px] left-4 text-[18px] leading-[140%] tracking-[-0.02em] font-bold text-[#E18700]">
-                      {gameState.dailyRewards?.lastDay && gameState.dailyRewards.lastDay > 0 
-                        ? (gameState.dailyRewards.lastDay <= 15 
-                            ? gameState.dailyRewards.lastDay 
-                            : gameState.dailyRewards?.currentStreak || 0)
-                        : 0} Days
+                      {gameState.dailyRewards?.lastDay &&
+                      gameState.dailyRewards.lastDay > 0
+                        ? gameState.dailyRewards.lastDay <= 15
+                          ? gameState.dailyRewards.lastDay
+                          : gameState.dailyRewards?.currentStreak || 0
+                        : 0}{" "}
+                      Days
                     </b>
                   </div>
                 </div>
 
                 <div className="relative h-[80px] w-[180px]">
                   <Image
-                    src={DailyRewardConfetti.src}
+                    src="/assets/DailyRewardConfetti.png"
                     alt=""
                     width={80}
                     height={74}
@@ -534,12 +581,14 @@ const DailyRewards = () => {
                     <b className="absolute top-[39px] left-4 text-[18px] leading-[140%] tracking-[-0.02em] font-bold text-[#E18700]">
                       {Math.max(
                         gameState.dailyRewards?.maxStreak || 0,
-                        gameState.dailyRewards?.lastDay && gameState.dailyRewards.lastDay > 0
-                          ? (gameState.dailyRewards.lastDay <= 15
-                              ? gameState.dailyRewards.lastDay
-                              : gameState.dailyRewards?.currentStreak || 0)
+                        gameState.dailyRewards?.lastDay &&
+                          gameState.dailyRewards.lastDay > 0
+                          ? gameState.dailyRewards.lastDay <= 15
+                            ? gameState.dailyRewards.lastDay
+                            : gameState.dailyRewards?.currentStreak || 0
                           : 0
-                      )} Days
+                      )}{" "}
+                      Days
                     </b>
                   </div>
                 </div>
@@ -588,7 +637,11 @@ const DailyRewards = () => {
 
                     // For first time or reset users, only allow collecting day 1
                     if (isFirstTimeUser) {
-                      if (task.day === 1 && (typeof status === 'object' && status.canCollect)) {
+                      if (
+                        task.day === 1 &&
+                        typeof status === "object" &&
+                        status.canCollect
+                      ) {
                         setShowClaimPopup(true);
                         setSelectedReward({ day: task.day, coins: task.coins });
                       } else if (task.day !== 1) {
@@ -628,7 +681,8 @@ const DailyRewards = () => {
                     if (
                       task.day === nextDayToCollect &&
                       task.day === nextDayToCollect &&
-                      (typeof status === 'object' && status.canCollect) &&
+                      typeof status === "object" &&
+                      status.canCollect &&
                       fullUtcDayPassed
                     ) {
                       setShowClaimPopup(true);
@@ -662,15 +716,16 @@ const DailyRewards = () => {
                     // If it's not yet time for collection (already collected today)
                     else if (
                       task.day === nextDayToCollect &&
-                      !(typeof status === 'object' && status.canCollect)
+                      !(typeof status === "object" && status.canCollect)
                     ) {
-                      const timeRemaining = (typeof status === 'object' && status.timeUntilNext)
-                        ? `${Math.floor(
-                            status.timeUntilNext / 3600
-                          )}h ${Math.floor(
-                            (status.timeUntilNext % 3600) / 60
-                          )}m`
-                        : "some time";
+                      const timeRemaining =
+                        typeof status === "object" && status.timeUntilNext
+                          ? `${Math.floor(
+                              status.timeUntilNext / 3600
+                            )}h ${Math.floor(
+                              (status.timeUntilNext % 3600) / 60
+                            )}m`
+                          : "some time";
                       gameToast.error(
                         `You've already collected today's reward. Next reward available in ${timeRemaining}.`,
                         {
@@ -737,12 +792,16 @@ const DailyRewards = () => {
                       <div className="relative overflow-visible">
                         {task.day === 15 && (
                           <Image
-                            src={WingsImage}
+                            src="/assets/Earn/wings.png"
                             alt="Wings"
                             width={60}
                             height={30}
                             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"
-                            style={{ maxWidth: 'none', width: "auto", height: "auto" }}
+                            style={{
+                              maxWidth: "none",
+                              width: "auto",
+                              height: "auto",
+                            }}
                           />
                         )}
                         <Image
@@ -750,7 +809,7 @@ const DailyRewards = () => {
                           width={24}
                           height={24}
                           alt="Spark"
-                          src={SparkIcon}
+                          src="/assets/SparkyIcon.png"
                           style={{ width: "auto", height: "auto" }}
                         />
                         {task.completed && (
@@ -759,7 +818,7 @@ const DailyRewards = () => {
                             width={20}
                             height={20}
                             alt="Task Completed"
-                            src={TaskCompletedDiamond}
+                            src="/assets/TaskCompletedDiamond.png"
                             style={{ width: "auto", height: "auto" }}
                           />
                         )}
