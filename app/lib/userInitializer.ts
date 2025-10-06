@@ -88,6 +88,14 @@ export const initializeUserOnce = (
   lastInitializedUserId = currentUserId || null;
 
   // Store the promise so we can return it if called again
+  console.log("🚀 Starting user initialization API call:", {
+    userId: telegramUser.id,
+    username: telegramUser.username,
+    firstName: telegramUser.first_name,
+    hasInitData: !!WebApp.initData,
+    initDataLength: WebApp.initData?.length || 0,
+  });
+
   initializationPromise = fetch("/api/telegram/user", {
     method: "POST",
     headers: {
@@ -108,10 +116,22 @@ export const initializeUserOnce = (
     }),
   })
     .then(async (response) => {
+      console.log("📡 API Response received:", {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+      });
+
       if (!response.ok) {
         const errorData = await response
           .json()
           .catch(() => ({ error: "Unknown error" }));
+
+        console.error("❌ API Error:", {
+          status: response.status,
+          error: errorData.error,
+          details: errorData.details,
+        });
 
         // If validation failed, try again without initData as fallback
         if (
@@ -159,6 +179,11 @@ export const initializeUserOnce = (
       }
 
       const result = await response.json();
+
+      console.log("✅ User initialization successful:", {
+        result: result,
+        isNewUser: result.data?.isNewUser,
+      });
 
       // Clear any existing progression data for new users
       if (typeof window !== "undefined") {
