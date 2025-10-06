@@ -1,8 +1,29 @@
 "use client";
 
-import { supabase } from "../lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 import { AUTO_TAP_DURATION } from "../constants/gameConstants";
 import { levelConfig } from "../utility/stageConfig";
+
+// Create a service role client for server-side operations
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error("Missing Supabase environment variables:", {
+    url: !!supabaseUrl,
+    serviceKey: !!supabaseServiceKey,
+  });
+}
+
+const supabaseAdmin =
+  supabaseUrl && supabaseServiceKey
+    ? createClient(supabaseUrl, supabaseServiceKey, {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      })
+    : null;
 
 // Helper function to detect users that should be re-initialized when DB entry is missing
 const shouldReinitializeOnMissing = (userId: string): boolean => {
@@ -306,13 +327,13 @@ export const updateTelegramUserProgress = async (
       return;
     }
 
-    if (!supabase) {
-      console.error("Supabase client not available");
+    if (!supabaseAdmin) {
+      console.error("Supabase admin client not available");
       return;
     }
 
     // First get current state to preserve booster counts and autotap state
-    const { data: currentUser, error: fetchError } = await supabase
+    const { data: currentUser, error: fetchError } = await supabaseAdmin
       .from("telegram_users")
       .select("game_state")
       .eq("user_id", userId)
@@ -406,7 +427,7 @@ export const updateTelegramUserProgress = async (
 
     const now = new Date().toISOString();
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await supabaseAdmin
       .from("telegram_users")
       .update({
         game_state: {
@@ -444,12 +465,12 @@ export const initializeOrUpdateUser = async (
       };
     }
 
-    if (!supabase) {
-      console.error("Supabase client not available");
+    if (!supabaseAdmin) {
+      console.error("Supabase admin client not available");
       return {
         success: false,
         isNewUser: false,
-        error: "Supabase client not available",
+        error: "Supabase admin client not available",
       };
     }
 
@@ -457,7 +478,7 @@ export const initializeOrUpdateUser = async (
     console.log("Checking if user exists...");
 
     // Check if user exists and get their current state
-    const { data: existingUser, error: fetchError } = await supabase
+    const { data: existingUser, error: fetchError } = await supabaseAdmin
       .from("telegram_users")
       .select("*, game_state")
       .eq("user_id", userData.id.toString())
@@ -631,7 +652,7 @@ export const initializeOrUpdateUser = async (
     console.log("Attempting to save user data:", userDataToSave);
 
     // Use insert for new users only (not upsert to avoid overwriting existing data)
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("telegram_users")
       .insert(userDataToSave)
       .select();
