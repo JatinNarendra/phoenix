@@ -172,7 +172,7 @@ const HowItWorksPage = () => {
       {/* Socials Grid */}
       <div className="grid grid-cols-2 gap-4 mt-8">
         {[
-          { icon: TelegramIcon, name: "Telegram", url: "https://t.me/SparkyTapGame" },
+          { icon: TelegramIcon, name: "Telegram", url: "https://t.me/devphoenixbot" },
           { icon: XIcon, name: "X", url: "https://x.com/TheSparkyVerse" },
           { icon: DiscordIcon, name: "Discord", url: "https://discord.gg/phoenixgame" },
           { icon: WebsiteIcon, name: "Website", url: "https://sparky.zone/" },

@@ -226,7 +226,7 @@ const LevelHowItWorksPage = () => {
             <button
               className="flex items-center justify-center gap-2 bg-[#1F1212] rounded-[10px] p-4 hover:bg-[#2A1818]"
               onClick={() =>
-                window.open("https://t.me/SparkyTapGame", "_blank")
+                window.open("https://t.me/devphoenixbot", "_blank")
               }
             >
               <Image src={telegramIcon} alt="Telegram" width={24} height={24} />

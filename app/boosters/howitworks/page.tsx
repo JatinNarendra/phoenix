@@ -129,7 +129,7 @@ const HowItWorksPage = () => {
       {/* Social Links */}
       <div className="mt-8 grid grid-cols-2 gap-4">
         <a
-          href="https://t.me/SparkyTapGame"
+          href="https://t.me/devphoenixbot"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] p-6 rounded-lg"

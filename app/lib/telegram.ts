@@ -42,7 +42,7 @@ const isDummyUser = (userId: string): boolean => {
 
 // Get bot URL from env with fallback
 export const getBotUrl = () => {
-  return process.env.BOT_URL || "https://t.me/PhoenixZoneBot";
+  return process.env.BOT_URL || "https://t.me/devphoenixbot";
 };
 
 // Get bot username from URL
