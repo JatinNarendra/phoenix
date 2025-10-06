@@ -25,7 +25,7 @@ export const SPIN_PURCHASE_OPTIONS = [
     icon: "yellow",
     spins: 20,
     bonus: "",
-    price: 1,
+    price: 6,
     freeForNow: false,
   },
   {
