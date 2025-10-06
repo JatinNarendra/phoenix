@@ -9,6 +9,7 @@ import CampaignOpenTreasure from "../../public/assets/CampaignOpenTreasure.png";
 import TaskCompletedDiamond from "../../public/assets/TaskCompletedDiamond.png";
 import { FaChevronRight } from "react-icons/fa";
 import { useGame } from "../context/GameContext";
+import { getLevelDetailsImage } from "../utility/imageHelpers";
 
 const LevelDescriptionPage = () => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const LevelDescriptionPage = () => {
   const { gameState } = useGame();
 
   // Get level from query parameter, default to current level if not provided
-  const level = parseInt(searchParams.get('level') || '1', 10);
+  const level = parseInt(searchParams.get("level") || "1", 10);
 
   // Function to calculate current level based on coins
   const calculateCurrentLevel = (coins: number): number => {
@@ -46,34 +47,25 @@ const LevelDescriptionPage = () => {
     if (WebApp) {
       WebApp.BackButton.show();
       WebApp.enableClosingConfirmation();
-      
+
       const handleBack = () => {
-        router.push('/level-details');
+        router.push("/level-details");
       };
 
       WebApp.BackButton.onClick(handleBack);
-      
+
       return () => {
         WebApp.BackButton.offClick(handleBack);
       };
     }
   }, [WebApp, router]);
 
-  // Function to get the phoenix image based on level
-  const getPhoenixImage = (level: number): string => {
-    try {
-      return  `/assets/leveldetails/leveldetailsbg${level}.png`;
-    } catch {
-      return "/assets/leveldetails/leveldetailsbg1.png";
-    }
-  };
-
   return (
     <div className="min-h-screen text-white">
       {/* Background Image Section */}
       <div className="fixed -inset-4 h-[80vh] z-0 overflow-hidden">
         <Image
-          src={getPhoenixImage(level)}
+          src={getLevelDetailsImage(level)}
           alt={`Level ${level} Phoenix`}
           width={0}
           height={0}
@@ -157,4 +149,4 @@ const LevelDescriptionPage = () => {
   );
 };
 
-export default LevelDescriptionPage; 
+export default LevelDescriptionPage;
