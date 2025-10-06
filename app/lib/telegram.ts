@@ -1,29 +1,8 @@
 "use client";
 
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../lib/supabase";
 import { AUTO_TAP_DURATION } from "../constants/gameConstants";
 import { levelConfig } from "../utility/stageConfig";
-
-// Create a service role client for server-side operations
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!supabaseUrl || !supabaseServiceKey) {
-  console.error("Missing Supabase environment variables:", {
-    url: !!supabaseUrl,
-    serviceKey: !!supabaseServiceKey,
-  });
-}
-
-const supabaseAdmin =
-  supabaseUrl && supabaseServiceKey
-    ? createClient(supabaseUrl, supabaseServiceKey, {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false,
-        },
-      })
-    : null;
 
 // Helper function to detect users that should be re-initialized when DB entry is missing
 const shouldReinitializeOnMissing = (userId: string): boolean => {
@@ -331,13 +310,13 @@ export const updateTelegramUserProgress = async (
       return;
     }
 
-    if (!supabaseAdmin) {
-      console.error("Supabase admin client not available");
+    if (!supabase) {
+      console.error("Supabase client not available");
       return;
     }
 
     // First get current state to preserve booster counts and autotap state
-    const { data: currentUser, error: fetchError } = await supabaseAdmin
+    const { data: currentUser, error: fetchError } = await supabase
       .from("telegram_users")
       .select("game_state")
       .eq("user_id", userId)
@@ -431,7 +410,7 @@ export const updateTelegramUserProgress = async (
 
     const now = new Date().toISOString();
 
-    const { error: updateError } = await supabaseAdmin
+    const { error: updateError } = await supabase
       .from("telegram_users")
       .update({
         game_state: {
@@ -469,12 +448,12 @@ export const initializeOrUpdateUser = async (
       };
     }
 
-    if (!supabaseAdmin) {
-      console.error("Supabase admin client not available");
+    if (!supabase) {
+      console.error("Supabase client not available");
       return {
         success: false,
         isNewUser: false,
-        error: "Supabase admin client not available",
+        error: "Supabase client not available",
       };
     }
 
@@ -482,7 +461,7 @@ export const initializeOrUpdateUser = async (
     console.log("Checking if user exists...");
 
     // Check if user exists and get their current state
-    const { data: existingUser, error: fetchError } = await supabaseAdmin
+    const { data: existingUser, error: fetchError } = await supabase
       .from("telegram_users")
       .select("*, game_state")
       .eq("user_id", userData.id.toString())
@@ -656,7 +635,7 @@ export const initializeOrUpdateUser = async (
     console.log("Attempting to save user data:", userDataToSave);
 
     // Use insert for new users only (not upsert to avoid overwriting existing data)
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from("telegram_users")
       .insert(userDataToSave)
       .select();
@@ -791,8 +770,8 @@ export const handleStartCommand = async (
       return false;
     }
 
-    if (!supabaseAdmin) {
-      console.error("Supabase admin client not available");
+    if (!supabase) {
+      console.error("Supabase client not available");
       return false;
     }
 
@@ -820,7 +799,7 @@ export const handleStartCommand = async (
         await sendTelegramMessage(userId, "❌ You cannot refer yourself!");
       } else {
         // Check if this user has already been referred (to prevent duplicate rewards)
-        const { data: userData, error: userError } = await supabaseAdmin
+        const { data: userData, error: userError } = await supabase
           .from("telegram_users")
           .select("referred_by")
           .eq("user_id", userId.toString())
@@ -843,7 +822,7 @@ export const handleStartCommand = async (
           } else {
             console.log("✅ New referral - updating user record");
             // First update the referred_by field in telegram_users
-            const { error: updateError } = await supabaseAdmin
+            const { error: updateError } = await supabase
               .from("telegram_users")
               .update({
                 referred_by: referrerId,
@@ -862,7 +841,7 @@ export const handleStartCommand = async (
             );
 
             // Check if we have an existing record first to absolutely prevent duplicates
-            const { data: existingRecord } = await supabaseAdmin
+            const { data: existingRecord } = await supabase
               .from("user_referrals")
               .select("*")
               .eq("referee_id", userId.toString())
@@ -877,7 +856,7 @@ export const handleStartCommand = async (
               );
             } else {
               // Then create a record in the user_referrals table
-              const { error: referralError } = await supabaseAdmin
+              const { error: referralError } = await supabase
                 .from("user_referrals")
                 .insert({
                   referrer_id: referrerId,
@@ -955,12 +934,12 @@ export const saveGameProgress = async (
   gameState: TelegramGameState
 ): Promise<boolean> => {
   try {
-    if (!supabaseAdmin) {
-      console.error("Supabase admin client not available");
+    if (!supabase) {
+      console.error("Supabase client not available");
       return false;
     }
 
-    const { error } = await supabaseAdmin
+    const { error } = await supabase
       .from("telegram_users")
       .update({
         game_state: gameState,
