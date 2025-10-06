@@ -3,37 +3,29 @@ import React, { useState, useEffect } from "react";
 import { useWebApp } from "@/app/hooks/useWebApp";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import TaskTelegram from "@/public/assets/TaskTelegramIcon.png";
-import TaskYoutube from "@/public/assets/TaskYoutubeIcon.png";
-import TaskX from "@/public/assets/TaskXIcon.png";
-import TaskDiscord from "@/public/assets/discordicon.png";
-import SparkyIcon from "@/public/assets/SparkyIcon.png";
-import SpinIcon from "@/public/assets/SpinIcon.png";
-import TaskCompletedDiamond from "@/public/assets/TaskCompletedDiamond.png";
+// Remove image imports - we'll use src paths instead
 import { CustomerSocialLink } from "@/app/types/Customer";
-import SparkyCampaignBG from "@/public/assets/SparkyCampaign/SparkyCampaignBG.png";
+// Remove image imports - we'll use src paths instead
 import CampaignTaskPopup from "@/app/earn/components/TaskPopup";
 import { gameToast } from "@/app/utility/customToast";
 import { getTaskCompletionStatus } from "@/app/lib/taskCompletionUtils";
 import { useUser } from "@/app/hooks/useUser";
-import TreasureBox from "@/public/assets/TreasureBox.png";
-import LockedYellow from "@/public/assets/LockedYellow.png";
-import GoldDownArrows from "@/public/assets/GoldDownArrows.png";
-import RedStar from "@/public/assets/RedStar.png";
+// Remove image imports - we'll use src paths instead
+// Remove image imports - we'll use src paths instead
 import CampaignRewardPopup from "@/app/earn/components/CampaignRewardPopup";
 import { supabase } from "@/lib/supabase";
 import { useGame } from "@/app/context/GameContext";
 
 const platformIcons = {
-  TELEGRAM_CHANNEL: TaskTelegram,
-  TELEGRAM_GROUP: TaskTelegram,
-  X: TaskX,
-  X_RETWEET: TaskX,
-  YOUTUBE_VIEWS: TaskYoutube,
-  YOUTUBE_SUBSCRIBERS: TaskYoutube,
-  YOUTUBE: TaskYoutube,
-  TELEGRAM: TaskTelegram,
-  DISCORD: TaskDiscord,
+  TELEGRAM_CHANNEL: "/assets/TaskTelegramIcon.png",
+  TELEGRAM_GROUP: "/assets/TaskTelegramIcon.png",
+  X: "/assets/TaskXIcon.png",
+  X_RETWEET: "/assets/TaskXIcon.png",
+  YOUTUBE_VIEWS: "/assets/TaskYoutubeIcon.png",
+  YOUTUBE_SUBSCRIBERS: "/assets/TaskYoutubeIcon.png",
+  YOUTUBE: "/assets/TaskYoutubeIcon.png",
+  TELEGRAM: "/assets/TaskTelegramIcon.png",
+  DISCORD: "/assets/discordicon.png",
 };
 
 const getTaskTitle = (platform: string, customerName: string) => {
@@ -271,7 +263,7 @@ export function CustomerCampaignClient({
     <div className="min-h-screen relative overflow-y-auto pb-20">
       <div className="fixed inset-0 z-0">
         <Image
-          src={SparkyCampaignBG}
+          src="/assets/SparkyCampaign/SparkyCampaignBG.png"
           alt="Campaign Background"
           fill
           style={{ objectFit: "cover" }}
@@ -291,7 +283,7 @@ export function CustomerCampaignClient({
         <div className="w-full relative backdrop-blur-[14px] rounded-[10px] bg-[rgba(41,24,24,0.7)] border border-[rgba(255,255,255,0.1)] box-border p-4 mb-4">
           <div className="flex items-center gap-2.5">
             <Image
-              src={customerData.logo_url || SparkyIcon}
+              src={customerData.logo_url || "/assets/SparkyIcon.png"}
               alt={customerData.customer_name}
               width={36}
               height={36}
@@ -325,7 +317,7 @@ export function CustomerCampaignClient({
               />
             </div>
             <Image
-              src={TreasureBox}
+              src="/assets/TreasureBox.png"
               alt="Treasure Box"
               width={24}
               height={24}
@@ -335,7 +327,7 @@ export function CustomerCampaignClient({
           {/* customer campaign detail overview card*/}
           <div className="flex items-center gap-4 mt-4">
             <div className="flex items-center gap-1">
-              <Image src={SparkyIcon} alt="Sparky" width={16} height={16} />
+              <Image src="/assets/SparkyIcon.png" alt="Sparky" width={16} height={16} />
               <span className="text-xs text-[#909090] font-bold">
                 {customerData.tasks
                   .filter((task) => completedTasks[task.id])
@@ -349,7 +341,7 @@ export function CustomerCampaignClient({
               </span>
             </div>
             <div className="flex items-center gap-1">
-              <Image src={SpinIcon} alt="Spin" width={16} height={16} />
+              <Image src="/assets/SpinIcon.png" alt="Spin" width={16} height={16} />
               <span className="text-xs text-[#909090] font-bold">
                 {customerData.tasks
                   .filter((task) => completedTasks[task.id])
@@ -381,7 +373,7 @@ export function CustomerCampaignClient({
                   <div className="grid grid-cols-[auto,1fr,auto] gap-4 items-center">
                     <div className="flex items-center">
                       <Image
-                        src={platformIcons[task.platform] || SparkyIcon}
+                         src={platformIcons[task.platform] || "/assets/SparkyIcon.png"}
                         alt={task.platform}
                         width={32}
                         height={32}
@@ -397,7 +389,7 @@ export function CustomerCampaignClient({
                       <div className="flex items-center gap-3 mt-1">
                         <div className="flex items-center gap-1">
                           <Image
-                            src={SparkyIcon}
+                             src="/assets/SparkyIcon.png"
                             alt="Sparky"
                             width={16}
                             height={16}
@@ -408,7 +400,7 @@ export function CustomerCampaignClient({
                         </div>
                         <div className="flex items-center gap-1">
                           <Image
-                            src={SpinIcon}
+                            src="/assets/SpinIcon.png"
                             alt="Spin"
                             width={16}
                             height={16}
@@ -422,7 +414,7 @@ export function CustomerCampaignClient({
                     {isCompleted && (
                       <div className="flex items-center justify-center">
                         <Image
-                          src={TaskCompletedDiamond}
+                          src="/assets/TaskCompletedDiamond.png"
                           alt="Completed"
                           width={24}
                           height={24}
@@ -444,19 +436,19 @@ export function CustomerCampaignClient({
         {/* Unlock Reward Section */}
         <div className="flex items-center justify-between w-full p-4 mb-4">
           <Image
-            src={GoldDownArrows}
+            src="/assets/GoldDownArrows.png"
             alt="Gold Arrows"
             width={20}
             height={20}
             className="ml-4"
           />
           <div className="flex items-center gap-1 px-4 py-2 bg-[#3A1C09] rounded-lg w-[210px] h-[40px]">
-            <Image src={RedStar} alt="Red Star" width={14} height={14} />
+            <Image src="/assets/RedStar.png" alt="Red Star" width={14} height={14} />
             <span className="text-[#909090] text-sm">Unlock your reward</span>
-            <Image src={RedStar} alt="Red Star" width={14} height={14} />
+            <Image src="/assets/RedStar.png" alt="Red Star" width={14} height={14} />
           </div>
           <Image
-            src={GoldDownArrows}
+            src="/assets/GoldDownArrows.png"
             alt="Gold Arrows"
             width={20}
             height={20}
@@ -485,7 +477,7 @@ export function CustomerCampaignClient({
             <div className="flex items-center gap-2">
               <div className="bg-[#3A1C09] rounded-lg p-2">
                 <Image
-                  src={TreasureBox}
+                  src="/assets/TreasureBox.png"
                   alt="Mystery Treasure"
                   width={32}
                   height={32}
@@ -498,13 +490,13 @@ export function CustomerCampaignClient({
             </div>
             {isCampaignCompleted ? (
               <Image
-                src={TaskCompletedDiamond}
+                src="/assets/TaskCompletedDiamond.png"
                 alt="All Tasks Completed"
                 width={28}
                 height={28}
               />
             ) : completedTasksCount === customerData.totalTasks ? null : (
-              <Image src={LockedYellow} alt="Locked" width={32} height={32} />
+              <Image src="/assets/LockedYellow.png" alt="Locked" width={32} height={32} />
             )}
           </div>
         </div>
