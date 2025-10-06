@@ -3,29 +3,23 @@ import React, { useState, useEffect } from "react";
 import { useWebApp } from "@/app/hooks/useWebApp";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import TaskTelegram from "@/public/assets/TaskTelegramIcon.png";
-import TaskYoutube from "@/public/assets/TaskYoutubeIcon.png";
-import TaskX from "@/public/assets/TaskXIcon.png";
-import TaskDiscord from "@/public/assets/discordicon.png";
-import SparkyIcon from "@/public/assets/SparkyIcon.png";
-import SpinIcon from "@/public/assets/SpinIcon.png";
-import TaskCompletedDiamond from "@/public/assets/TaskCompletedDiamond.png";
+// Remove image imports - we'll use src paths instead
 import { PlatformType } from "@/app/types/Customer";
-import SparkyCampaignBG from "@/public/assets/SparkyCampaign/SparkyCampaignBG.png";
+// Remove image imports - we'll use src paths instead
 import { gameToast } from "@/app/utility/customToast";
 import { useUser } from "@/app/hooks/useUser";
 import { supabase } from "@/lib/supabase";
 
 const platformIcons = {
-  TELEGRAM_CHANNEL: TaskTelegram.src,
-  TELEGRAM_GROUP: TaskTelegram.src,
-  X: TaskX.src,
-  X_RETWEET: TaskX.src,
-  YOUTUBE_VIEWS: TaskYoutube.src,
-  YOUTUBE_SUBSCRIBERS: TaskYoutube.src,
-  YOUTUBE: TaskYoutube.src,
-  TELEGRAM: TaskTelegram.src,
-  DISCORD: TaskDiscord.src,
+  TELEGRAM_CHANNEL: "/assets/TaskTelegramIcon.png",
+  TELEGRAM_GROUP: "/assets/TaskTelegramIcon.png",
+  X: "/assets/TaskXIcon.png",
+  X_RETWEET: "/assets/TaskXIcon.png",
+  YOUTUBE_VIEWS: "/assets/TaskYoutubeIcon.png",
+  YOUTUBE_SUBSCRIBERS: "/assets/TaskYoutubeIcon.png",
+  YOUTUBE: "/assets/TaskYoutubeIcon.png",
+  TELEGRAM: "/assets/TaskTelegramIcon.png",
+  DISCORD: "/assets/discordicon.png",
 };
 
 const getTaskTitle = (platform: string, customerName: string) => {
@@ -237,7 +231,7 @@ export default function ArchivedTasksPage() {
     <div className="min-h-screen relative overflow-y-auto pb-20">
       <div className="fixed inset-0 z-0">
         <Image
-          src={SparkyCampaignBG}
+          src="/assets/SparkyCampaign/SparkyCampaignBG.png"
           alt="Campaign Background"
           fill
           style={{ objectFit: "cover" }}
@@ -262,7 +256,7 @@ export default function ArchivedTasksPage() {
                 <div className="grid grid-cols-[auto,1fr,auto] gap-4 items-center">
                   <div className="flex items-center">
                     <Image
-                      src={campaign.logo_url || SparkyIcon}
+                      src={campaign.logo_url || "/assets/SparkyIcon.png"}
                       alt={campaign.customer_name}
                       width={32}
                       height={32}
@@ -276,7 +270,7 @@ export default function ArchivedTasksPage() {
                     <div className="flex items-center gap-3 mt-1">
                       <div className="flex items-center gap-1">
                         <Image
-                          src={SparkyIcon}
+                          src="/assets/SparkyIcon.png"
                           alt="Sparky"
                           width={16}
                           height={16}
@@ -287,7 +281,7 @@ export default function ArchivedTasksPage() {
                       </div>
                       <div className="flex items-center gap-1">
                         <Image
-                          src={SpinIcon}
+                          src="/assets/SpinIcon.png"
                           alt="Spin"
                           width={16}
                           height={16}
@@ -304,7 +298,7 @@ export default function ArchivedTasksPage() {
                   </div>
                   <div className="flex items-center">
                     <Image
-                      src={TaskCompletedDiamond}
+                      src="/assets/TaskCompletedDiamond.png"
                       alt="Completed"
                       width={24}
                       height={24}
@@ -328,7 +322,7 @@ export default function ArchivedTasksPage() {
                 <div className="grid grid-cols-[auto,1fr,auto] gap-4 items-center">
                   <div className="flex items-center">
                     <Image
-                      src={platformIcons[task.platform] || SparkyIcon}
+                      src={platformIcons[task.platform] || "/assets/SparkyIcon.png"}
                       alt={task.platform}
                       width={32}
                       height={32}
@@ -341,7 +335,7 @@ export default function ArchivedTasksPage() {
                     <div className="flex items-center gap-3 mt-1">
                       <div className="flex items-center gap-1">
                         <Image
-                          src={SparkyIcon}
+                          src="/assets/SparkyIcon.png"
                           alt="Sparky"
                           width={16}
                           height={16}
@@ -352,7 +346,7 @@ export default function ArchivedTasksPage() {
                       </div>
                       <div className="flex items-center gap-1">
                         <Image
-                          src={SpinIcon}
+                          src="/assets/SpinIcon.png"
                           alt="Spin"
                           width={16}
                           height={16}
@@ -369,7 +363,7 @@ export default function ArchivedTasksPage() {
                   </div>
                   <div className="flex items-center">
                     <Image
-                      src={TaskCompletedDiamond}
+                      src="/assets/TaskCompletedDiamond.png"
                       alt="Completed"
                       width={24}
                       height={24}

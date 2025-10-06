@@ -3,7 +3,6 @@ import React from "react";
 import Image from "next/image";
 import { useGame } from "../context/GameContext";
 import { useRouter } from "next/navigation";
-// Remove image imports - we'll use src paths instead
 import { gameToast } from "../utility/customToast";
 import { getEnergyConfig } from "../utility/energyConfig";
 import CustomYellowButton from "@/app/ui/CustomYellowButton";
