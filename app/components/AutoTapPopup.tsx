@@ -9,15 +9,10 @@ import { calculateAutoTapReward } from "../utility/gameUtils";
 import { useGameFeatures } from "../context/GameFeaturesContext";
 import { gameToast } from "../utility/customToast";
 import Image from "next/image";
-import SparkyIcon from "../../public/assets/SparkyIcon.png";
-import PurchaseBotPopupIcon from "../../public/assets/purchasebotpopupicon.png";
-import ActivateBotPopupIcon from "../../public/assets/activatebotpopupicon.png";
-import TapDiscriptionIcon from "../../public/assets/TapDiscriptionIcon.png";
-import Close from "../../public/assets/Close.png";
+// Remove image imports - we'll use src paths instead
 import { supabase } from "@/lib/supabase";
 import timerService from "../services/timerService";
-import miningcompletedicon from "../../public/assets/miningcompletedicon.png";
-import AutoTapBotInProgress from "../../public/assets/autotapbotinprogress.png";
+// Remove image imports - we'll use src paths instead
 import CustomYellowButton from "@/app/ui/CustomYellowButton";
 
 // Extend the GameState type to include our custom property
@@ -207,13 +202,13 @@ const AutoTapInProgressPopup: React.FC<AutoTapInProgressPopupProps> = ({
                 }}
                 className="text-gray-400 hover:text-white"
               >
-                <Image src={Close.src} alt="Close" width={32} height={32} />
+                <Image src="/assets/Close.png" alt="Close" width={32} height={32} />
               </button>
             </div>
 
             <div className="flex flex-col items-center space-y-6">
               <Image
-                src={AutoTapBotInProgress}
+                src="/assets/autotapbotinprogress.png"
                 alt="Auto Tap"
                 width={150}
                 height={150}
@@ -231,7 +226,7 @@ const AutoTapInProgressPopup: React.FC<AutoTapInProgressPopupProps> = ({
 
               <div className="w-full flex items-center justify-center space-x-2 mt-4">
                 <Image
-                  src={SparkyIcon}
+                  src="/assets/SparkyIcon.png"
                   alt="Spark"
                   width={24}
                   height={24}
@@ -260,7 +255,7 @@ const AutoTapInProgressPopup: React.FC<AutoTapInProgressPopupProps> = ({
               <div className="bg-[#3a1c09] rounded-xl p-4 w-full mt-4">
                 <div className="flex items-center space-x-3">
                   <Image
-                    src={TapDiscriptionIcon}
+                    src="/assets/TapDiscriptionIcon.png"
                     alt="Description"
                     width={36}
                     height={36}
@@ -383,12 +378,12 @@ const AutoTapClaimPopup: React.FC<AutoTapClaimPopupProps> = ({
               onClick={onClose}
               className="absolute top-4 right-4 text-gray-400 hover:text-white z-10"
             >
-              <Image src={Close.src} alt="Close" width={32} height={32} />
+              <Image src="/assets/Close.png" alt="Close" width={32} height={32} />
             </button>
 
             <div className="flex flex-col items-center py-[40px] space-y-6">
               <Image
-                src={miningcompletedicon}
+                src="/assets/miningcompletedicon.png"
                 alt="Auto Tap Bot"
                 width={100}
                 height={100}
@@ -406,7 +401,7 @@ const AutoTapClaimPopup: React.FC<AutoTapClaimPopupProps> = ({
 
               <div className="w-full flex items-center justify-center space-x-2">
                 <Image
-                  src={SparkyIcon}
+                  src="/assets/SparkyIcon.png"
                   alt="Spark"
                   width={24}
                   height={24}
@@ -814,13 +809,13 @@ const AutoTapPopup: React.FC<AutoTapPopupProps> = ({
                 onClick={onClose}
                 className="text-gray-400 hover:text-white"
               >
-                <Image src={Close.src} alt="Close" width={32} height={32} />
+                <Image src="/assets/Close.png" alt="Close" width={32} height={32} />
               </button>
             </div>
 
             <div className="flex flex-col items-center space-y-8 py-4">
               <Image
-                src={isPurchased ? ActivateBotPopupIcon : PurchaseBotPopupIcon}
+                src={isPurchased ? "/assets/activatebotpopupicon.png" : "/assets/purchasebotpopupicon.png"}
                 alt="Auto Tap"
                 width={100}
                 height={100}
@@ -845,7 +840,7 @@ const AutoTapPopup: React.FC<AutoTapPopupProps> = ({
               {!isPurchased && (
                 <div className="flex items-center justify-center space-x-2">
                   <Image
-                    src={SparkyIcon}
+                    src="/assets/SparkyIcon.png"
                     alt="Spark"
                     width={24}
                     height={24}
@@ -860,7 +855,7 @@ const AutoTapPopup: React.FC<AutoTapPopupProps> = ({
               <div className="bg-[#3a1c09] rounded-xl px-6 py-4 w-full">
                 <div className="flex items-center space-x-3">
                   <Image
-                    src={TapDiscriptionIcon}
+                    src="/assets/TapDiscriptionIcon.png"
                     alt="Description"
                     width={36}
                     height={36}
