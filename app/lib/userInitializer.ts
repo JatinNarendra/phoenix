@@ -22,6 +22,14 @@ export const resetUserProgressionData = () => {
   }
 };
 
+// Utility function to reset initialization state
+export const resetInitializationState = () => {
+  hasInitialized = false;
+  initializationPromise = null;
+  lastInitializedUserId = null;
+  console.log("🔄 Initialization state reset");
+};
+
 export const initializeUserOnce = (
   WebApp: TelegramWebApp
 ): Promise<InitializeResult> => {
@@ -62,6 +70,11 @@ export const initializeUserOnce = (
 
   // If we've already completed initialization for this user, return a resolved promise
   if (hasInitialized && lastInitializedUserId === currentUserId) {
+    console.log("🔄 User already initialized, skipping API call:", {
+      hasInitialized,
+      lastInitializedUserId,
+      currentUserId,
+    });
     return Promise.resolve({ success: true });
   }
 
