@@ -212,17 +212,31 @@ export const useUser = () => {
 
       console.log("useUser: Setting user data:", userData);
       try {
+        console.log("🔄 useUser: Calling initializeUserOnce...");
         const result = await initializeUserOnce(WebApp);
+        console.log("🔄 useUser: initializeUserOnce result:", result);
+
         if (!result.success) {
-          console.error("User initialization failed:", result.error);
+          console.error("❌ User initialization failed:", result.error);
+          console.error("❌ Full error details:", {
+            success: result.success,
+            error: result.error,
+            isNewUser: result.isNewUser,
+          });
           // Even if initialization fails, we still want to set the user data
           // as we have it from Telegram
+        } else {
+          console.log("✅ User initialization successful in useUser");
         }
         setUser(userData);
         initializationCompleted.current = true;
         console.log("useUser: User initialization completed");
       } catch (error) {
-        console.error("User initialization error:", error);
+        console.error("❌ User initialization error:", error);
+        console.error(
+          "❌ Error stack:",
+          error instanceof Error ? error.stack : "No stack trace"
+        );
         // Set user data even if initialization fails
         setUser(userData);
         initializationCompleted.current = true;
