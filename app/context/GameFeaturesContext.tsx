@@ -159,6 +159,9 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
         lastActiveTime: Date.now(), // Update last active time
       }));
 
+      // Game toast: notify user about awarded spins
+      toast.success("+5 spins added");
+
       // Restart timer if still under 50 spins after adding
       const newSpinCount = Math.min(50, gameState.spins + 5);
       if (newSpinCount < 50) {
@@ -197,15 +200,27 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsTimerLoading(true);
       const activeTimers = timerService.getAllActiveTimers();
 
-      // Initialize spin timer if needed
-      if (
-        gameState.spins < 50 &&
-        (!activeTimers.spin || activeTimers.spin.status !== "active")
-      ) {
-        timerService.startTimer(TimerType.SPIN, 2.5 * 60 * 60 * 1000); // 2.5 hours
-        // Get updated timers after starting spin timer
-        const updatedTimers = timerService.getAllActiveTimers();
-        setTimersState(updatedTimers);
+      // Initialize or resolve spin timer state correctly
+      if (gameState.spins < 50) {
+        const spinTimer = activeTimers.spin;
+
+        if (!spinTimer) {
+          // No timer → start fresh
+          timerService.startTimer(TimerType.SPIN, 2.5 * 60 * 60 * 1000); // 2.5 hours
+          const updatedTimers = timerService.getAllActiveTimers();
+          setTimersState(updatedTimers);
+        } else if (
+          spinTimer.status === "completed" ||
+          (spinTimer.endTime && spinTimer.endTime <= Date.now())
+        ) {
+          // Completed/expired → award 5 spins, then restart inside handler if still <50
+          handleSpinTimerComplete();
+          const updatedTimers = timerService.getAllActiveTimers();
+          setTimersState(updatedTimers);
+        } else {
+          // Active → just use it
+          setTimersState(activeTimers);
+        }
       } else {
         setTimersState(activeTimers);
       }
@@ -228,8 +243,19 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
         if (gameState.spins < 50) {
           const spinTimer = timers.spin;
 
-          // If timer is completed or doesn't exist, handle completion and start new timer
-          if (!spinTimer || spinTimer.status === "completed") {
+          // If timer doesn't exist, start a fresh 2.5h timer
+          if (!spinTimer) {
+            timerService.startTimer(TimerType.SPIN, 2.5 * 60 * 60 * 1000);
+            const updatedTimers = timerService.getAllActiveTimers();
+            if (
+              JSON.stringify(updatedTimers) !==
+              JSON.stringify(prevTimersRef.current)
+            ) {
+              prevTimersRef.current = updatedTimers;
+              setTimersState(updatedTimers);
+            }
+          } else if (spinTimer.status === "completed") {
+            // If timer completed, award spins and possibly restart inside handler
             handleSpinTimerComplete();
             const updatedTimers = timerService.getAllActiveTimers();
             if (
@@ -259,6 +285,28 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
       clearInterval(intervalId);
     };
   }, [userId, gameState.spins, handleSpinTimerComplete]);
+
+  // When spins drop from >=50 to <50, start a fresh 2.5h timer
+  useEffect(() => {
+    const prevSpinsRef = { current: gameState.spins } as { current: number };
+    return () => {
+      prevSpinsRef.current = gameState.spins;
+    };
+  }, []);
+
+  useEffect(() => {
+    // Track previous spins using a static ref on the window to avoid rerender issues
+    const w = window as unknown as { __prevSpins?: number };
+    const prevSpins = w.__prevSpins;
+    if (typeof prevSpins === "number") {
+      if (prevSpins >= 50 && gameState.spins < 50) {
+        // Start a new timer from now when dropping below 50
+        timerService.startTimer(TimerType.SPIN, 2.5 * 60 * 60 * 1000);
+        setTimersState(timerService.getAllActiveTimers());
+      }
+    }
+    w.__prevSpins = gameState.spins;
+  }, [gameState.spins]);
 
   // Load auto-tap state
   useEffect(() => {

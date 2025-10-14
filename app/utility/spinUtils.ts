@@ -19,35 +19,40 @@ export function calculateRetroactiveSpins(
     return {
       spinsToAdd: 0,
       minutesAway: 0,
-      explanation: "User already has maximum spins"
+      explanation: "User already has maximum spins",
     };
   }
 
   const now = Date.now();
   const timeDifference = now - lastActiveTime;
-  
+
   // Only calculate if user was away for more than 1 minute
   if (timeDifference < 60 * 1000) {
     return {
       spinsToAdd: 0,
       minutesAway: 0,
-      explanation: "User was away for less than 1 minute"
+      explanation: "User was away for less than 1 minute",
     };
   }
 
   // Calculate minutes away (rounded down)
   const minutesAway = Math.floor(timeDifference / (60 * 1000));
-  
-  // Calculate spins to add (2 spins per minute)
-  const potentialSpinsToAdd = minutesAway * 2;
-  
+
+  // Award ONLY full blocks: 5 spins per 150 minutes (2.5 hours)
+  const blockMinutes = 150; // minutes per block
+  const spinsPerBlock = 5; // spins awarded per full block
+
+  // Calculate number of full 2.5h blocks elapsed
+  const fullBlocks = Math.floor(minutesAway / blockMinutes);
+  const potentialSpinsToAdd = fullBlocks * spinsPerBlock;
+
   // Cap the total spins at maxSpins
   const spinsToAdd = Math.min(potentialSpinsToAdd, maxSpins - currentSpins);
-  
+
   return {
     spinsToAdd,
     minutesAway,
-    explanation: `User was away for ${minutesAway} minutes, adding ${spinsToAdd} spins (${potentialSpinsToAdd} calculated, capped at ${maxSpins} total)`
+    explanation: `Away ${minutesAway}m → ${spinsToAdd} spins (${spinsPerBlock} per ${blockMinutes}m block, capped to ${maxSpins})`,
   };
 }
 
@@ -56,10 +61,12 @@ export function calculateRetroactiveSpins(
  * @param gameState - Current game state
  * @returns Updated game state with new lastActiveTime
  */
-export function updateLastActiveTime<T extends { lastActiveTime?: number }>(gameState: T): T {
+export function updateLastActiveTime<T extends { lastActiveTime?: number }>(
+  gameState: T
+): T {
   return {
     ...gameState,
-    lastActiveTime: Date.now()
+    lastActiveTime: Date.now(),
   };
 }
 
@@ -75,5 +82,5 @@ export function shouldCalculateRetroactiveSpins(
 ): boolean {
   const now = Date.now();
   const timeDifference = now - lastActiveTime;
-  return timeDifference >= (minimumMinutes * 60 * 1000);
-} 
+  return timeDifference >= minimumMinutes * 60 * 1000;
+}

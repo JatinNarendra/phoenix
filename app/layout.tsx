@@ -111,8 +111,6 @@ export default function RootLayout({
         className={`${mplus.className} font-rounded-mplus`}
       >
         <ConditionalLayout>{children}</ConditionalLayout>
-        <UserInitializationDebugger />
-        <FrontendInitializationTest />
       </body>
     </html>
   );

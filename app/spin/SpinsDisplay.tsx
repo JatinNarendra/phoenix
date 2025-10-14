@@ -130,8 +130,10 @@ const SpinsDisplay: React.FC<SpinsDisplayProps> = ({
                 <div
                   className="absolute inset-0 bg-[#301402] transition-all duration-300"
                   style={{
-                    // Testing code - 1 minute timer (60 seconds)
-                    width: `${((60 - internalTimer) / 60) * 100}%`,
+                    // Reflect actual 2.5h (9000s) timer progression
+                    width: `${
+                      ((2.5 * 60 * 60 - internalTimer) / (2.5 * 60 * 60)) * 100
+                    }%`,
                   }}
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
