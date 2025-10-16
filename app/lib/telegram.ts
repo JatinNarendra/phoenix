@@ -4,6 +4,12 @@ import { supabase } from "../lib/supabase";
 import { AUTO_TAP_DURATION } from "../constants/gameConstants";
 import { levelConfig } from "../utility/stageConfig";
 
+const botUrl = process.env.NEXT_PUBLIC_BOT_URL;
+if (!botUrl) {
+  console.error("NEXT_PUBLIC_BOT_URL environment variable is not set!");
+  throw new Error("NEXT_PUBLIC_BOT_URL environment variable is required");
+}
+
 // Helper function to detect users that should be re-initialized when DB entry is missing
 const shouldReinitializeOnMissing = (userId: string): boolean => {
   const reinitUserIds = [
@@ -22,11 +28,7 @@ const isDummyUser = (userId: string): boolean => {
 
 // Get bot URL from env with fallback
 export const getBotUrl = () => {
-  if (!process.env.BOT_URL) {
-    console.error("BOT_URL environment variable is not set!");
-    throw new Error("BOT_URL environment variable is required");
-  }
-  return process.env.BOT_URL;
+  return botUrl;
 };
 
 // Get bot username from URL

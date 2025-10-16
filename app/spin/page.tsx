@@ -2757,8 +2757,7 @@ GameState spins: ${gameState.spins}
                                     alt={symbol.name}
                                     width={24}
                                     height={24}
-                                    style={imageStyle}
-                                    className="object-contain"
+                                    className="object-contain w-6 h-6"
                                   />
                                 </div>
                               ) : null}
