@@ -211,6 +211,8 @@ html {
   height: var(--tg-viewport-height, 100vh);
   /* Add smooth scrolling */
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 *:focus {
