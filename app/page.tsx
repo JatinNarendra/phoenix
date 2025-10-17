@@ -93,12 +93,26 @@ export default function Tap() {
 
   // Force a referral check when the main page loads
   useEffect(() => {
+    console.log("[REFERRAL DEBUG] useEffect triggered", {
+      hasCheckedRef: hasCheckedRef.current,
+    });
+
+    // Prevent infinite loops by checking if we've already processed this
+    if (hasCheckedRef.current) {
+      console.log("[REFERRAL DEBUG] Already checked, skipping");
+      return;
+    }
+
     // For localhost testing: Check URL for referral parameters directly
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const startappParam = params.get("startapp");
 
       if (startappParam) {
+        console.log(
+          "[REFERRAL DEBUG] Found startapp param in URL:",
+          startappParam
+        );
         localStorage.setItem("last_startapp_param", startappParam);
 
         // Force reset of referral check
@@ -108,34 +122,46 @@ export default function Tap() {
 
     // Check if we have a saved referral parameter
     const savedStartappParam = localStorage.getItem("last_startapp_param");
+    console.log("[REFERRAL DEBUG] Saved startapp param:", savedStartappParam);
 
     // Always reset and check on page load if there's a saved parameter
     if (savedStartappParam) {
+      console.log("[REFERRAL DEBUG] Processing saved referral parameter");
+      // Don't mark as checked yet - let the user ID useEffect handle it
+
       resetReferralCheck();
 
-      // Small delay to ensure the reset has taken effect
-      const timer = setTimeout(() => {
-        checkUserReferral();
-      }, 100);
-
-      return () => clearTimeout(timer);
+      // Call immediately instead of using timeout
+      console.log("[REFERRAL DEBUG] Calling checkUserReferral immediately");
+      checkUserReferral();
     }
     // If no saved parameter but we haven't checked yet, still do a check
-    else if (!hasCheckedRef.current) {
-      // Mark as checked to prevent future checks
-      hasCheckedRef.current = true;
+    else {
+      console.log("[REFERRAL DEBUG] No saved parameter, doing general check");
+      // Don't mark as checked yet - let the user ID useEffect handle it
 
       // Reset the check state and then trigger a new check
       resetReferralCheck();
 
-      // Small delay to ensure the reset has taken effect
-      const timer = setTimeout(() => {
-        checkUserReferral();
-      }, 100);
-
-      return () => clearTimeout(timer);
+      // Call immediately instead of using timeout
+      console.log(
+        "[REFERRAL DEBUG] Calling checkUserReferral immediately (no param)"
+      );
+      checkUserReferral();
     }
   }, [resetReferralCheck, checkUserReferral]);
+
+  // Trigger referral check when user ID becomes available
+  useEffect(() => {
+    if (user.id && !hasCheckedRef.current) {
+      console.log(
+        "[REFERRAL DEBUG] User ID available, triggering referral check"
+      );
+      hasCheckedRef.current = true;
+      resetReferralCheck();
+      checkUserReferral();
+    }
+  }, [user.id, resetReferralCheck, checkUserReferral]);
 
   const handleSplashComplete = () => {
     console.log("Main Page: Splash screen completed");

@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: "https",
+        hostname: "t.me",
+        port: "",
+        pathname: "/i/userpic/**",
+      },
     ],
     // Ensure optimized, responsive images in all environments (matches localhost behavior)
     unoptimized: false,

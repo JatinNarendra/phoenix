@@ -70,6 +70,9 @@ export const ReferralProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
 
+    // Mark as checked immediately to prevent concurrent calls
+    setCheckedReferral(true);
+
     if (!supabase) {
       console.error("Supabase client not available");
       return;
@@ -465,16 +468,8 @@ export const ReferralProvider: React.FC<{ children: React.ReactNode }> = ({
         "[REFERRAL CONTEXT DEBUG] Error in checkUserReferral:",
         error
       );
-    } finally {
-      setCheckedReferral(true);
     }
-  }, [
-    user.id,
-    checkedReferral,
-    searchParams,
-    setCheckedReferral,
-    setShowReferralPopup,
-  ]);
+  }, [user.id, checkedReferral, searchParams]);
 
   const resetReferralCheck = useCallback(() => {
     setCheckedReferral(false);
