@@ -574,6 +574,13 @@ const SpinPage = () => {
         ...prev,
         spins: prev.spins + currentEarnedRewards.spins,
       }));
+
+      // Update the ref to match the new spin count for UI consistency
+      latestStateRef.current.spins =
+        gameState.spins + currentEarnedRewards.spins;
+
+      // Force UI update to reflect the new spin count
+      setLastUpdateTime(Date.now());
     }
 
     if (currentEarnedRewards.turbo > 0) {
@@ -585,6 +592,8 @@ const SpinPage = () => {
             (prev.boosts.rewardedTurbo || 0) + currentEarnedRewards.turbo,
         },
       }));
+      // Force UI update
+      setLastUpdateTime(Date.now());
     }
 
     if (currentEarnedRewards.recharge > 0) {
@@ -596,6 +605,8 @@ const SpinPage = () => {
             (prev.boosts.rewardedRecharge || 0) + currentEarnedRewards.recharge,
         },
       }));
+      // Force UI update
+      setLastUpdateTime(Date.now());
     }
 
     // Update last reward for display
@@ -697,20 +708,25 @@ const SpinPage = () => {
             latestStateRef.current.spinProcessAppliedRewards = null;
             // Clear the step completion rewards since they were already applied during spin
             clearStepCompletion();
-          } else if (!spinning) {
-            // Only apply rewards if not currently spinning to prevent race conditions
-            // Apply rewards first, then clear the step completion
-            applyRewards().then(() => {
-              // Mark this step's rewards as applied to prevent duplicate application
-              appliedStepRewardsRef.current = stepKey;
+          } else if (
+            !spinning &&
+            !latestStateRef.current.spinProcessAppliedRewards
+          ) {
+            // Only apply rewards if not currently spinning and not in a spin process to prevent race conditions
+            // Add a small delay to ensure spin process is completely finished
+            setTimeout(() => {
+              applyRewards().then(() => {
+                // Mark this step's rewards as applied to prevent duplicate application
+                appliedStepRewardsRef.current = stepKey;
 
-              // Only clear lastCompletedStep, not lastCompletedType
-              // This is a workaround since we don't have direct access to modify the state
-              // The proper fix would be to modify the clearStepCompletion function to preserve lastCompletedType
-            });
+                // Only clear lastCompletedStep, not lastCompletedType
+                // This is a workaround since we don't have direct access to modify the state
+                // The proper fix would be to modify the clearStepCompletion function to preserve lastCompletedType
+              });
+            }, 200); // 200ms delay to ensure spin process is complete
           } else {
             console.log(
-              "[SPIN DEBUG] Skipping step completion rewards application - currently spinning"
+              "[SPIN DEBUG] Skipping step completion rewards application - currently spinning or in spin process"
             );
           }
         } else if (
@@ -1181,7 +1197,13 @@ const SpinPage = () => {
     const currentSpins = finalStartingSpins;
 
     try {
-      // STEP 1: Use current spins (no deduction in memory needed)
+      // STEP 1: Update database with final spin count (deducted + step rewards)
+      // This ensures the database state matches the calculated final spins
+      await criticalStateUpdate((prev) => ({
+        ...prev,
+        spins: currentSpins,
+      }));
+
       // Update our ref to match current game state for UI consistency
       latestStateRef.current.spins = currentSpins;
       setLastUpdateTime(Date.now()); // Force UI update
@@ -1431,6 +1453,9 @@ const SpinPage = () => {
                       setStoppingReels([false, false, false]);
                       setSpinning(false); // Enable spin button
 
+                      // Clear the spin process flag to allow step completion rewards to be applied again
+                      latestStateRef.current.spinProcessAppliedRewards = null;
+
                       // Create aggregated prize - use ref instead of state
                       const totalSparkcoins =
                         aggregatedRewardsRef.current.sparkcoins;
@@ -1565,6 +1590,21 @@ const SpinPage = () => {
                           }
 
                           // Update database with final calculated values (deduction + aggregated rewards)
+                          // Check if step completion rewards were just applied to avoid overwriting them
+                          const currentDbSpins = gameState.spins;
+                          if (currentDbSpins > finalSpins) {
+                            // Step completion rewards were applied, use the higher value
+                            finalSpins = currentDbSpins;
+                            console.log(
+                              "[SPIN DEBUG] Step completion rewards detected, using higher spin count:",
+                              {
+                                currentDbSpins,
+                                calculatedFinalSpins: finalSpins,
+                                timestamp: new Date().toISOString(),
+                              }
+                            );
+                          }
+
                           await safeCriticalStateUpdate((prev: GameState) => {
                             return {
                               ...prev,
@@ -1614,6 +1654,9 @@ const SpinPage = () => {
                         } catch {
                           // Ensure the spin button is re-enabled on error
                           setSpinning(false);
+                          // Clear the spin process flag
+                          latestStateRef.current.spinProcessAppliedRewards =
+                            null;
                         }
                       };
 
@@ -1957,9 +2000,15 @@ const SpinPage = () => {
                               }
 
                               setSpinning(false); // Enable spin button
+                              // Clear the spin process flag
+                              latestStateRef.current.spinProcessAppliedRewards =
+                                null;
                             })
                             .catch((_error) => {
                               setSpinning(false); // Ensure spin button is enabled on error
+                              // Clear the spin process flag
+                              latestStateRef.current.spinProcessAppliedRewards =
+                                null;
                             });
                         }, stopDelay);
                       }, stopDelay);
@@ -1984,6 +2033,8 @@ const SpinPage = () => {
     } catch (error) {
       console.log("[SPIN DEBUG] Error in spin process:", error);
       setSpinning(false);
+      // Clear the spin process flag
+      latestStateRef.current.spinProcessAppliedRewards = null;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -2320,6 +2371,8 @@ GameState spins: ${gameState.spins}
   const stopAutoSpin = useCallback(() => {
     setIsAutoSpinning(false);
     setSpinning(false); // Ensure spinning state is reset
+    // Clear the spin process flag
+    latestStateRef.current.spinProcessAppliedRewards = null;
 
     // Re-enable vertical swipes when auto-spin stops
     const webApp = window.Telegram?.WebApp;

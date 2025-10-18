@@ -967,7 +967,7 @@ const PhoenixTapArea: React.FC = () => {
 
             {/* Bottom Timer - Only show if less than 50 spins available */}
             {!shouldShowSpin && (
-              <div className="absolute -bottom-7 w-16">
+              <div className="absolute -bottom-6 w-16">
                 <SpinTimer
                   nextSpinsTimer={spinTimer?.remainingSec ?? 0}
                   formatTime={formatTime}
@@ -1085,7 +1085,7 @@ const PhoenixTapArea: React.FC = () => {
         (gameState.autoTapEndTime &&
           !gameState.autoTapClaimed &&
           (gameState.autoTapCoins || 0) > 0)) && (
-        <div className="absolute top-[35%] left-4 z-10">
+        <div className="absolute top-[36%] left-4 z-10">
           <div className="flex flex-col items-center relative">
             {/* AutoTap Icon */}
             <div

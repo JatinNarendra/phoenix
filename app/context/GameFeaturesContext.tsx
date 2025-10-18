@@ -170,11 +170,22 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [gameState.spins, persistState]);
 
-  // Initialize timer service
+  // Initialize timer service and register callbacks
   useEffect(() => {
     timerService.initializeTimerService();
 
-    // Initialize spin timer if needed
+    // Register spin timer completion callback
+    timerService.onTimerComplete(TimerType.SPIN, handleSpinTimerComplete);
+
+    return () => {
+      // Unregister callback on cleanup
+      timerService.offTimerComplete(TimerType.SPIN);
+      timerService.cleanupTimerService();
+    };
+  }, [handleSpinTimerComplete]);
+
+  // Initialize spin timer when spins are below 50
+  useEffect(() => {
     if (gameState.spins < 50) {
       const spinTimer = timerService.getTimerInfo(TimerType.SPIN);
       if (!spinTimer || spinTimer.status !== "active") {
@@ -182,10 +193,6 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
         timerService.startTimer(TimerType.SPIN, 2.5 * 60 * 60 * 1000);
       }
     }
-
-    return () => {
-      timerService.cleanupTimerService();
-    };
   }, [gameState.spins]);
 
   // Load user timers
@@ -284,7 +291,7 @@ export const GameFeaturesProvider: React.FC<{ children: React.ReactNode }> = ({
       isMounted.current = false;
       clearInterval(intervalId);
     };
-  }, [userId, gameState.spins, handleSpinTimerComplete]);
+  }, [userId, gameState.spins]);
 
   // When spins drop from >=50 to <50, start a fresh 2.5h timer
   useEffect(() => {

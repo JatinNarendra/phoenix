@@ -54,6 +54,10 @@ let timerCache: GameTimerState = {};
 let lastSync = 0;
 const SYNC_INTERVAL = 1000; // Sync every second
 
+// Callback system for timer completions
+type TimerCallback = () => void;
+const timerCallbacks: Map<TimerType, TimerCallback> = new Map();
+
 // Helper function to get current timestamp
 const getCurrentTimestamp = () => Date.now();
 
@@ -206,6 +210,12 @@ export const completeTimer = (timerType: TimerType): void => {
     timer.remainingSec = 0;
 
     queueTimerUpdate(timerType);
+
+    // Trigger callback if registered
+    const callback = timerCallbacks.get(timerType);
+    if (callback) {
+      callback();
+    }
   }
 };
 
@@ -271,10 +281,15 @@ export const cleanupTimerService = () => {
 
 // Register a callback for timer completion
 export const onTimerComplete = (
-  _timerId: string,
-  _callback: () => void
+  timerType: TimerType,
+  callback: TimerCallback
 ): void => {
-  // Implementation needed
+  timerCallbacks.set(timerType, callback);
+};
+
+// Unregister a callback for timer completion
+export const offTimerComplete = (timerType: TimerType): void => {
+  timerCallbacks.delete(timerType);
 };
 
 // Update auto tap coins
@@ -695,6 +710,7 @@ const timerService = {
   cancelTimer,
   getTimerInfo,
   onTimerComplete,
+  offTimerComplete,
   startAutoTap,
   completeAutoTap,
   updateAutoTapCoins,

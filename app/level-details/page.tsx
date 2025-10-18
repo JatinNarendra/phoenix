@@ -92,9 +92,12 @@ const LevelDetailsPage = () => {
 
         if (error) throw error;
 
+        // Type assertion to fix TypeScript inference issues
+        const users = (telegramUsers as any[]) || [];
+
         // Filter users by selected level using the new level calculation
-        const usersInLevel = telegramUsers.filter((user) => {
-          const userGameState = user.game_state as { coins?: number };
+        const usersInLevel = users.filter((user) => {
+          const userGameState = user?.game_state as { coins?: number };
           const userLevel = calculateCurrentLevel(userGameState?.coins || 0);
           return userLevel === selectedLevel;
         });
@@ -104,29 +107,29 @@ const LevelDetailsPage = () => {
 
         // Sort all users by coins
         const sortedUsers = [...usersInLevel].sort((a, b) => {
-          const aCoins = (a.game_state as { coins?: number })?.coins || 0;
-          const bCoins = (b.game_state as { coins?: number })?.coins || 0;
+          const aCoins = (a?.game_state as { coins?: number })?.coins || 0;
+          const bCoins = (b?.game_state as { coins?: number })?.coins || 0;
           return bCoins - aCoins;
         });
 
         // Find current user's place
         const currentUserIndex = sortedUsers.findIndex((user) => {
-          const userGameState = user.game_state as { user_id?: string };
+          const userGameState = user?.game_state as { user_id?: string };
           return userGameState?.user_id === gameState.user_id;
         });
         setUserPlace(currentUserIndex >= 0 ? currentUserIndex + 1 : 0);
 
-        // Get top 3 users
-        const topUsers = sortedUsers.slice(0, 3);
+        // Get top 10 users
+        const topUsers = sortedUsers.slice(0, 10);
 
         const formattedUsers = topUsers.map((user, index) => {
-          const userGameState = user.game_state as { coins?: number };
+          const userGameState = user?.game_state as { coins?: number };
           return {
-            name: user.username || user.first_name || "Anonymous",
+            name: user?.username || user?.first_name || "Anonymous",
             spark: Math.max(0, userGameState?.coins || 0).toLocaleString(),
             rank: index + 1,
             level: selectedLevel,
-            photo_url: user.photo_url || null,
+            photo_url: user?.photo_url || null,
           };
         });
 
