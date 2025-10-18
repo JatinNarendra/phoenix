@@ -5,7 +5,7 @@ import Close from "../../public/assets/Close.png";
 import SparkyIcon from "../../public/assets/SparkyIcon.png";
 import EnergyCapacityIcon from "../../public/assets/energycapacity.png";
 import { useGame } from "../context/GameContext";
-import { energyConfig } from "../utility/energyConfig";
+import { getEnergyConfig } from "../utility/energyConfig";
 import CustomYellowButton from "@/app/ui/CustomYellowButton";
 
 interface EnergyCapacityPopupProps {
@@ -14,10 +14,14 @@ interface EnergyCapacityPopupProps {
   onUpgrade: () => void;
 }
 
-const EnergyCapacityPopup: React.FC<EnergyCapacityPopupProps> = ({ onClose, isOpen, onUpgrade }) => {
+const EnergyCapacityPopup: React.FC<EnergyCapacityPopupProps> = ({
+  onClose,
+  isOpen,
+  onUpgrade,
+}) => {
   const { gameState } = useGame();
   const currentLevel = gameState.upgrades?.energyLevel || 1;
-  const nextLevelConfig = energyConfig[currentLevel + 1];
+  const nextLevelConfig = getEnergyConfig(currentLevel + 1);
 
   if (!isOpen) return null;
 
@@ -69,7 +73,6 @@ const EnergyCapacityPopup: React.FC<EnergyCapacityPopupProps> = ({ onClose, isOp
                 <span className="text-2xl font-bold text-white">
                   {nextLevelConfig?.upgradePrice.toLocaleString()}
                 </span>
-                
               </div>
 
               <div className="pt-4 flex justify-center w-full">

@@ -851,7 +851,7 @@ export default function BoostersPage() {
     const currentEnergyLevel = gameState.upgrades?.energyLevel || 1;
     const currentRechargeLevel = gameState.upgrades?.rechargeLevel || 1;
 
-    const energyConfigData = energyConfig[currentEnergyLevel + 1];
+    const energyConfigData = getEnergyConfig(currentEnergyLevel + 1);
 
     return [
       {
@@ -1008,7 +1008,7 @@ export default function BoostersPage() {
         ),
         coinPrice: energyConfigData?.upgradePrice || 0,
         level: currentEnergyLevel,
-        maxLevel: 5,
+        maxLevel: 40,
         color: "orange",
         effect: `Max energy +${energyConfigData?.maxRecharge || 0}`,
       },
@@ -1382,7 +1382,7 @@ export default function BoostersPage() {
           onUpgrade={() =>
             handleUpgrade({
               id: "energy-upgrade",
-              maxLevel: 5,
+              maxLevel: 40,
             } as Upgrade)
           }
         />

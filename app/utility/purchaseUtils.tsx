@@ -159,7 +159,7 @@ export async function handleSpinPurchase({
         gameToast.info(
           <div className="text-center">
             <div className="text-lg font-bold text-yellow-400 mb-1">
-              ⏸️ Payment Cancelled
+              Payment Cancelled
             </div>
             <div className="text-sm text-gray-300">
               No charges were made to your account
@@ -172,7 +172,7 @@ export async function handleSpinPurchase({
         gameToast.error(
           <div className="text-center">
             <div className="text-lg font-bold text-red-400 mb-1">
-              ❌ Payment Failed
+              Payment Failed
             </div>
             <div className="text-sm text-gray-300 mb-1">
               Unable to process your payment
@@ -188,7 +188,7 @@ export async function handleSpinPurchase({
         gameToast.error(
           <div className="text-center">
             <div className="text-lg font-bold text-red-400 mb-1">
-              ⚠️ Unknown Status
+              Unknown Status
             </div>
             <div className="text-sm text-gray-300">
               Payment status: {status}
@@ -208,9 +208,7 @@ export async function handleSpinPurchase({
     // Show detailed error toast
     gameToast.error(
       <div className="text-center">
-        <div className="text-lg font-bold text-red-400 mb-1">
-          🚫 Payment Error
-        </div>
+        <div className="text-lg font-bold text-red-400 mb-1">Payment Error</div>
         <div className="text-sm text-gray-300 mb-1">
           Unable to process your payment request
         </div>
