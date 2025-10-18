@@ -1085,7 +1085,7 @@ const PhoenixTapArea: React.FC = () => {
         (gameState.autoTapEndTime &&
           !gameState.autoTapClaimed &&
           (gameState.autoTapCoins || 0) > 0)) && (
-        <div className="absolute top-[36%] left-4 z-10">
+        <div className="absolute top-[38%] left-4 z-10">
           <div className="flex flex-col items-center relative">
             {/* AutoTap Icon */}
             <div
