@@ -576,11 +576,21 @@ const SpinPage = () => {
       }));
 
       // Update the ref to match the new spin count for UI consistency
-      latestStateRef.current.spins =
-        gameState.spins + currentEarnedRewards.spins;
+      const newSpinCount = gameState.spins + currentEarnedRewards.spins;
+      latestStateRef.current.spins = newSpinCount;
 
       // Force UI update to reflect the new spin count
       setLastUpdateTime(Date.now());
+
+      // Additional UI update after a short delay to ensure the database update has propagated
+      setTimeout(() => {
+        setLastUpdateTime(Date.now());
+        console.log("[SPIN DEBUG] Forced UI update after step completion:", {
+          newSpinCount,
+          latestStateRef: latestStateRef.current.spins,
+          timestamp: new Date().toISOString(),
+        });
+      }, 100);
     }
 
     if (currentEarnedRewards.turbo > 0) {
@@ -715,14 +725,25 @@ const SpinPage = () => {
             // Only apply rewards if not currently spinning and not in a spin process to prevent race conditions
             // Add a small delay to ensure spin process is completely finished
             setTimeout(() => {
-              applyRewards().then(() => {
-                // Mark this step's rewards as applied to prevent duplicate application
-                appliedStepRewardsRef.current = stepKey;
+              // Double-check that we haven't already applied this step's rewards
+              if (appliedStepRewardsRef.current !== stepKey) {
+                applyRewards().then(() => {
+                  // Mark this step's rewards as applied to prevent duplicate application
+                  appliedStepRewardsRef.current = stepKey;
 
-                // Only clear lastCompletedStep, not lastCompletedType
-                // This is a workaround since we don't have direct access to modify the state
-                // The proper fix would be to modify the clearStepCompletion function to preserve lastCompletedType
-              });
+                  // Only clear lastCompletedStep, not lastCompletedType
+                  // This is a workaround since we don't have direct access to modify the state
+                  // The proper fix would be to modify the clearStepCompletion function to preserve lastCompletedType
+                });
+              } else {
+                console.log(
+                  "[SPIN DEBUG] Step completion rewards already applied, skipping duplicate application:",
+                  {
+                    stepKey,
+                    timestamp: new Date().toISOString(),
+                  }
+                );
+              }
             }, 200); // 200ms delay to ensure spin process is complete
           } else {
             console.log(
