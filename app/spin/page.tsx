@@ -564,12 +564,6 @@ const SpinPage = () => {
     }
 
     if (currentEarnedRewards.spins > 0) {
-      console.log("[SPIN DEBUG] Applying step completion spins:", {
-        currentSpins: gameState.spins,
-        earnedSpins: currentEarnedRewards.spins,
-        newSpins: gameState.spins + currentEarnedRewards.spins,
-        timestamp: new Date().toISOString(),
-      });
       await criticalStateUpdate((prev) => ({
         ...prev,
         spins: prev.spins + currentEarnedRewards.spins,
@@ -585,11 +579,6 @@ const SpinPage = () => {
       // Additional UI update after a short delay to ensure the database update has propagated
       setTimeout(() => {
         setLastUpdateTime(Date.now());
-        console.log("[SPIN DEBUG] Forced UI update after step completion:", {
-          newSpinCount,
-          latestStateRef: latestStateRef.current.spins,
-          timestamp: new Date().toISOString(),
-        });
       }, 100);
     }
 
@@ -657,7 +646,8 @@ const SpinPage = () => {
         // Don't clear step completion immediately as it also clears lastCompletedType
         // Instead, just handle the rewards and let the type completion status persist
 
-        // Check if a type was completed
+        // Type completion logging removed - see comprehensive log at end
+
         if (state.lastCompletedType !== null) {
           // Only set type completion reward when a step is completed AND it's the last step in the type
           // This is determined by checking if the currentType has changed from what was completed
@@ -666,52 +656,33 @@ const SpinPage = () => {
             if (
               processedTypeCompletionRef.current !== state.lastCompletedType
             ) {
+              // Type completion reward processed - see comprehensive log at end
               // Note: typeCompletionReward state removed - no longer needed for display
               // Mark this type as processed to prevent duplicate rewards
               processedTypeCompletionRef.current = state.lastCompletedType;
             } else {
-              // Type completion reward already processed
+              // Type completion reward already processed - see comprehensive log at end
             }
           } else {
-            // Note: typeCompletionReward state removed
+            // Type completion - same type - see comprehensive log at end
           }
         } else {
-          // Note: typeCompletionReward state removed
+          // No type completion - see comprehensive log at end
         }
 
         // Clear only the step completion rewards after they've been processed
         // but preserve the lastCompletedType
         // IMPORTANT: Only apply rewards if they haven't been applied during the spin process
         if (hasPendingRewards() && appliedStepRewardsRef.current !== stepKey) {
-          console.log("[SPIN DEBUG] Step completion effect triggered:", {
-            stepKey,
-            earnedRewards: state.earnedRewards,
-            timestamp: new Date().toISOString(),
-          });
-
           // Check if we're currently in a spin process that has already applied these rewards
           // If the spin process has already applied the rewards, we should not apply them again
           const spinProcessAppliedRewards =
             latestStateRef.current.spinProcessAppliedRewards;
-          console.log(
-            "[SPIN DEBUG] Step completion effect checking for duplicate application:",
-            {
-              stepKey,
-              spinProcessAppliedRewards,
-              willSkip:
-                spinProcessAppliedRewards &&
-                spinProcessAppliedRewards === stepKey,
-              timestamp: new Date().toISOString(),
-            }
-          );
 
           if (
             spinProcessAppliedRewards &&
             spinProcessAppliedRewards === stepKey
           ) {
-            console.log(
-              "[SPIN DEBUG] Step completion rewards already applied during spin process, skipping duplicate application"
-            );
             // Mark this step's rewards as applied to prevent duplicate application
             appliedStepRewardsRef.current = stepKey;
             // Clear the flag since we've handled it
@@ -736,19 +707,9 @@ const SpinPage = () => {
                   // The proper fix would be to modify the clearStepCompletion function to preserve lastCompletedType
                 });
               } else {
-                console.log(
-                  "[SPIN DEBUG] Step completion rewards already applied, skipping duplicate application:",
-                  {
-                    stepKey,
-                    timestamp: new Date().toISOString(),
-                  }
-                );
               }
             }, 200); // 200ms delay to ensure spin process is complete
           } else {
-            console.log(
-              "[SPIN DEBUG] Skipping step completion rewards application - currently spinning or in spin process"
-            );
           }
         } else if (
           hasPendingRewards() &&
@@ -1159,16 +1120,13 @@ const SpinPage = () => {
     });
 
     // STEP 1: Deduct spin cost first
+    const originalSpins = gameState.spins; // Store original spin count for logging
     const spinsAfterDeduction = gameState.spins - spinLevel;
 
     // STEP 2: Apply any pending step completion rewards to the deducted amount
     let finalStartingSpins = spinsAfterDeduction;
-    console.log("[SPIN DEBUG] Checking for pending rewards at spin start:", {
-      hasPendingRewards: hasPendingRewards(),
-      earnedRewards: state.earnedRewards,
-      lastCompletedStep: state.lastCompletedStep,
-      timestamp: new Date().toISOString(),
-    });
+
+    // Step completion rewards logging removed - see comprehensive log at end
 
     if (hasPendingRewards()) {
       // Create a unique key for this step to track if it was applied during spin process
@@ -1178,29 +1136,13 @@ const SpinPage = () => {
 
       // Check if this step was already applied in a previous spin
       if (stepKey && appliedStepRewardsRef.current === stepKey) {
-        console.log(
-          "[SPIN DEBUG] Step completion rewards already applied in previous spin, skipping:",
-          {
-            stepKey,
-            timestamp: new Date().toISOString(),
-          }
-        );
         // Clear the step completion rewards without applying them again
         clearStepCompletion();
       } else {
         // Apply rewards to the deducted amount, not the original amount
         finalStartingSpins = spinsAfterDeduction + state.earnedRewards.spins;
 
-        console.log(
-          "[SPIN DEBUG] Step completion rewards applied during spin process:",
-          {
-            stepKey,
-            spinsAfterDeduction,
-            earnedSpins: state.earnedRewards.spins,
-            finalStartingSpins,
-            timestamp: new Date().toISOString(),
-          }
-        );
+        // Step rewards applied logging removed - see comprehensive log at end
 
         // Mark that this step's rewards were applied during the spin process
         if (stepKey) {
@@ -1415,35 +1357,8 @@ const SpinPage = () => {
       const processCurrentSpin = async (
         currentSpins: number
       ): Promise<void> => {
-        console.log("[SPIN DEBUG] processCurrentSpin called with:", {
-          currentSpins,
-          spinIndex,
-          spinLevel,
-          timestamp: new Date().toISOString(),
-        });
-
         try {
-          // Log current state at the beginning of each spin
-          console.log(
-            "[SPIN DEBUG] Starting spin",
-            spinIndex + 1,
-            "of",
-            spinLevel,
-            ":",
-            {
-              spinNumber: spinIndex + 1,
-              currentSpins,
-              earnedRewards: state.earnedRewards,
-              hasPendingRewards: hasPendingRewards(),
-              lastCompletedStep: state.lastCompletedStep,
-              timestamp: new Date().toISOString(),
-            }
-          );
-
           if (spinIndex >= spinLevel) {
-            console.log(
-              "[SPIN DEBUG] All spins complete, starting final calculation phase"
-            );
             // All spins complete, show final stopping animation and results
             const stopDelay = getStopDelay();
 
@@ -1505,17 +1420,19 @@ const SpinPage = () => {
                       }
 
                       // Apply aggregated rewards following the same sequence as single spins
-                      console.log(
-                        "[SPIN DEBUG] About to call applyRewards function"
-                      );
                       const applyRewards = async () => {
-                        console.log(
-                          "[SPIN DEBUG] applyRewards function started"
-                        );
                         try {
                           // Calculate final values (currentSpins already has deduction applied)
                           // Calculate final spins: currentSpins + slot rewards + type completion rewards + accumulated step completion rewards
                           let finalSpins = currentSpins + totalSpins;
+
+                          console.log("[SPIN CALCULATION DEBUG]", {
+                            currentSpins,
+                            totalSpins,
+                            initialFinalSpins: finalSpins,
+                            deductionApplied:
+                              currentSpins === originalSpins - spinLevel,
+                          });
 
                           // Add any accumulated step completion rewards that were earned during the spin process
                           // Only apply if they weren't already applied at spin start
@@ -1523,16 +1440,20 @@ const SpinPage = () => {
                             hasPendingRewards() &&
                             !latestStateRef.current.spinProcessAppliedRewards
                           ) {
-                            finalSpins += state.earnedRewards.spins;
                             console.log(
-                              "[SPIN DEBUG] Accumulated step completion rewards added to final calculation:",
+                              "[STEP REWARDS ADDED DURING SPIN - DEBUG]",
                               {
-                                earnedSpins: state.earnedRewards.spins,
-                                finalSpins,
-                                lastCompletedStep: state.lastCompletedStep,
-                                timestamp: new Date().toISOString(),
+                                beforeAdding: finalSpins,
+                                stepRewardsSpins: state.earnedRewards.spins,
+                                afterAdding:
+                                  finalSpins + state.earnedRewards.spins,
+                                hasPendingRewards: hasPendingRewards(),
+                                spinProcessAppliedRewards:
+                                  latestStateRef.current
+                                    .spinProcessAppliedRewards,
                               }
                             );
+                            finalSpins += state.earnedRewards.spins;
 
                             // Mark that step completion rewards were applied during the spin process
                             const stepKey = state.lastCompletedStep
@@ -1541,48 +1462,12 @@ const SpinPage = () => {
                             if (stepKey) {
                               latestStateRef.current.spinProcessAppliedRewards =
                                 stepKey;
-                              console.log(
-                                "[SPIN DEBUG] Marked step completion rewards as applied during spin process:",
-                                {
-                                  stepKey,
-                                  timestamp: new Date().toISOString(),
-                                }
-                              );
                             }
 
                             // Clear the step completion rewards after including them in the final calculation
                             clearStepCompletion();
                           } else {
-                            console.log(
-                              "[SPIN DEBUG] No accumulated step completion rewards found at end of spin or already applied at spin start"
-                            );
                           }
-
-                          // Log detailed calculation breakdown
-                          console.log(
-                            "[SPIN DEBUG] Final calculation breakdown:",
-                            {
-                              currentSpins,
-                              totalSpins,
-                              finalSpins,
-                              calculation: `${currentSpins} + ${totalSpins} = ${finalSpins}`,
-                              spinProcessAppliedRewards:
-                                latestStateRef.current
-                                  .spinProcessAppliedRewards,
-                              timestamp: new Date().toISOString(),
-                            }
-                          );
-
-                          // Log spins after spin completes
-                          console.log(
-                            "[SPIN DEBUG] Spins after spin completes:",
-                            {
-                              currentSpins,
-                              totalSpins,
-                              finalSpins,
-                              timestamp: new Date().toISOString(),
-                            }
-                          );
 
                           const finalCoins = gameState.coins + totalSparkcoins;
                           const finalTurbo =
@@ -1613,17 +1498,37 @@ const SpinPage = () => {
                           // Update database with final calculated values (deduction + aggregated rewards)
                           // Check if step completion rewards were just applied to avoid overwriting them
                           const currentDbSpins = gameState.spins;
-                          if (currentDbSpins > finalSpins) {
+                          const hasStepRewards =
+                            hasPendingRewards() &&
+                            !latestStateRef.current.spinProcessAppliedRewards;
+
+                          console.log("[DATABASE SPIN CHECK - DEBUG]", {
+                            currentDbSpins,
+                            finalSpins,
+                            hasStepRewards,
+                            usingDbValue:
+                              currentDbSpins > finalSpins && hasStepRewards,
+                            finalSpinsBefore: finalSpins,
+                          });
+
+                          // Only use database value if there are actual step completion rewards
+                          if (currentDbSpins > finalSpins && hasStepRewards) {
                             // Step completion rewards were applied, use the higher value
+                            console.log("[USING DATABASE SPINS - DEBUG]", {
+                              oldFinalSpins: finalSpins,
+                              newFinalSpins: currentDbSpins,
+                              reason:
+                                "Database spins higher than calculated final spins AND step rewards present",
+                            });
                             finalSpins = currentDbSpins;
-                            console.log(
-                              "[SPIN DEBUG] Step completion rewards detected, using higher spin count:",
-                              {
-                                currentDbSpins,
-                                calculatedFinalSpins: finalSpins,
-                                timestamp: new Date().toISOString(),
-                              }
-                            );
+                          } else if (currentDbSpins > finalSpins) {
+                            console.log("[SKIPPING DATABASE SPINS - DEBUG]", {
+                              reason:
+                                "Database spins higher but no step rewards present - using calculated value",
+                              currentDbSpins,
+                              finalSpins,
+                              hasStepRewards,
+                            });
                           }
 
                           await safeCriticalStateUpdate((prev: GameState) => {
@@ -1642,9 +1547,81 @@ const SpinPage = () => {
                           });
 
                           // Update our ref to match the final values
+                          console.log("[FINAL SPIN VALUES - DEBUG]", {
+                            finalSpins,
+                            originalSpins,
+                            spinsDeducted: spinLevel,
+                            netChange: finalSpins - originalSpins,
+                            expectedFinalSpins:
+                              originalSpins - spinLevel + totalSpins,
+                            currentSpins,
+                            totalSpins,
+                            stepRewardsApplied:
+                              hasPendingRewards() &&
+                              !latestStateRef.current.spinProcessAppliedRewards,
+                          });
+
                           latestStateRef.current.spins = finalSpins;
                           latestStateRef.current.coins = finalCoins;
                           setLastUpdateTime(Date.now()); // Force UI update
+
+                          // Comprehensive spin cycle summary
+                          const logId = Math.random().toString(36).substr(2, 9);
+                          console.log(
+                            `🎰 ===== SPIN CYCLE COMPLETE [${logId}] =====`,
+                            {
+                              // Basic spin info
+                              spinLevel,
+                              isMultiSpin,
+
+                              // Spin deduction breakdown
+                              originalSpins: originalSpins,
+                              spinsDeducted: spinLevel,
+                              spinsAfterDeduction: originalSpins - spinLevel,
+                              finalSpins,
+
+                              // Step completion rewards
+                              stepRewards: {
+                                hasPendingRewards: hasPendingRewards(),
+                                earnedRewards: state.earnedRewards,
+                                lastCompletedStep: state.lastCompletedStep,
+                                lastCompletedType: state.lastCompletedType,
+                                currentType: state.currentType,
+                                appliedStepRewardsRef:
+                                  appliedStepRewardsRef.current,
+                              },
+
+                              // Slot machine rewards (aggregated)
+                              slotRewards: {
+                                totalSpins: isMultiSpin ? totalSpins : 0,
+                                totalSparkcoins: isMultiSpin
+                                  ? totalSparkcoins
+                                  : 0,
+                                totalTurbo: isMultiSpin ? totalTurbo : 0,
+                                totalRecharge: isMultiSpin ? totalRecharge : 0,
+                                sparkytokens:
+                                  aggregatedRewardsRef.current.sparkytokens,
+                              },
+
+                              // Final values
+                              finalValues: {
+                                coins: finalCoins,
+                                spins: finalSpins,
+                                turbo: finalTurbo,
+                                recharge: finalRecharge,
+                              },
+
+                              // Type completion status
+                              typeCompletion: {
+                                lastCompletedType: state.lastCompletedType,
+                                currentType: state.currentType,
+                                processedTypeCompletionRef:
+                                  processedTypeCompletionRef.current,
+                              },
+
+                              timestamp: new Date().toISOString(),
+                            }
+                          );
 
                           // Type completion reward is now included in finalSpins calculation
 
@@ -1733,20 +1710,6 @@ const SpinPage = () => {
                   // Do NOT multiply by spin level for token progression
                   if (tokensToAdd > 0 && isTypeCompletionAllowed()) {
                     updateProgressWithTokens(tokensToAdd);
-
-                    // Log earned rewards after this spin to track accumulation
-                    console.log(
-                      "[SPIN DEBUG] After spin",
-                      spinIndex + 1,
-                      "progression update:",
-                      {
-                        spinNumber: spinIndex + 1,
-                        tokensAdded: tokensToAdd,
-                        earnedRewards: state.earnedRewards,
-                        hasPendingRewards: hasPendingRewards(),
-                        timestamp: new Date().toISOString(),
-                      }
-                    );
                   } else if (tokensToAdd > 0 && !isTypeCompletionAllowed()) {
                     // Type completion is not allowed - don't add tokens and stop processing more spins
                     // that would add tokens to prevent bypassing the type completion restriction
@@ -1757,6 +1720,8 @@ const SpinPage = () => {
 
               // Accumulate rewards directly in the ref to avoid state update race conditions
               if (result && result.winningCombo && result.newPrize) {
+                // Slot reward logging removed - see comprehensive log at end
+
                 // Update ref directly for consistent aggregation
                 if (result.newPrize?.type === "sparkcoins") {
                   aggregatedRewardsRef.current.sparkcoins +=
@@ -1852,25 +1817,6 @@ const SpinPage = () => {
                           // Calculate final values (currentSpins already has deduction applied)
                           let finalSpins = currentSpins;
 
-                          // Log detailed calculation breakdown (single spin)
-                          console.log(
-                            "[SPIN DEBUG] Final calculation breakdown (single):",
-                            {
-                              currentSpins,
-                              finalSpins,
-                              timestamp: new Date().toISOString(),
-                            }
-                          );
-
-                          // Log spins after spin completes (single spin)
-                          console.log(
-                            "[SPIN DEBUG] Spins after spin completes (single):",
-                            {
-                              currentSpins,
-                              finalSpins,
-                              timestamp: new Date().toISOString(),
-                            }
-                          );
                           let finalCoins = gameState.coins;
                           let finalTurbo = gameState.boosts.rewardedTurbo || 0;
                           let finalRecharge =
@@ -1886,22 +1832,15 @@ const SpinPage = () => {
                             setPrize(result.newPrize);
 
                             // Calculate rewards based on prize type
+                            // Single spin slot reward logging removed - see comprehensive log at end
+
                             if (result.newPrize?.type === "sparkcoins") {
                               finalCoins =
                                 gameState.coins + (result.newPrize.amount || 0);
                             } else if (result.newPrize?.type === "spins") {
                               const wonSpins = result.newPrize.amount;
                               finalSpins += wonSpins;
-
-                              // Log slot spin rewards
-                              console.log(
-                                "[SPIN DEBUG] Slot spin rewards added:",
-                                {
-                                  wonSpins,
-                                  finalSpins,
-                                  timestamp: new Date().toISOString(),
-                                }
-                              );
+                              // Single spin spins reward logging removed - see comprehensive log at end
                             } else if (result.newPrize?.type === "turbo") {
                               finalTurbo =
                                 (gameState.boosts.rewardedTurbo || 0) +
@@ -1976,6 +1915,68 @@ const SpinPage = () => {
                               latestStateRef.current.coins = finalCoins;
                               setLastUpdateTime(Date.now()); // Force UI update
 
+                              // Comprehensive single spin cycle summary
+                              const logId = Math.random()
+                                .toString(36)
+                                .substr(2, 9);
+                              console.log(
+                                `🎰 ===== SINGLE SPIN CYCLE COMPLETE [${logId}] =====`,
+                                {
+                                  // Basic spin info
+                                  spinLevel,
+                                  isMultiSpin: false,
+
+                                  // Spin deduction breakdown
+                                  originalSpins: originalSpins,
+                                  spinsDeducted: spinLevel,
+                                  spinsAfterDeduction:
+                                    originalSpins - spinLevel,
+                                  finalSpins,
+
+                                  // Step completion rewards
+                                  stepRewards: {
+                                    hasPendingRewards: hasPendingRewards(),
+                                    earnedRewards: state.earnedRewards,
+                                    lastCompletedStep: state.lastCompletedStep,
+                                    lastCompletedType: state.lastCompletedType,
+                                    currentType: state.currentType,
+                                    appliedStepRewardsRef:
+                                      appliedStepRewardsRef.current,
+                                  },
+
+                                  // Slot machine rewards (single spin)
+                                  slotRewards: {
+                                    totalSpins:
+                                      aggregatedRewardsRef.current.spins,
+                                    totalSparkcoins:
+                                      aggregatedRewardsRef.current.sparkcoins,
+                                    totalTurbo:
+                                      aggregatedRewardsRef.current.turbo,
+                                    totalRecharge:
+                                      aggregatedRewardsRef.current.recharge,
+                                    sparkytokens: tokensToAdd,
+                                  },
+
+                                  // Final values
+                                  finalValues: {
+                                    coins: finalCoins,
+                                    spins: finalSpins,
+                                    turbo: finalTurbo,
+                                    recharge: finalRecharge,
+                                  },
+
+                                  // Type completion status
+                                  typeCompletion: {
+                                    lastCompletedType: state.lastCompletedType,
+                                    currentType: state.currentType,
+                                    processedTypeCompletionRef:
+                                      processedTypeCompletionRef.current,
+                                  },
+
+                                  timestamp: new Date().toISOString(),
+                                }
+                              );
+
                               // Type completion reward is now included in finalSpins calculation
 
                               // Handle sparkytoken progression for single spins
@@ -2040,19 +2041,14 @@ const SpinPage = () => {
             }
           }
         } catch (error) {
-          console.log("[SPIN DEBUG] Error in processCurrentSpin:", error);
           throw error;
         }
       };
 
       // Start processing spins
-      console.log(
-        "[SPIN DEBUG] Calling processCurrentSpin with currentSpins:",
-        currentSpins
-      );
+      console.log();
       processCurrentSpin(currentSpins);
     } catch (error) {
-      console.log("[SPIN DEBUG] Error in spin process:", error);
       setSpinning(false);
       // Clear the spin process flag
       latestStateRef.current.spinProcessAppliedRewards = null;
