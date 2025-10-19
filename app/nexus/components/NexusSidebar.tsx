@@ -5,13 +5,10 @@ import { usePathname } from "next/navigation";
 import { FaHome, FaUsers, FaChartLine } from "react-icons/fa";
 
 export default function NexusSidebar() {
-  console.log("NexusSidebar: Component rendering started");
   const pathname = usePathname();
-  console.log(`NexusSidebar: Current pathname: ${pathname}`);
 
   return (
     <>
-      {console.log("NexusSidebar: Rendering sidebar components")}
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-20 bg-white border-r border-gray-100 fixed left-0 top-12 bottom-0 z-40">
         <nav className="flex-1 py-6">
@@ -69,7 +66,6 @@ export default function NexusSidebar() {
           ))}
         </div>
       </nav>
-      {console.log("NexusSidebar: Sidebar components rendered")}
     </>
   );
 }

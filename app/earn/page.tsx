@@ -8,6 +8,7 @@ import Image from "next/image";
 import TaskTelegram from "../../public/assets/TaskTelegramIcon.png";
 import TaskYoutube from "../../public/assets/TaskYoutubeIcon.png";
 import TaskX from "../../public/assets/TaskXIcon.png";
+import TaskDiscord from "../../public/assets/TaskDiscordIcon.png";
 import SparkyIcon from "../../public/assets/SparkyIcon.png";
 import { supabase } from "@/lib/supabase";
 import {
@@ -35,6 +36,7 @@ const platformIcons = {
   YOUTUBE_SUBSCRIBERS: TaskYoutube.src,
   YOUTUBE: TaskYoutube.src,
   TELEGRAM: TaskTelegram.src,
+  DISCORD: TaskDiscord.src,
 };
 
 const getGradientForPlatform = (platform: PlatformType): string => {
@@ -47,6 +49,8 @@ const getGradientForPlatform = (platform: PlatformType): string => {
     case "YOUTUBE_VIEWS":
     case "YOUTUBE_SUBSCRIBERS":
       return "linear-gradient(90deg, #FF0000 0%, #CC0000 100%)";
+    case "DISCORD":
+      return "linear-gradient(90deg, #5865F2 0%, #4752C4 100%)";
     default:
       return "linear-gradient(90deg, #E18700 0%, #D74600 100%)";
   }
@@ -62,6 +66,8 @@ const getGlowForPlatform = (platform: PlatformType): string => {
     case "YOUTUBE_VIEWS":
     case "YOUTUBE_SUBSCRIBERS":
       return "0px 0px 20px rgba(255, 0, 0, 0.3)";
+    case "DISCORD":
+      return "0px 0px 20px rgba(88, 101, 242, 0.3)";
     default:
       return "0px 0px 20px rgba(225, 135, 0, 0.3)";
   }
@@ -105,6 +111,8 @@ const formatTaskTitle = (platform: PlatformType) => {
     case "YOUTUBE_VIEWS":
     case "YOUTUBE_SUBSCRIBERS":
       return "Subscribe to Youtube";
+    case "DISCORD":
+      return "Join us on Discord";
     default:
       return getPlatformName(platform);
   }

@@ -87,9 +87,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
   const { id: user_id } = useUser();
 
   // Debug logging for user_id
-  useEffect(() => {
-    console.log("GameContext: user_id changed:", user_id);
-  }, [user_id]);
+  useEffect(() => {}, [user_id]);
   const lastSaveRef = useRef<number>(Date.now());
   const isAutoSpinningRef = useRef(false);
   const turboTimeRef = useRef(gameState.boosts.turboTimeLeft);
@@ -699,11 +697,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
   // Initialize state
   useEffect(() => {
     const initializeState = async () => {
-      console.log("GameContext: initializeState called with user_id:", user_id);
       if (typeof window === "undefined" || !user_id) {
-        console.log(
-          "GameContext: Skipping initialization - no user_id or window"
-        );
         return;
       }
 
@@ -872,33 +866,12 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 
         let newState: GameState;
 
-        console.log("[GAME CONTEXT DEBUG] Decision logic inputs:", {
-          dbState: dbState ? "exists" : "null",
-          dbStateCoins: dbState?.coins,
-          dbStateLevel: dbState?.level,
-          dbError,
-          storedState: storedState ? "exists" : "null",
-          storedStateCoins: storedState?.coins,
-          storedStateUserId: storedState?.user_id,
-          currentUserId: user_id.toString(),
-          userSwitchCleared:
-            localStorage.getItem("userSwitchCleared") === "true",
-          needsReinit,
-          shouldReinitializeOnMissing: shouldReinitializeOnMissing(
-            user_id.toString()
-          ),
-          isDummyUser: isDummyUser(user_id.toString()),
-        });
-
         // Decision logic for which state to use:
         const userSwitchCleared =
           localStorage.getItem("userSwitchCleared") === "true";
 
         // ESSENTIAL: If user needs re-initialization, use cached state and mark for DB sync
         if (needsReinit && storedState) {
-          console.log(
-            "[GAME CONTEXT DEBUG] Using cached state for re-initialization"
-          );
           newState = {
             ...storedState,
             user_id: user_id.toString(),
@@ -1069,12 +1042,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
             }, 1000);
           } else {
             // Use database state (either it has coins or localStorage doesn't have coins or user switch cleared)
-            console.log("[GAME CONTEXT DEBUG] Using database state:", {
-              hasDbCoins: hasDbCoins,
-              hasLocalCoins: hasLocalCoins,
-              userSwitchCleared: userSwitchCleared,
-              currentUserId: user_id.toString(),
-            });
 
             newState = {
               ...dbState,
@@ -1181,13 +1148,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
           };
         } else if (!dbError && dbState !== null) {
           // No localStorage but database state exists - use database state
-          console.log(
-            "[GAME CONTEXT DEBUG] Using database state (no localStorage):",
-            {
-              hasDbState: !!dbState,
-              currentUserId: user_id.toString(),
-            }
-          );
           newState = {
             ...(dbState as GameState),
             gameVersion: CURRENT_GAME_VERSION,
@@ -1318,6 +1278,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
 
         setGameState(newState);
         setMounted(true);
+
+        // Condensed app initialization log
+        console.log("[APP INIT]", {
+          userId: user_id,
+          coins: newState.coins,
+          spins: newState.spins,
+          level: newState.level,
+          timestamp: new Date().toISOString(),
+        });
       } catch {
         toast.error("Failed to load game state");
 

@@ -42,14 +42,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
       window.Telegram?.WebApp &&
       window.Telegram.WebApp.isTelegramApp;
 
-    console.log("WebAppContext: Telegram environment check:", {
-      hasWindow: typeof window !== "undefined",
-      hasTelegram: !!window?.Telegram,
-      hasWebApp: !!window?.Telegram?.WebApp,
-      isTelegramApp: window?.Telegram?.WebApp?.isTelegramApp,
-      isTelegramEnvironment,
-    });
-
     const initializeWebApp = () => {
       if (typeof window === "undefined") return;
 
@@ -146,7 +138,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
           !window.Telegram.WebApp.initDataUnsafe?.user)
       ) {
         if (isLocalhost) {
-          console.log("Running in localhost mode with dummy data");
           const dummyWebApp: TelegramWebApp = {
             platform: "web",
             isTelegramApp: true,
@@ -302,7 +293,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
       const currentUserId = WebApp?.initDataUnsafe?.user?.id?.toString();
       if (currentUserId) {
         lastKnownUserId.current = currentUserId;
-        console.log("WebAppContext: Initial user ID set:", currentUserId);
       }
 
       initDataCheckInterval.current = setInterval(() => {
@@ -315,7 +305,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
 
         if (!lastKnownUserId.current) {
           lastKnownUserId.current = currentUserId;
-          console.log("WebAppContext: Initial user ID set:", currentUserId);
           return;
         }
 
@@ -398,12 +387,6 @@ export const WebAppProvider = ({ children }: { children: React.ReactNode }) => {
     disableCloseConfirmation,
     triggerHapticFeedback,
   };
-
-  console.log("WebAppContext: Rendering with state:", {
-    isReady,
-    isLoading,
-    isTelegramApp,
-  });
 
   return (
     <WebAppContext.Provider value={value}>{children}</WebAppContext.Provider>

@@ -31,13 +31,8 @@ export const useUser = () => {
   const initializationCompleted = useRef(false);
 
   useEffect(() => {
-    console.log("useUser effect triggered:", {
-      isReady,
-      initializationAttempted: initializationAttempted.current,
-    });
     if (!isReady || initializationAttempted.current) return;
     initializationAttempted.current = true;
-    console.log("useUser: Starting user initialization");
 
     // Check for user switching and handle localStorage appropriately
     if (typeof window !== "undefined") {
@@ -53,27 +48,12 @@ export const useUser = () => {
           if (storedState.user_id && storedState.user_id !== currentUserId) {
             // Check if this is a legitimate user switch (not first-time initialization)
             if (lastUserId && lastUserId !== currentUserId) {
-              console.log(
-                "useUser: User switch detected, clearing localStorage data:",
-                {
-                  lastUserId: lastUserId,
-                  storedUserId: storedState.user_id,
-                  currentUserId: currentUserId,
-                }
-              );
               // Clear localStorage data from previous user
               localStorage.removeItem("user");
               localStorage.removeItem("playerScore");
               localStorage.removeItem("boosterUsage");
               localStorage.removeItem("spinProgression");
             } else {
-              console.log(
-                "useUser: Different user detected but no previous user, preserving data:",
-                {
-                  storedUserId: storedState.user_id,
-                  currentUserId: currentUserId,
-                }
-              );
               // Don't clear data - this might be a legitimate account addition
             }
           }
@@ -149,34 +129,16 @@ export const useUser = () => {
             `"id":${telegramUser.id}`
           );
 
-          console.log("useUser: initData validation:", {
-            telegramUserId: telegramUser.id,
-            initData: initData,
-            decodedInitData: decodedInitData,
-            userIdInInitData: userIdInInitData,
-          });
-
           if (!userIdInInitData) {
-            console.error("useUser: initData mismatch detected!", {
-              telegramUserId: telegramUser.id,
-              initData: initData,
-              decodedInitData: decodedInitData,
-              initDataUnsafe: WebApp.initDataUnsafe,
-            });
-
             // Only refresh if we haven't refreshed recently
             const lastRefresh = localStorage.getItem("lastInitDataRefresh");
             const now = Date.now();
             if (!lastRefresh || now - parseInt(lastRefresh) > 5000) {
               // 5 second cooldown
               localStorage.setItem("lastInitDataRefresh", now.toString());
-              console.log(
-                "useUser: Forcing page refresh due to initData mismatch"
-              );
               window.location.reload();
               return;
             } else {
-              console.log("useUser: Skipping refresh due to cooldown");
             }
           }
         } catch (error) {
@@ -189,10 +151,6 @@ export const useUser = () => {
         }
       }
 
-      if (!hasLogged.current) {
-        console.log("Telegram initData found:", WebApp.initData);
-        hasLogged.current = true;
-      }
       const username =
         telegramUser.username ||
         `${telegramUser.first_name}${
@@ -210,11 +168,8 @@ export const useUser = () => {
         isLoading: false,
       };
 
-      console.log("useUser: Setting user data:", userData);
       try {
-        console.log("🔄 useUser: Calling initializeUserOnce...");
         const result = await initializeUserOnce(WebApp);
-        console.log("🔄 useUser: initializeUserOnce result:", result);
 
         if (!result.success) {
           console.error("❌ User initialization failed:", result.error);
@@ -226,11 +181,9 @@ export const useUser = () => {
           // Even if initialization fails, we still want to set the user data
           // as we have it from Telegram
         } else {
-          console.log("✅ User initialization successful in useUser");
         }
         setUser(userData);
         initializationCompleted.current = true;
-        console.log("useUser: User initialization completed");
       } catch (error) {
         console.error("❌ User initialization error:", error);
         console.error(
@@ -240,7 +193,6 @@ export const useUser = () => {
         // Set user data even if initialization fails
         setUser(userData);
         initializationCompleted.current = true;
-        console.log("useUser: User initialization completed (with error)");
       }
     };
 

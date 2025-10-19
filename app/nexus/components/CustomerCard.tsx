@@ -14,6 +14,17 @@ interface CustomerCardProps {
 export default function CustomerCard({ customer, onClick }: CustomerCardProps) {
   const router = useRouter();
 
+  // Helper function to validate URL
+  const isValidUrl = (url: string | null): boolean => {
+    if (!url) return false;
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   // Check if any social service is enabled and has links
   const isActive = Object.values(customer.socialTasks).some(
     (task) => task.enabled && task.links?.length && task.links.length > 0
@@ -58,7 +69,7 @@ export default function CustomerCard({ customer, onClick }: CustomerCardProps) {
       >
         {/* Logo - Updated to be round */}
         <div className="absolute left-4 top-4 w-12 h-12 rounded-full overflow-hidden border border-gray-200">
-          {customer.logo_url ? (
+          {customer.logo_url && isValidUrl(customer.logo_url) ? (
             <Image
               src={customer.logo_url}
               alt={`${customer.customer_name} logo`}

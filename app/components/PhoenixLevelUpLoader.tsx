@@ -231,13 +231,6 @@ const PhoenixLevelUpLoader: React.FC<PhoenixLevelUpLoaderProps> = ({
     return null;
   }
 
-  console.log("Rendering animation with:", {
-    isVisible,
-    newLevel,
-    backgroundLoaded,
-    badgeLoaded,
-  });
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black bg-opacity-60" />
